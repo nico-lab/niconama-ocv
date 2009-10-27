@@ -115,7 +115,6 @@ namespace OpenCommentViewer
 		[System.Diagnostics.ConditionalAttribute("DEBUG")] 
 		private void DebugWrite(string message) { 
 #if MONO
-			// MONODocでDebug.Writeされた文字がどこに表示されるかよくわからないのでメッセージウィンドウに出しておく
 			System.Windows.Forms.MessageBox.Show(message);
 #else
 			System.Diagnostics.Debug.WriteLine(message);
