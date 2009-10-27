@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCSPlugin", "NCSPlugin\NCSPlugin.csproj", "{9CC20246-79AA-43B0-9736-CA65EDB1C334}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCommentViewer", "OpenCommentViewer\OpenCommentViewer.csproj", "{75AC91B7-F004-42D1-8DEA-E7616B9C4612}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|.NET = Debug|.NET
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Release|.NET = Release|.NET
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9CC20246-79AA-43B0-9736-CA65EDB1C334}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{9CC20246-79AA-43B0-9736-CA65EDB1C334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CC20246-79AA-43B0-9736-CA65EDB1C334}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CC20246-79AA-43B0-9736-CA65EDB1C334}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9CC20246-79AA-43B0-9736-CA65EDB1C334}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9CC20246-79AA-43B0-9736-CA65EDB1C334}.Release|.NET.ActiveCfg = Release|Any CPU
+		{9CC20246-79AA-43B0-9736-CA65EDB1C334}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CC20246-79AA-43B0-9736-CA65EDB1C334}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CC20246-79AA-43B0-9736-CA65EDB1C334}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9CC20246-79AA-43B0-9736-CA65EDB1C334}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{75AC91B7-F004-42D1-8DEA-E7616B9C4612}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{75AC91B7-F004-42D1-8DEA-E7616B9C4612}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75AC91B7-F004-42D1-8DEA-E7616B9C4612}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75AC91B7-F004-42D1-8DEA-E7616B9C4612}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{75AC91B7-F004-42D1-8DEA-E7616B9C4612}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{75AC91B7-F004-42D1-8DEA-E7616B9C4612}.Release|.NET.ActiveCfg = Release|Any CPU
+		{75AC91B7-F004-42D1-8DEA-E7616B9C4612}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75AC91B7-F004-42D1-8DEA-E7616B9C4612}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75AC91B7-F004-42D1-8DEA-E7616B9C4612}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{75AC91B7-F004-42D1-8DEA-E7616B9C4612}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
