@@ -125,7 +125,14 @@ namespace OpenCommentViewer
 		/// <param name="path"></param>
 		public void Save(string path)
 		{
-			Utility.Serialize(path, this, typeof(Logger));
+			string log = Utility.Serialize(this, typeof(Logger));
+			try {
+				using (System.IO.StreamWriter sw = new System.IO.StreamWriter(path, true)) {
+					sw.WriteLine(log);
+				}
+			} catch (Exception ex){
+				System.Windows.Forms.MessageBox.Show("ログの書き込みに失敗しました。" + ex.Message);
+			}
 		}
 
 		public class LogData

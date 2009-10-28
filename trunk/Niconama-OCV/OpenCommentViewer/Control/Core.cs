@@ -196,6 +196,8 @@ namespace OpenCommentViewer.Control
 
 			// VPOSを数値で表示するカラムを追加する
 			_mainview.RegisterColumnExtention(new VposColumnExtention());
+
+			//NGソースを表示するカラムを追加する
 			_mainview.RegisterColumnExtention(new NgColumnExtention());
 		}
 
@@ -210,6 +212,7 @@ namespace OpenCommentViewer.Control
 
 		/// <summary>
 		/// MessageServerStatusで指定されたコメントをすべて取得する
+		/// （用途は未定、なんとなく作った）
 		/// </summary>
 		/// <param name="messageServerStatus"></param>
 		/// <returns></returns>
@@ -233,6 +236,7 @@ namespace OpenCommentViewer.Control
 					NicoAPI.Chat[] chats = NicoAPI.ChatReceiver.ReceiveAllLog(_messageServerStatus, _cookies, _accountInfomation.UserId);
 					_chats.AddRange(chats);
 
+					// プラグインには開始通知の直後に終了通知する
 					OnStartLive(null, null);
 					OnDisconnectServer(null, EventArgs.Empty);
 
@@ -309,8 +313,8 @@ namespace OpenCommentViewer.Control
 		// デバッグ用
 		public void CallTestMethod()
 		{
-			//_chatReceiver.SendMessge("<test />");
 		}
+
 
 
 
@@ -678,13 +682,3 @@ namespace OpenCommentViewer.Control
 
 	}
 }
-/*
- NicoAPI.ChatTransceiver transceiver = (NicoAPI.ChatTransceiver)_chatReceiver;
-
-
-			int vpos = getCurrentVpos(_liveBasicStatus.LocalStartTime);
-			NicoAPI.Chat chat = new OpenCommentViewer.NicoAPI.Chat("test" + __count++, "184 green", vpos, _accountInfomation.UserId.ToString(), _accountInfomation.IsPremium);
-			transceiver.PostComment(chat, _cookies);
-			//_chatReceiver.SendMessge("<test />");
- 
- */

@@ -20,10 +20,12 @@ namespace OpenCommentViewer.Control
 	{
 
 		List<INgClient> _clients = new List<INgClient>();
+		StringBuilder _normalFilterPattern = null;
+		StringBuilder _unityFilterPattern = null;
 		Regex _normalFilter = null;
 		Regex _unifyFilter = null;
-		Regex _idFilter = null;
-		Regex _commandFilter = null;
+		System.Collections.Specialized.StringCollection _idCollections = null;
+		System.Collections.Specialized.StringCollection _commandCollections = null;
 
 		/// <summary>
 		/// 初期化
@@ -35,8 +37,8 @@ namespace OpenCommentViewer.Control
 
 			NCSPlugin.INgClient[] clients = core.GetNgClients();
 			if (clients != null && clients.Length != 0) {
-				_clients.AddRange(clients);
-				BuildRegex();
+				
+				BuildRegex(clients);
 
 			}
 		}
@@ -46,10 +48,12 @@ namespace OpenCommentViewer.Control
 		/// </summary>
 		private void ClearFilter()
 		{
+			_normalFilterPattern = new StringBuilder();
+			_unityFilterPattern = new StringBuilder();
 			_normalFilter = null;
 			_unifyFilter = null;
-			_idFilter = null;
-			_commandFilter = null;
+			_idCollections = new System.Collections.Specialized.StringCollection();
+			_commandCollections = new System.Collections.Specialized.StringCollection();
 			_clients.Clear();
 		}
 
@@ -89,21 +93,24 @@ namespace OpenCommentViewer.Control
 						}
 					}
 
-					if (_idFilter != null && !string.IsNullOrEmpty(chat.UserId)) {
-						Match m = _idFilter.Match(chat.UserId);
-						if (m.Success) {
+					if (_idCollections.Count != 0 && !string.IsNullOrEmpty(chat.UserId)) {
+						if (_idCollections.Contains(chat.UserId)) {
 							chat.NgType = NGType.Id;
-							chat.NgSource = m.Value;
+							chat.NgSource = chat.UserId;
 							return;
 						}
 					}
 
-					if (_commandFilter != null && !string.IsNullOrEmpty(chat.Mail)) {
-						Match m = _commandFilter.Match(chat.Mail);
-						if (m.Success) {
-							chat.NgType = NGType.Command;
-							chat.NgSource = m.Value;
-							return;
+					if (_commandCollections.Count != 0 && !string.IsNullOrEmpty(chat.Mail)) {
+						if (!string.IsNullOrEmpty(chat.Mail) && chat.Mail != "184") {
+							foreach (string cc in chat.Mail.Split(' ')) {
+								if (_commandCollections.Contains(cc)) {
+									chat.NgType = NGType.Command;
+									chat.NgSource = cc;
+									return;
+								}
+							}
+
 						}
 					}
 				}
@@ -138,7 +145,7 @@ namespace OpenCommentViewer.Control
 				} else {
 					DelNg(type, src);
 				}
-				BuildRegex();
+
 			}
 
 		}
@@ -159,9 +166,34 @@ namespace OpenCommentViewer.Control
 		/// NGを追加する
 		/// </summary>
 		/// <param name="ng"></param>
-		private void AddNg(INgClient ng)
+		private void AddNg(INgClient client)
 		{
-			_clients.Add(ng);
+			_clients.Add(client);
+
+			switch (client.Type) {
+				case NGType.Word:
+
+					// NGの属性に沿って該当する正規表現を生成する
+					if (client.UseCaseUnify) {
+						AddPattern(_unityFilterPattern, MakeUnifyPattern(client.Source.ToUpper()));
+						_unifyFilter = new Regex(_unityFilterPattern.ToString());
+					} else{
+						if (client.IsRegex) {
+							AddPattern(_normalFilterPattern, string.Format("({0})", client.Source));
+						} else {
+							AddPattern(_normalFilterPattern, Regex.Escape(client.Source.ToUpper()));
+						}
+						_normalFilter = new Regex(_normalFilterPattern.ToString());
+					}
+
+					break;
+				case NGType.Id:
+					_idCollections.Add(client.Source);
+					break;
+				case NGType.Command:
+					_commandCollections.Add(client.Source);
+					break;
+			}
 
 		}
 
@@ -185,64 +217,51 @@ namespace OpenCommentViewer.Control
 				_clients.Remove(ng);
 			}
 
+			BuildRegex(_clients.ToArray());
+
 		}
 
 		/// <summary>
 		/// NGフィルターを構築する
 		/// </summary>
-		private void BuildRegex()
+		private void BuildRegex(NCSPlugin.INgClient[] clients)
 		{
-			StringBuilder wordPattern = new StringBuilder();
-			StringBuilder unifyPattern = new StringBuilder();
-			StringBuilder idPattern = new StringBuilder();
-			StringBuilder commandPattern = new StringBuilder();
-
+			ClearFilter();
+			_clients.AddRange(clients);
 			foreach (INgClient client in _clients) {
 				switch (client.Type) {
 					case NGType.Word:
 
 						// NGの属性に沿って該当する正規表現を生成する
 						if (client.UseCaseUnify) {
-							AddPattern(unifyPattern, MakeUnifyPattern(client.Source.ToUpper()));
+							AddPattern(_unityFilterPattern, MakeUnifyPattern(client.Source.ToUpper()));
 						} else if (client.IsRegex) {
-							AddPattern(wordPattern, string.Format("({0})", client.Source));
+							AddPattern(_normalFilterPattern, string.Format("({0})", client.Source));
 						} else {
-							AddPattern(wordPattern, Regex.Escape(client.Source.ToUpper()));
+							AddPattern(_normalFilterPattern, Regex.Escape(client.Source.ToUpper()));
 						}
 
 						break;
 					case NGType.Id:
-						AddPattern(idPattern, string.Format("^{0}$", Regex.Escape(client.Source)));
+						_idCollections.Add(client.Source);
 						break;
 					case NGType.Command:
-						AddPattern(commandPattern, Regex.Escape(client.Source));
+						_commandCollections.Add(client.Source);
 						break;
 				}
 
 			}
 
-			if (wordPattern.Length != 0) {
-				_normalFilter = new Regex(wordPattern.ToString(), System.Text.RegularExpressions.RegexOptions.Compiled);
+			if (_normalFilterPattern.Length != 0) {
+				_normalFilter = new Regex(_normalFilterPattern.ToString(), System.Text.RegularExpressions.RegexOptions.Compiled);
 			} else {
 				_normalFilter = null;
 			}
 
-			if (unifyPattern.Length != 0) {
-				_unifyFilter = new Regex(unifyPattern.ToString(), System.Text.RegularExpressions.RegexOptions.Compiled);
+			if (_unityFilterPattern.Length != 0) {
+				_unifyFilter = new Regex(_unityFilterPattern.ToString(), System.Text.RegularExpressions.RegexOptions.Compiled);
 			} else {
 				_unifyFilter = null;
-			}
-
-			if (idPattern.Length != 0) {
-				_idFilter = new Regex(idPattern.ToString(), System.Text.RegularExpressions.RegexOptions.Compiled);
-			} else {
-				_idFilter = null;
-			}
-
-			if (commandPattern.Length != 0) {
-				_commandFilter = new Regex(commandPattern.ToString(), System.Text.RegularExpressions.RegexOptions.Compiled);
-			} else {
-				_commandFilter = null;
 			}
 
 		}

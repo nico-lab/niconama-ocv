@@ -13,12 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCommentViewer", "OpenCo
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualDatagridViewTest", "VirtualDatagridViewTest\VirtualDatagridViewTest.csproj", "{15376605-51C2-4C83-AE20-A2219EF4CA32}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -53,16 +47,6 @@ Global
 		{75AC91B7-F004-42D1-8DEA-E7616B9C4612}.Release|Any CPU.Build.0 = Release|Any CPU
 		{75AC91B7-F004-42D1-8DEA-E7616B9C4612}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{75AC91B7-F004-42D1-8DEA-E7616B9C4612}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{15376605-51C2-4C83-AE20-A2219EF4CA32}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{15376605-51C2-4C83-AE20-A2219EF4CA32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{15376605-51C2-4C83-AE20-A2219EF4CA32}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{15376605-51C2-4C83-AE20-A2219EF4CA32}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{15376605-51C2-4C83-AE20-A2219EF4CA32}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{15376605-51C2-4C83-AE20-A2219EF4CA32}.Release|.NET.ActiveCfg = Release|Any CPU
-		{15376605-51C2-4C83-AE20-A2219EF4CA32}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{15376605-51C2-4C83-AE20-A2219EF4CA32}.Release|Any CPU.Build.0 = Release|Any CPU
-		{15376605-51C2-4C83-AE20-A2219EF4CA32}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{15376605-51C2-4C83-AE20-A2219EF4CA32}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
