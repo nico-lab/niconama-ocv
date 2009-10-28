@@ -116,17 +116,14 @@ namespace OpenCommentViewer.NicoAPI
 
 						};
 
-						// 一秒以上応答が無かった場合は
+						// 既定時間以上応答が無かった場合はタイムアウト
 						_tcpClient.BeginConnect(data.Address, data.Port, ac, _tcpClient);
 
-						if (!m.WaitOne(1000, false)) {
+						if (!m.WaitOne(ApplicationSettings.Default.DefaultConnectionTimeout, false)) {
 							timeouted = true;
-							throw new Exception();
+							throw new Exception("コメント受信：サーバーコネクションタイムアウト");
 						}
 					}
-
-
-
 
 					string msg = String.Format(ApplicationSettings.Default.ThreadStartMessageFormat, data.Thread, resFrom);
 					SendMessge(msg);
@@ -325,7 +322,7 @@ namespace OpenCommentViewer.NicoAPI
 
 			if (this.IsConnected && !this.IsDisconnecting) {
 
-				byte[] wdata = System.Text.Encoding.UTF8.GetBytes(message + "\0\0");
+				byte[] wdata = System.Text.Encoding.UTF8.GetBytes(message + "\0");
 				try {
 					NetworkStream ns = _tcpClient.GetStream();
 					if (ns != null && ns.CanWrite) {
