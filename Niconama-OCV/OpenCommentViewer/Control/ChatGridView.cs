@@ -8,7 +8,6 @@ using System.Windows.Forms;
 
 namespace OpenCommentViewer.Control
 {
-
 	/// <summary>
 	/// チャットを表示するためのコントロール
 	/// </summary>
@@ -17,20 +16,32 @@ namespace OpenCommentViewer.Control
 
 		protected List<NCSPlugin.IColumnExtention> _columnExtentions = new List<NCSPlugin.IColumnExtention>();
 		List<NCSPlugin.IChat> _chats = new List<NCSPlugin.IChat>();
-		List<System.Drawing.Size> _sizeList = new List<System.Drawing.Size>();
+		List<int> _widthList = new List<int>();
+		int _dgHeight = 0;
+
 		int _messageColumnWidth = 40;
 
 		protected int _columnIndexOffset = 0;
+
 		public ChatGridView()
 		{
 			InitializeComponent();
+
+			// プラグイン追加前のカラムの量を保存しておく
 			_columnIndexOffset = dataGridView1.Columns.Count;
-			_messageColumnWidth = dataGridView1.Columns[1].Width;
+
+			// 現在のフォントの高さを取得しておく
+			_dgHeight = System.Windows.Forms.TextRenderer.MeasureText("measure height", dataGridView1.Font).Height;
 
 		}
 
+		/// <summary>
+		/// ビューの設定を読み込む
+		/// </summary>
+		/// <param name="settings"></param>
 		public void LoadSettings(UserSettings settings)
 		{
+			// 同じ名前のカラムの設定を反映させる
 			foreach (UserSettings.ColumnStatus cs in settings.ColumnStates) {
 				if (dataGridView1.Columns.Contains(cs.Name)) {
 					try {
@@ -48,6 +59,10 @@ namespace OpenCommentViewer.Control
 
 		}
 
+		/// <summary>
+		/// ビューの設定を保存する
+		/// </summary>
+		/// <param name="settings"></param>
 		public void SaveSettings(UserSettings settings)
 		{
 			foreach (DataGridViewColumn column in dataGridView1.Columns) {
@@ -74,11 +89,17 @@ namespace OpenCommentViewer.Control
 			}
 		}
 
+		/// <summary>
+		/// チャットを追加する
+		/// </summary>
+		/// <param name="chat"></param>
 		public void Add(NCSPlugin.IChat chat)
 		{
+			// 現在のフォントでの文字列の長さを取得する
+			_widthList.Add(System.Windows.Forms.TextRenderer.MeasureText(chat.Message, dataGridView1.Font).Width);
+			
 			dataGridView1.SuspendLayout();
 			_chats.Add(chat);
-			_sizeList.Add(System.Windows.Forms.TextRenderer.MeasureText(chat.Message, dataGridView1.Font));
 			dataGridView1.RowCount = _chats.Count;
 
 			if (IsAttachBottom()) {
@@ -91,6 +112,10 @@ namespace OpenCommentViewer.Control
 			dataGridView1.ResumeLayout();
 		}
 
+		/// <summary>
+		/// チャット配列を追加する
+		/// </summary>
+		/// <param name="chats"></param>
 		public void AddRange(NCSPlugin.IChat[] chats)
 		{
 
@@ -99,7 +124,8 @@ namespace OpenCommentViewer.Control
 
 			foreach (NCSPlugin.IChat c in chats) {
 				_chats.Add(c);
-				_sizeList.Add(System.Windows.Forms.TextRenderer.MeasureText(c.Message, dataGridView1.Font));
+				// 現在のフォントでの文字列の長さを取得する
+				_widthList.Add(System.Windows.Forms.TextRenderer.MeasureText(c.Message, dataGridView1.Font).Width);
 			}
 			dataGridView1.RowCount = _chats.Count;
 
@@ -110,12 +136,20 @@ namespace OpenCommentViewer.Control
 			dataGridView1.ResumeLayout();
 		}
 
+		/// <summary>
+		/// 一番下のチャットが表示されているかどうか
+		/// </summary>
+		/// <returns></returns>
 		protected bool IsAttachBottom()
 		{
 			int las = dataGridView1.Rows.GetLastRow(DataGridViewElementStates.Displayed);
 			return dataGridView1.RowCount - 2 <= las;
 		}
 
+		/// <summary>
+		/// カラムを追加する
+		/// </summary>
+		/// <param name="ext"></param>
 		public void AddColumn(NCSPlugin.IColumnExtention ext) {
 			if (ext != null && ext.Column != null) {
 				if (ext.Column.SortMode == DataGridViewColumnSortMode.Automatic) {
@@ -126,14 +160,27 @@ namespace OpenCommentViewer.Control
 			}
 		}
 
+		/// <summary>
+		/// チャットをすべて取り除く
+		/// </summary>
 		public void Clear()
 		{
 			dataGridView1.RowCount = 0;
 			_chats.Clear();
-			_sizeList.Clear();
+			_widthList.Clear();
 			
 		}
 
+		/// <summary>
+		/// ビューの値が必要になったときに呼び出される
+		/// 
+		/// メモリ使用量の削減、大量のコメントがある場合のビュー構築の時間短縮のために
+		/// データグリッドビューは仮想モードで実行させる
+		/// 
+		/// （なぜかMONOだとこのイベントが呼び出されない。原因がわかる方は連絡お願いします）
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		protected void dataGridView1_CellValueNeeded(object sender, System.Windows.Forms.DataGridViewCellValueEventArgs e)
 		{
 			if (e.RowIndex < 0 || _chats.Count <= e.RowIndex) {
@@ -160,6 +207,7 @@ namespace OpenCommentViewer.Control
 					return;
 			}
 
+			// 拡張カラムの値を処理する
 			int index = e.ColumnIndex - _columnIndexOffset;
 			if (0 <= index && index < _columnExtentions.Count) {
 				try {
@@ -174,6 +222,11 @@ namespace OpenCommentViewer.Control
 
 		}
 
+		/// <summary>
+		/// セルのスタイルを決定する
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		protected void dataGridView1_CellFormatting(object sender, System.Windows.Forms.DataGridViewCellFormattingEventArgs e)
 		{
 			if (e.RowIndex < 0 || _chats.Count <= e.RowIndex) {
@@ -181,26 +234,18 @@ namespace OpenCommentViewer.Control
 			}
 
 			NCSPlugin.IChat chat = _chats[e.RowIndex];
+
+			// 主コメントをオレンジ色にする
 			if (e.ColumnIndex == 1 && chat.IsOwnerComment) {
 				e.CellStyle.ForeColor = System.Drawing.Color.OrangeRed;
 			}
 		}
 
-		protected void dataGridView1_RowPrePaint(object sender, System.Windows.Forms.DataGridViewRowPrePaintEventArgs e)
-		{
-			//if (e.RowIndex <= 0 || _chats.Count < e.RowIndex) {
-			//  return;
-			//}
-
-			//NCSPlugin.IChat chat = _chats[e.RowIndex];
-
-			//System.Drawing.Size s = System.Windows.Forms.TextRenderer.MeasureText(chat.Message, dataGridView1.Font);
-			//if (dataGridView1.Columns[1].Width < s.Width) {
-			//  int line = s.Width / dataGridView1.Columns[1].Width + 1;
-			//  dataGridView1.Rows[e.RowIndex].Height = s.Height * line + 5;
-			//}
-		}
-
+		/// <summary>
+		/// ツールチップテキストにチャットのメッセージを表示させる
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		protected void dataGridView1_CellToolTipTextNeeded(object sender, System.Windows.Forms.DataGridViewCellToolTipTextNeededEventArgs e)
 		{
 			if (e.RowIndex < 0 || _chats.Count <= e.RowIndex) {
@@ -211,38 +256,56 @@ namespace OpenCommentViewer.Control
 			e.ToolTipText = chat.Message;
 		}
 
+		/// <summary>
+		/// メッセージの高さを調整する
+		/// AutoResizeを使わずに計算
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		protected void dataGridView1_RowHeightInfoNeeded(object sender, System.Windows.Forms.DataGridViewRowHeightInfoNeededEventArgs e)
 		{
 
-			if (e.RowIndex < 0 || _sizeList.Count <= e.RowIndex) {
+			if (e.RowIndex < 0 || _widthList.Count <= e.RowIndex) {
 				return;
 			}
 
-			System.Drawing.Size s = _sizeList[e.RowIndex];
+			int w = _widthList[e.RowIndex];
 
-			if (_messageColumnWidth < s.Width) {
-				int line = s.Width / _messageColumnWidth + 1;
-				e.Height = Math.Min(s.Height * line + 5, 50);
+			if (_messageColumnWidth < w) {
+				int line = w / _messageColumnWidth + 1;
+				e.Height = Math.Min(_dgHeight * line + 5, 50);
 			}
 		}
-
+		
+		/// <summary>
+		/// メッセージカラムの幅が変わった場合、折り返しの発生でビューのレイアウトが崩れてしまうので
+		/// ビューを再構築する
+		/// （ビュー再構築のやり方が間違っているかもしれません。）
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void dataGridView1_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
 		{
-			_messageColumnWidth = dataGridView1.Columns[1].Width;
-			dataGridView1.SuspendLayout();
-			int c = dataGridView1.RowCount;
-			int d = dataGridView1.FirstDisplayedScrollingRowIndex;
-			dataGridView1.RowCount = 0;
-			
-			if (c != -1) {
-				dataGridView1.RowCount = c;
-			}
+			if (e.Column.Index == 1) {
+				_messageColumnWidth = dataGridView1.Columns[1].Width;
 
-			if (d != -1) {
-				dataGridView1.FirstDisplayedScrollingRowIndex = d;
-			}
+				if (dataGridView1.RowCount != 0) {
+					dataGridView1.SuspendLayout();
+					int c = dataGridView1.RowCount;
+					int d = dataGridView1.FirstDisplayedScrollingRowIndex;
+					dataGridView1.RowCount = 0;
 
-			dataGridView1.ResumeLayout();
+					if (c != -1) {
+						dataGridView1.RowCount = c;
+					}
+
+					if (d != -1) {
+						dataGridView1.FirstDisplayedScrollingRowIndex = d;
+					}
+
+					dataGridView1.ResumeLayout();
+				}
+			}
 		}
 	
 	}

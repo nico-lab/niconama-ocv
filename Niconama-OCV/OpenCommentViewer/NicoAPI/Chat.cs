@@ -217,6 +217,22 @@ namespace OpenCommentViewer.NicoAPI
 		}
 
 		/// <summary>
+		/// 送信用のチャット
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="command"></param>
+		/// <param name="vpos"></param>
+		/// <param name="userid"></param>
+		/// <param name="isPremium"></param>
+		public Chat(string message, string command, int vpos, string userid, bool isPremium) : this(){
+			this._premium = isPremium ? 1 : 0;
+			this._mail = command;
+			this._message = message;
+			this._userId = userid;
+			this._vpos = vpos;
+		}
+
+		/// <summary>
 		/// デバッグ
 		/// </summary>
 		/// <param name="anonymity"></param>

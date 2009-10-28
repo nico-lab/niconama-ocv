@@ -160,6 +160,11 @@ namespace OpenCommentViewer
 		/// </summary>
 		public int DefaultApiTimeout = 10000;
 
+		/// <summary>
+		/// メッセージサーバとのコネクション時のタイムアウトの既定値
+		/// </summary>
+		public int DefaultConnectionTimeout = 3000;
+
 		public int _StatusMessageColor = System.Drawing.Color.Black.ToArgb();
 
 		public int _FatalMessageColor = System.Drawing.Color.Red.ToArgb();

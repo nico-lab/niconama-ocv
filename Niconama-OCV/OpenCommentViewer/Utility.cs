@@ -177,6 +177,23 @@ namespace OpenCommentViewer
 		}
 
 		/// <summary>
+		/// XMLやHTML用に文字をエスケープする
+		/// </summary>
+		/// <param name="src"></param>
+		/// <returns></returns>
+		public static string Sanitizing(string src)
+		{
+			src = src.Replace("&", "&amp;");
+			src = src.Replace("<", "&lt;");
+			src = src.Replace(">", "&gt;");
+			src = src.Replace("\"", "&quot;");
+			src = src.Replace("'", "&#39;");
+
+			return src;
+
+		}
+
+		/// <summary>
 		/// Unix時間をDateTimeに変換する
 		/// </summary>
 		/// <param name="UnixTime"></param>

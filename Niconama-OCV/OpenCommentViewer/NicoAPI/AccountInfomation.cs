@@ -7,11 +7,12 @@ namespace OpenCommentViewer.NicoAPI
 	class AccountInfomation : IAccountInfomation
 	{
 
-		public static AccountInfomation GetInstance(System.Net.CookieContainer cookies) {
+		public static AccountInfomation GetInstance(System.Net.CookieContainer cookies)
+		{
 			try {
 				string url = ApplicationSettings.Default.GetFlvUrl;
 				string res = Utility.GetResponseText(url, cookies, ApplicationSettings.Default.DefaultApiTimeout);
-				
+
 				if (string.IsNullOrEmpty(res)) {
 					return null;
 				}

@@ -16,6 +16,8 @@ namespace OpenCommentViewer.Cookie
 
 	/// <summary>
 	/// SQLiteを利用してクッキーを保存しているブラウザからクッキーを取得する
+	/// コンパイルオプションにMONOを指定して、Mono.Data.Sqlite編参照を追加してビルドすると
+	/// mono上でもクッキーが取得できるようになる
 	/// </summary>
 	abstract class SqliteCookieGetter : ICookieGetter
 	{

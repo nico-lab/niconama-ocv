@@ -80,6 +80,8 @@
     <Compile Include="NicoAPI\AccountInfomation.cs" />
     <Compile Include="NicoAPI\Chat.cs" />
     <Compile Include="NicoAPI\ChatReceiver.cs" />
+    <Compile Include="NicoAPI\ChatResult.cs" />
+    <Compile Include="NicoAPI\ChatTransceiver.cs" />
     <Compile Include="NicoAPI\HeartBeat.cs" />
     <Compile Include="NicoAPI\IAccountInfomation.cs" />
     <Compile Include="NicoAPI\ChatClient.cs" />

@@ -37,14 +37,13 @@ namespace OpenCommentViewer.Cookie
 		public FirefoxCookieGetter(string path)
 		{
 			_path = path;
+
 		}
 
 		public override string GetCookieValue(string url, string key)
 		{
-			Logger.Default.LogMessage("クッキー取得開始");
-			Logger.Default.LogMessage(_path);
 			if (_path == null || !System.IO.File.Exists(_path)) {
-				Logger.Default.LogErrorMessage("パスが存在しない");
+				Logger.Default.LogErrorMessage("クッキー取得：存在しないパス - " + _path);
 				return null;
 			}
 
@@ -53,13 +52,10 @@ namespace OpenCommentViewer.Cookie
 				// FireFox3.5以上からDBがロックされるようになったのでコピーしてこれを回避する
 				string tempdbpath = System.IO.Path.GetFullPath(TEMP_SQLITE_FILE_NAME);
 				System.IO.File.Copy(_path, tempdbpath);
-				Logger.Default.LogMessage("データベースシャドウィング");
 				string query = string.Format(QUERY_FORMAT, url, key);
 
-				string res = base.getDatabaseValue(tempdbpath, query);
-				Logger.Default.LogMessage(res);
 				// SqliteCookieGetterに処理を投げる
-				return res;
+				return base.getDatabaseValue(tempdbpath, query);
 
 			} catch (Exception ex) {
 
@@ -69,7 +65,6 @@ namespace OpenCommentViewer.Cookie
 				if (System.IO.File.Exists(TEMP_SQLITE_FILE_NAME)) {
 					System.IO.File.Delete(TEMP_SQLITE_FILE_NAME);
 				}
-				Logger.Default.LogMessage("クッキー取得終了");
 			}
 
 			return null;
@@ -112,8 +107,6 @@ namespace OpenCommentViewer.Cookie
 				}
 
 			}
-
-			Logger.Default.LogMessage("パス取得" + path);
 			return path;
 
 		}

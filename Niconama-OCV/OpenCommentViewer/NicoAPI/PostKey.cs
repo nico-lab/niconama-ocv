@@ -6,6 +6,14 @@ namespace OpenCommentViewer.NicoAPI
 {
 	public class PostKey
 	{
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="thread"></param>
+		/// <param name="lastCommentNo"></param>
+		/// <param name="cookies"></param>
+		/// <returns>失敗したらnullを返す</returns>
 		public static PostKey GetInstance(int thread, int lastCommentNo, System.Net.CookieContainer cookies)
 		{
 			try {

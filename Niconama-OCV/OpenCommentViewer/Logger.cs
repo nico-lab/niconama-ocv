@@ -113,12 +113,10 @@ namespace OpenCommentViewer
 		}
 
 		[System.Diagnostics.ConditionalAttribute("DEBUG")] 
-		private void DebugWrite(string message) { 
-#if MONO
-			System.Windows.Forms.MessageBox.Show(message);
-#else
-			System.Diagnostics.Debug.WriteLine(message);
-#endif
+		private void DebugWrite(string message) {
+
+			// MONODevelopでDebug.Writeされた文字がどこに表示されるかよくわからないので関数を作った
+			System.Console.WriteLine(message);
 		}
 
 		/// <summary>
