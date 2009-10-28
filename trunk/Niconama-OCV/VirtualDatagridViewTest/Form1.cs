@@ -8,6 +8,10 @@ using System.Windows.Forms;
 
 namespace VirtualDatagridViewTest
 {
+
+	/// <summary>
+	/// MONO‚ÅDatagridview‚ÌVirtualmode‚ª‚¤‚Ü‚­“®ì‚µ‚È‚©‚Á‚½‚Ì‚Å‚»‚ÌŒ´ˆö‚ğ’²‚×‚é‚½‚ß‚ÌƒNƒ‰ƒX
+	/// </summary>
 	public partial class Form1 : Form
 	{
 		public Form1()

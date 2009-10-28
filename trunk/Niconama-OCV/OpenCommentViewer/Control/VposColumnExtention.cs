@@ -5,6 +5,9 @@ using System.Windows.Forms;
 
 namespace OpenCommentViewer.Control
 {
+	/// <summary>
+	/// ビューのカラムに00：00形式の時間を追加するためのクラス
+	/// </summary>
 	class VposColumnExtention : NCSPlugin.IColumnExtention
 	{
 

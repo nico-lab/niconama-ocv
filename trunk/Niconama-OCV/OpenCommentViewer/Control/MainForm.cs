@@ -13,12 +13,6 @@ namespace OpenCommentViewer.Control
 
 		Control.ICore _core = null;
 
-		protected Control.ICore Core
-		{
-			get { return _core; }
-			set { _core = value; }
-		}
-
 		public MainForm()
 		{
 			InitializeComponent();
@@ -60,6 +54,10 @@ namespace OpenCommentViewer.Control
 			chatGridView1.Clear();
 			chatGridView1.AddRange(_core.Chats);
 			startButton.Enabled = true;
+
+			string label = (_core.SeetType == SeetType.Arena ? "【アリーナ】" : "【立ち見】");
+			idBox.Text = string.Format("{0} - {1}", liveId, label);
+			this.Text = string.Format("{0}{1}", label, _core.LiveName);
 
 		}
 
@@ -179,7 +177,7 @@ namespace OpenCommentViewer.Control
 		{
 			LoginForm f = new LoginForm();
 			if (f.ShowDialog() == DialogResult.OK) {
-				_core.Login();
+				_core.Login(UserSettings.Default.BrowserType, UserSettings.Default.CookieFilePath);
 			}
 		}
 

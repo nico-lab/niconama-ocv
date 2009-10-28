@@ -10,6 +10,12 @@ using Match = System.Text.RegularExpressions.Match;
 
 namespace OpenCommentViewer.Control
 {
+
+	/// <summary>
+	/// NGチェックを担当するクラス
+	/// 
+	/// すべて正規表現で処理しているが、CommandとIDについてはStringCollectionあたりを使ってやったほうがいいかもしれない
+	/// </summary>
 	class NgChecker
 	{
 
@@ -19,17 +25,13 @@ namespace OpenCommentViewer.Control
 		Regex _idFilter = null;
 		Regex _commandFilter = null;
 
-		private void Clear() {
-			_normalFilter = null;
-			_unifyFilter = null;
-			_idFilter = null;
-			_commandFilter = null;
-			_clients.Clear();
-		}
-
+		/// <summary>
+		/// 初期化
+		/// </summary>
+		/// <param name="core"></param>
 		public void Initialize(ICore core)
 		{
-			this.Clear();
+			this.ClearFilter();
 
 			NCSPlugin.INgClient[] clients = core.GetNgClients();
 			if (clients != null && clients.Length != 0) {
@@ -39,11 +41,28 @@ namespace OpenCommentViewer.Control
 			}
 		}
 
+		/// <summary>
+		/// フィルターを初期化する
+		/// </summary>
+		private void ClearFilter()
+		{
+			_normalFilter = null;
+			_unifyFilter = null;
+			_idFilter = null;
+			_commandFilter = null;
+			_clients.Clear();
+		}
+
+		/// <summary>
+		/// ChatのNGチェックを行う
+		/// 結果はchatオブジェクトのIFilterdChatインターフェースの実装に格納される
+		/// </summary>
+		/// <param name="chat"></param>
 		public void Check(NicoAPI.Chat chat)
 		{
-			
+
 			if (chat.IsOwnerComment && chat.Message.StartsWith("/ng")) {
-				
+
 				OperateNgCommand(chat);
 
 			} else if (!chat.IsOwnerComment) {
@@ -61,7 +80,7 @@ namespace OpenCommentViewer.Control
 					}
 
 					if (_unifyFilter != null) {
-						string com = System.Text.RegularExpressions.Regex.Replace(chat.Message, @"[ 　\t\r\n]", "").ToUpper(); 
+						string com = System.Text.RegularExpressions.Regex.Replace(chat.Message, @"[ 　\t\r\n]", "").ToUpper();
 						Match m = _unifyFilter.Match(com);
 						if (m.Success) {
 							chat.NgType = NGType.Word;
@@ -70,7 +89,7 @@ namespace OpenCommentViewer.Control
 						}
 					}
 
-					if (_idFilter != null) {
+					if (_idFilter != null && !string.IsNullOrEmpty(chat.UserId)) {
 						Match m = _idFilter.Match(chat.UserId);
 						if (m.Success) {
 							chat.NgType = NGType.Id;
@@ -79,7 +98,7 @@ namespace OpenCommentViewer.Control
 						}
 					}
 
-					if (_commandFilter != null) {
+					if (_commandFilter != null && !string.IsNullOrEmpty(chat.Mail)) {
 						Match m = _commandFilter.Match(chat.Mail);
 						if (m.Success) {
 							chat.NgType = NGType.Command;
@@ -92,12 +111,17 @@ namespace OpenCommentViewer.Control
 
 		}
 
-		public void Check(ICollection<NicoAPI.Chat> chats) {
+		public void Check(ICollection<NicoAPI.Chat> chats)
+		{
 			foreach (NicoAPI.Chat chat in chats) {
 				this.Check(chat);
 			}
 		}
 
+		/// <summary>
+		/// 主米によるNG操作を実行する
+		/// </summary>
+		/// <param name="chat"></param>
 		private void OperateNgCommand(IChat chat)
 		{
 
@@ -119,6 +143,11 @@ namespace OpenCommentViewer.Control
 
 		}
 
+		/// <summary>
+		/// NGを追加する
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="src"></param>
 		private void AddNg(NGType type, string src)
 		{
 
@@ -126,17 +155,30 @@ namespace OpenCommentViewer.Control
 
 		}
 
+		/// <summary>
+		/// NGを追加する
+		/// </summary>
+		/// <param name="ng"></param>
 		private void AddNg(INgClient ng)
 		{
 			_clients.Add(ng);
-			
+
 		}
 
+		/// <summary>
+		/// NGを削除する
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="src"></param>
 		private void DelNg(NGType type, string src)
 		{
 			DelNg(new NicoAPI.NgClient(type, src, DateTime.Now));
 		}
 
+		/// <summary>
+		/// NGを削除する
+		/// </summary>
+		/// <param name="ng"></param>
 		private void DelNg(INgClient ng)
 		{
 			if (_clients.Contains(ng)) {
@@ -145,6 +187,9 @@ namespace OpenCommentViewer.Control
 
 		}
 
+		/// <summary>
+		/// NGフィルターを構築する
+		/// </summary>
 		private void BuildRegex()
 		{
 			StringBuilder wordPattern = new StringBuilder();
@@ -155,6 +200,8 @@ namespace OpenCommentViewer.Control
 			foreach (INgClient client in _clients) {
 				switch (client.Type) {
 					case NGType.Word:
+
+						// NGの属性に沿って該当する正規表現を生成する
 						if (client.UseCaseUnify) {
 							AddPattern(unifyPattern, MakeUnifyPattern(client.Source.ToUpper()));
 						} else if (client.IsRegex) {
@@ -200,6 +247,11 @@ namespace OpenCommentViewer.Control
 
 		}
 
+		/// <summary>
+		/// ストリングビルダーに正規表現パターンを追加する
+		/// </summary>
+		/// <param name="sb"></param>
+		/// <param name="pattern"></param>
 		private void AddPattern(StringBuilder sb, string pattern)
 		{
 			if (sb.Length != 0) {
@@ -209,6 +261,11 @@ namespace OpenCommentViewer.Control
 			sb.Append(pattern);
 		}
 
+		/// <summary>
+		/// UseCaseUnity属性が付いたNGの正規表現パターンを生成する
+		/// </summary>
+		/// <param name="str"></param>
+		/// <returns></returns>
 		private string MakeUnifyPattern(string str)
 		{
 			StringBuilder sb = new StringBuilder();
@@ -219,6 +276,9 @@ namespace OpenCommentViewer.Control
 
 				char c = str[i];
 				if (Utility.IsZenkakuJapanese(c)) {
+					// ひらがな、カタカナ、半角カタカナのどれでも引っかかるパターンを作る
+					// ただし、濁点がある場合はパフォーマンスを優先して一部仕様外の動作を許容している
+					// (（）を使ってグループを作るとパフォーマンスが悪化する気がしたので)
 					char h = Utility.ToHiragana(c);
 					char k = Utility.ToKatakana(c);
 					string n = Utility.ToHankaku(k.ToString());
@@ -229,9 +289,11 @@ namespace OpenCommentViewer.Control
 					}
 
 				} else if (Utility.IsZenkakuCase(c)) {
+					// ひらがなカタカナ以外の全角文字（数字や全角英字）から半角文字でも引っかかるパターンを生成する
 					string n = Utility.ToHankaku(c.ToString()).ToUpper();
 					sb.AppendFormat("[{0}{1}]", c, n);
 				} else if (Utility.IsHankakuCase(c)) {
+					// 半角文字から全角文字でも引っかかるパターンを生成する
 					string n = Utility.ToZenkaku(c).ToString().ToUpper();
 					sb.AppendFormat("[{0}{1}]", c, n);
 				} else {
@@ -248,7 +310,7 @@ namespace OpenCommentViewer.Control
 
 		public void Dispose()
 		{
-			this.Clear();
+			this.ClearFilter();
 			_clients = null;
 		}
 

@@ -10,12 +10,32 @@ namespace OpenCommentViewer.Control
 	public class Core : NCSPlugin.IPluginHost, ICore
 	{
 
-		protected List<NicoAPI.Chat> _chats;
+		/// <summary>
+		/// 番組の基本情報
+		/// </summary>
 		protected NicoAPI.ILiveBasicStatus _liveBasicStatus = null;
+
+		/// <summary>
+		/// メッセージサーバー接続用の情報
+		/// </summary>
 		protected NicoAPI.IMessageServerStatus _messageServerStatus = null;
+
+		/// <summary>
+		/// 視聴者に関する情報
+		/// </summary>
 		protected NicoAPI.ILiveWatcherStatus _liveWatcherStatus = null;
+
+		/// <summary>
+		/// 放送の詳細情報
+		/// </summary>
 		protected NicoAPI.ILiveDescription _liveDescription = null;
+
+		/// <summary>
+		/// アカウント情報
+		/// </summary>
 		protected NicoAPI.IAccountInfomation _accountInfomation = null;
+
+		protected List<NicoAPI.Chat> _chats;
 		protected Control.IMainView _mainview = null;
 		protected System.Windows.Forms.Form _form = null;
 		protected SeetType _seetType = SeetType.Arena;
@@ -27,6 +47,9 @@ namespace OpenCommentViewer.Control
 
 		protected List<NCSPlugin.IPlugin> _plugins = null;
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
 		public Core()
 		{
 			_chats = new List<OpenCommentViewer.NicoAPI.Chat>();
@@ -40,6 +63,7 @@ namespace OpenCommentViewer.Control
 			_ngChecker.Initialize(this);
 
 			_plugins = new List<NCSPlugin.IPlugin>();
+
 
 		}
 
@@ -79,7 +103,78 @@ namespace OpenCommentViewer.Control
 
 		}
 
+		/// <summary>
+		/// LiveIdから放送に接続する
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <returns></returns>
+		private bool connectLiveID(string liveId)
+		{
+			if (_accountInfomation == null) {
+				_mainview.ShowFatalMessage("ログインが完了していません");
+				return false;
+			}
+
+			NicoAPI.PlayerStatus playerStatus = NicoAPI.PlayerStatus.GetInstance(liveId, _cookies);
+
+			if (playerStatus != null) {
+				if (!playerStatus.HasError) {
+					_liveBasicStatus = playerStatus;
+					_liveWatcherStatus = playerStatus;
+					_messageServerStatus = playerStatus;
+					_liveDescription = NicoAPI.LiveDescription.GetInstance(liveId, _cookies);
+					_seetType = _liveBasicStatus.RoomLabel != "立ち見席" ? SeetType.Arena : SeetType.Standing;
+
+					return ConnectServer(_accountInfomation, _liveDescription, _messageServerStatus);
+				} else {
+					_mainview.ShowFatalMessage(playerStatus.ErrorMessage);
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// 与えられた情報を元にメッセージサーバーに接続を試みる
+		/// </summary>
+		/// <param name="accountInfomation">アカウント情報</param>
+		/// <param name="liveDescription">放送の詳細情報</param>
+		/// <param name="messageServerStatus">メッセージサーバにアクセスするための情報</param>
+		/// <returns>接続に成功したか</returns>
+		protected bool ConnectServer(NicoAPI.IAccountInfomation accountInfomation, NicoAPI.ILiveDescription liveDescription, NicoAPI.IMessageServerStatus messageServerStatus)
+		{
+
+			if (accountInfomation == null) {
+				_mainview.ShowFatalMessage("ログインが完了していません");
+				return false;
+			}
+
+			_chatReceiver.Disconnect();
+
+			_chats.Clear();
+			_ngChecker.Initialize(this);
+
+
+
+			UserSettings.Default.LastAccessLiveId = liveDescription.LiveId;
+			UserSettings.Default.Save();
+
+			NicoAPI.Chat[] chats = NicoAPI.ChatReceiver.ReceiveAllLog(messageServerStatus, _cookies, accountInfomation.UserId);
+			_chats.AddRange(chats);
+			_chatReceiver.Connect(messageServerStatus, chats.Length + 1);
+			return true;
+
+		}
+
 		#region ICore メンバ
+
+		/// <summary>
+		/// アリーナか立ち見かを返します
+		/// </summary>
+		public SeetType SeetType
+		{
+			get { return _seetType; }
+		}
 
 		/// <summary>
 		/// ビューアで使用するメインフォームを指定する
@@ -113,11 +208,66 @@ namespace OpenCommentViewer.Control
 			_reservedId = id;
 		}
 
-		public SeetType SeetType
+		/// <summary>
+		/// MessageServerStatusで指定されたコメントをすべて取得する
+		/// </summary>
+		/// <param name="messageServerStatus"></param>
+		/// <returns></returns>
+		public bool GetLogComment(NicoAPI.IMessageServerStatus messageServerStatus)
 		{
-			get { return _seetType; }
+			if (messageServerStatus != null) {
+
+				if (_accountInfomation == null) {
+
+					_mainview.ShowFatalMessage("ログインが完了していません");
+					return false;
+
+				}
+
+				_chats.Clear();
+				_ngChecker.Initialize(this);
+
+				_messageServerStatus = messageServerStatus;
+
+				if (_accountInfomation.IsPremium) {
+					NicoAPI.Chat[] chats = NicoAPI.ChatReceiver.ReceiveAllLog(_messageServerStatus, _cookies, _accountInfomation.UserId);
+					_chats.AddRange(chats);
+
+					OnStartLive(null, null);
+					OnDisconnectServer(null, EventArgs.Empty);
+
+				}
+				return true;
+			}
+
+			return false;
 		}
 
+		/// <summary>
+		/// チケット情報を元にメッセージサーバーへの接続を試みる
+		/// </summary>
+		/// <param name="ticket"></param>
+		/// <returns></returns>
+		public bool ConnectByLiveTicket(LiveTicket ticket)
+		{
+			if (ticket != null) {
+				_liveBasicStatus = ticket;
+				_messageServerStatus = ticket;
+				_liveDescription = ticket;
+				_seetType = ticket.RoomLabel != "立ち見席" ? SeetType.Arena : SeetType.Standing;
+
+				return ConnectServer(_accountInfomation, ticket, ticket);
+			}
+
+			return false;
+		}
+
+
+
+		/// <summary>
+		/// 放送再接続用の情報を取得します
+		/// </summary>
+		/// <returns></returns>
 		public Control.LiveTicket GetLiveTicket()
 		{
 			if (_liveBasicStatus != null && _liveDescription != null && _messageServerStatus != null) {
@@ -128,32 +278,29 @@ namespace OpenCommentViewer.Control
 
 		}
 
-		public virtual bool Login()
+		/// <summary>
+		/// ログインする
+		/// </summary>
+		/// <param name="browserType"></param>
+		/// <param name="cookieFilePath">クッキーが保存されているファイル、nullの場合既定のファイルを対称にする</param>
+		/// <returns></returns>
+		public virtual bool Login(Cookie.CookieGetter.BROWSER_TYPE browserType, string cookieFilePath)
 		{
-			Logger.Default.LogMessage("Core.Login start");
-			string userSession = Cookie.CookieGetter.GetCookie("nicovideo.jp", "user_session", UserSettings.Default.BrowserType, UserSettings.Default.CookieFilePath);
-
-			Logger.Default.LogMessage("us" + userSession);
+			string userSession = Cookie.CookieGetter.GetCookie("nicovideo.jp", "user_session", browserType, cookieFilePath);
 
 			if (string.IsNullOrEmpty(userSession)) {
 				_mainview.ShowFatalMessage("指定されたブラウザからクッキーを取得できませんでした。");
 				return false;
 			}
 
-			Logger.Default.LogMessage("success get cookie");
-
 			System.Net.Cookie cuid = new System.Net.Cookie("user_session", userSession, "/", ".nicovideo.jp");
 			_cookies.Add(cuid);
 
-			Logger.Default.LogMessage("test login");
-
 			_accountInfomation = NicoAPI.AccountInfomation.GetInstance(_cookies);
 			if (_accountInfomation != null) {
-				Logger.Default.LogMessage("login success");
 				_mainview.ShowStatusMessage(string.Format("ログイン成功 : ユーザー名【{0}】", _accountInfomation.UserName));
 				return true;
 			} else {
-				Logger.Default.LogMessage("login failed");
 				_mainview.ShowFatalMessage("ログインに失敗しました。");
 				return false;
 			}
@@ -164,6 +311,8 @@ namespace OpenCommentViewer.Control
 		{
 			//_chatReceiver.SendMessge("<test />");
 		}
+
+
 
 		#endregion
 
@@ -179,10 +328,10 @@ namespace OpenCommentViewer.Control
 			if (UserSettings.Default.ShowAccountForm) {
 				LoginForm f = new LoginForm();
 				if (f.ShowDialog(this._form) == System.Windows.Forms.DialogResult.OK) {
-					Login();
+					Login(UserSettings.Default.BrowserType, UserSettings.Default.CookieFilePath);
 				}
 			} else {
-				Login();
+				Login(UserSettings.Default.BrowserType, UserSettings.Default.CookieFilePath);
 			}
 
 			// コマンドライン引数で指定された放送がある場合はそれに接続する
@@ -301,92 +450,8 @@ namespace OpenCommentViewer.Control
 			}
 		}
 
-		/// <summary>
-		/// チケット情報を元にメッセージサーバーへの接続を試みる
-		/// </summary>
-		/// <param name="ticket"></param>
-		/// <returns></returns>
-		public bool ConnectByLiveTicket(LiveTicket ticket)
-		{
-			if (ticket != null) {
-				_liveBasicStatus = ticket;
-				_messageServerStatus = ticket;
-				_liveDescription = ticket;
-				_seetType = _liveBasicStatus.RoomLabel != "立ち見席" ? SeetType.Arena : SeetType.Standing;
-
-				return ConnectServer();
-			}
-
-			return false;
-		}
-
-		protected bool ConnectServer()
-		{
-			if (_accountInfomation == null) {
-				_mainview.ShowFatalMessage("ログインが完了していません");
-				return false;
-
-			}
-
-			_chatReceiver.Disconnect();
-
-			_chats.Clear();
-			_ngChecker.Initialize(this);
-
-			switch (_seetType) {
-				case SeetType.Arena:
-					_mainview.IdBoxText = _liveDescription.LiveId + " - 【アリーナ】";
-					_mainview.Text = "【アリーナ】" + _liveDescription.LiveName;
-					break;
-				case SeetType.Standing:
-					_mainview.IdBoxText = _liveDescription.LiveId + " - 【立ち見】";
-					_mainview.Text = "【立ち見】" + _liveDescription.LiveName;
-					break;
-			}
-
-			UserSettings.Default.LastAccessLiveId = _liveDescription.LiveId;
-			UserSettings.Default.Save();
-
-			NicoAPI.Chat[] chats = NicoAPI.ChatReceiver.ReceiveAllLog(_messageServerStatus, _cookies, _accountInfomation.UserId);
-			_chats.AddRange(chats);
-			_chatReceiver.Connect(_messageServerStatus, chats.Length + 1);
-			return true;
-
-		}
-
-		public bool GetLogComment(NicoAPI.IMessageServerStatus messageServerStatus)
-		{
-			if (messageServerStatus != null) {
-
-				if (_accountInfomation == null) {
-
-					_mainview.ShowFatalMessage("ログインが完了していません");
-					return false;
-
-				}
-
-				_chats.Clear();
-				_ngChecker.Initialize(this);
-
-				_messageServerStatus = messageServerStatus;
-
-				if (_accountInfomation.IsPremium) {
-					NicoAPI.Chat[] chats = NicoAPI.ChatReceiver.ReceiveAllLog(_messageServerStatus, _cookies, _accountInfomation.UserId);
-					_chats.AddRange(chats);
-
-					OnStartLive(null, null);
-					OnDisconnectServer(null, EventArgs.Empty);
-
-				}
-				return true;
-			}
-
-			return false;
-		}
-
 
 		#endregion
-
 
 		#region IPluginHost メンバ
 
@@ -567,28 +632,7 @@ namespace OpenCommentViewer.Control
 
 		public bool ConnectLive(string liveId)
 		{
-			if (_accountInfomation == null) {
-				_mainview.ShowFatalMessage("ログインが完了していません");
-				return false;
-			}
-
-			NicoAPI.PlayerStatus playerStatus = NicoAPI.PlayerStatus.GetInstance(liveId, _cookies);
-
-			if (playerStatus != null) {
-				if (!playerStatus.HasError) {
-					_liveBasicStatus = playerStatus;
-					_liveWatcherStatus = playerStatus;
-					_messageServerStatus = playerStatus;
-					_liveDescription = NicoAPI.LiveDescription.GetInstance(liveId, _cookies);
-					_seetType = _liveBasicStatus.RoomLabel != "立ち見席" ? SeetType.Arena : SeetType.Standing;
-
-					return ConnectServer();
-				} else {
-					_mainview.ShowFatalMessage(playerStatus.ErrorMessage);
-				}
-			}
-
-			return false;
+			return connectLiveID(liveId);
 		}
 
 
@@ -634,3 +678,13 @@ namespace OpenCommentViewer.Control
 
 	}
 }
+/*
+ NicoAPI.ChatTransceiver transceiver = (NicoAPI.ChatTransceiver)_chatReceiver;
+
+
+			int vpos = getCurrentVpos(_liveBasicStatus.LocalStartTime);
+			NicoAPI.Chat chat = new OpenCommentViewer.NicoAPI.Chat("test" + __count++, "184 green", vpos, _accountInfomation.UserId.ToString(), _accountInfomation.IsPremium);
+			transceiver.PostComment(chat, _cookies);
+			//_chatReceiver.SendMessge("<test />");
+ 
+ */

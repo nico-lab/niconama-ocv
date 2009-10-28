@@ -34,7 +34,7 @@ namespace OpenCommentViewer.Control
 			this._address = messageStatus.Address;
 			this._port = messageStatus.Port;
 			this._thread = messageStatus.Thread;
-			this._liveName = liveDescription.CommunityName;
+			this._liveName = liveDescription.LiveName;
 			this._communityName = liveDescription.CommunityName;
 			this._caster = liveDescription.Caster;
 		}

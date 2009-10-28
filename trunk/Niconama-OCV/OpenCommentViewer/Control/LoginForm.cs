@@ -15,10 +15,10 @@ namespace OpenCommentViewer.Control
 			InitializeComponent();
 			this.DialogResult = DialogResult.Cancel;
 		}
-		
+
 		private void LoginForm_Load(object sender, EventArgs e)
 		{
-			switch (UserSettings.Default.BrowserType) { 
+			switch (UserSettings.Default.BrowserType) {
 				case OpenCommentViewer.Cookie.CookieGetter.BROWSER_TYPE.IEComponent:
 					radioButton1.Checked = true;
 					break;
@@ -45,11 +45,11 @@ namespace OpenCommentViewer.Control
 		{
 			if (radioButton1.Checked) {
 				UserSettings.Default.BrowserType = OpenCommentViewer.Cookie.CookieGetter.BROWSER_TYPE.IEComponent;
-			} else 	if (radioButton2.Checked) {
+			} else if (radioButton2.Checked) {
 				UserSettings.Default.BrowserType = OpenCommentViewer.Cookie.CookieGetter.BROWSER_TYPE.IESafeMode;
-			} else 	if (radioButton3.Checked) {
+			} else if (radioButton3.Checked) {
 				UserSettings.Default.BrowserType = OpenCommentViewer.Cookie.CookieGetter.BROWSER_TYPE.Firefox;
-			} else 	if (radioButton4.Checked) {
+			} else if (radioButton4.Checked) {
 				UserSettings.Default.BrowserType = OpenCommentViewer.Cookie.CookieGetter.BROWSER_TYPE.Chrome;
 			}
 
@@ -72,11 +72,11 @@ namespace OpenCommentViewer.Control
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			if(openFileDialog1.ShowDialog() == DialogResult.OK){
+			if (openFileDialog1.ShowDialog() == DialogResult.OK) {
 				textBox1.Text = openFileDialog1.FileName;
 			}
 		}
 
-		
+
 	}
 }
