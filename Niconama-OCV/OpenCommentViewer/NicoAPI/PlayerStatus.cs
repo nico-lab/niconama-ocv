@@ -181,6 +181,7 @@ namespace OpenCommentViewer.NicoAPI
 						case "require_community_member":
 							return "メンバー限定のためアクセスできませんでした。";
 						default:
+							Logger.Default.LogMessage("PlayerStatus UnknownErrorCode:"+this.ErrorCode);
 							return "未定義のエラーが発生しました";
 					}
 

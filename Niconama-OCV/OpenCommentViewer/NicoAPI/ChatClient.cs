@@ -325,7 +325,7 @@ namespace OpenCommentViewer.NicoAPI
 
 			if (this.IsConnected && !this.IsDisconnecting) {
 
-				byte[] wdata = System.Text.Encoding.UTF8.GetBytes(message + "\0\0");
+				byte[] wdata = System.Text.Encoding.UTF8.GetBytes(message + "\0");
 				try {
 					NetworkStream ns = _tcpClient.GetStream();
 					if (ns != null && ns.CanWrite) {

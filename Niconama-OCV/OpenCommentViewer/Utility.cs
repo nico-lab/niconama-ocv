@@ -40,6 +40,29 @@ namespace OpenCommentViewer
 		}
 
 		/// <summary>
+		///  Typeで指定されたクラスをXMLシリアライズする
+		/// </summary>
+		/// <param name="graph"></param>
+		/// <param name="type"></param>
+		/// <returns>シリアル化された文字列</returns>
+		static public string Serialize(object graph, Type type)
+		{
+
+			try {
+				System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(type);
+
+				using (System.IO.StringWriter fs = new StringWriter()) {
+					serializer.Serialize(fs, graph);
+					return fs.ToString();
+				}
+			} catch (Exception ex) {
+				Logger.Default.LogException(ex);
+			}
+
+			return null;
+		}
+
+		/// <summary>
 		/// シリアライズされたオブジェクトを復元する
 		/// 失敗した場合はnullを返す
 		/// </summary>
