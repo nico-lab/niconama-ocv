@@ -74,11 +74,14 @@ namespace OpenCommentViewer.NicoAPI
 		#region 過去ログ取得
 
 		/// <summary>
-		/// 過去ログを取得する
+		/// 指定された時間以前の過去ログを取得する
 		/// </summary>
 		/// <param name="data"></param>
+		/// <param name="cookies"></param>
+		/// <param name="userId"></param>
+		/// <param name="when">取得開始時間</param>
 		/// <param name="resFrom"></param>
-		/// <returns>成功・失敗</returns>
+		/// <returns></returns>
 		public static Chat[] ReceiveLog(IMessageServerStatus data, System.Net.CookieContainer cookies, int userId, DateTime when, int resFrom)
 		{
 
@@ -107,13 +110,14 @@ namespace OpenCommentViewer.NicoAPI
 
 						tcpClient.BeginConnect(data.Address, data.Port, ac, tcpClient);
 
-						// 1秒以内に接続できない場合は失敗とする
-						if (!m.WaitOne(1000, false)) {
+						// 既定時間以内に接続できない場合は失敗とする
+						if (!m.WaitOne(ApplicationSettings.Default.DefaultConnectionTimeout, false)) {
 							timeouted = true;
-							throw new Exception();
+							throw new Exception("過去ログ取得：コネクションタイムアウト");
 						}
 					}
 
+					// NetworkStreamは自動的に開放されないのでusingで囲む
 					using (NetworkStream ns = tcpClient.GetStream()) {
 
 						string msg = String.Format(ApplicationSettings.Default.WaybackThreadStartMessageFormat, data.Thread, resFrom, Utility.DateTimeToUnixTime(when), key.Value, userId);
