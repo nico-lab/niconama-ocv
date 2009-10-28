@@ -62,7 +62,6 @@
 			this.dataGridView1.Size = new System.Drawing.Size(706, 309);
 			this.dataGridView1.TabIndex = 0;
 			this.dataGridView1.VirtualMode = true;
-			this.dataGridView1.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.dataGridView1_RowPrePaint);
 			this.dataGridView1.RowHeightInfoNeeded += new System.Windows.Forms.DataGridViewRowHeightInfoNeededEventHandler(this.dataGridView1_RowHeightInfoNeeded);
 			this.dataGridView1.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dataGridView1_CellValueNeeded);
 			this.dataGridView1.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridView1_CellFormatting);
