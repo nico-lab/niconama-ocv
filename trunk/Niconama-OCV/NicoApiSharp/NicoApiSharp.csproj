@@ -18,6 +18,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -26,14 +27,41 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountInfomation.cs" />
+    <Compile Include="ApiSettings.cs" />
+    <Compile Include="ExXMLDocument.cs" />
+    <Compile Include="Live\Chat.cs" />
+    <Compile Include="Live\ChatClient.cs" />
+    <Compile Include="Live\ChatReceiver.cs" />
+    <Compile Include="Live\HeartBeat.cs" />
+    <Compile Include="IAccountInfomation.cs" />
+    <Compile Include="IErrorData.cs" />
+    <Compile Include="Live\IChat.cs" />
+    <Compile Include="Live\ILiveBasicStatus.cs" />
+    <Compile Include="Live\ILiveCountStatus.cs" />
+    <Compile Include="Live\ILiveDescription.cs" />
+    <Compile Include="Live\ILiveWatcherStatus.cs" />
+    <Compile Include="Live\IMessageServerStatus.cs" />
+    <Compile Include="Live\INgClient.cs" />
+    <Compile Include="Live\LiveDescription.cs" />
+    <Compile Include="Live\NgClient.cs" />
+    <Compile Include="Live\OwnerCommentPoster.cs" />
+    <Compile Include="Live\PlayerStatus.cs" />
+    <Compile Include="Live\PostKey.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Live\ThreadHeader.cs" />
+    <Compile Include="Live\Waybackkey.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
