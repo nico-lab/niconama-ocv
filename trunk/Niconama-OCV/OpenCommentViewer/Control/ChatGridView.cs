@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace OpenCommentViewer.Control
+namespace Hal.OpenCommentViewer.Control
 {
 	/// <summary>
 	/// チャットを表示するためのコントロール
@@ -16,14 +16,14 @@ namespace OpenCommentViewer.Control
 		/// <summary>
 		/// カラムを拡張するプラグインを格納する配列
 		/// </summary>
-		protected List<NCSPlugin.IColumnExtention> _columnExtentions = new List<NCSPlugin.IColumnExtention>();
+		protected List<Hal.NCSPlugin.IColumnExtention> _columnExtentions = new List<Hal.NCSPlugin.IColumnExtention>();
 
 		/// <summary>
 		/// プラグイン追加前のカラムの量
 		/// </summary>
 		protected int _defaultColmunCount = 0;
 		
-		List<NCSPlugin.IChat> _chats = new List<NCSPlugin.IChat>();
+		List<Hal.NCSPlugin.IChat> _chats = new List<Hal.NCSPlugin.IChat>();
 		List<int> _widthList = new List<int>();
 		int _dgHeight = 0;
 
@@ -103,7 +103,7 @@ namespace OpenCommentViewer.Control
 		/// チャットを追加する
 		/// </summary>
 		/// <param name="chat"></param>
-		public void Add(NCSPlugin.IChat chat)
+		public void Add(Hal.NCSPlugin.IChat chat)
 		{
 			// 現在のフォントでの文字列の長さを取得する
 			_widthList.Add(System.Windows.Forms.TextRenderer.MeasureText(chat.Message, dataGridView1.Font).Width);
@@ -126,13 +126,13 @@ namespace OpenCommentViewer.Control
 		/// チャット配列を追加する
 		/// </summary>
 		/// <param name="chats"></param>
-		public void AddRange(NCSPlugin.IChat[] chats)
+		public void AddRange(Hal.NCSPlugin.IChat[] chats)
 		{
 
 			dataGridView1.SuspendLayout();
 
 
-			foreach (NCSPlugin.IChat c in chats) {
+			foreach (Hal.NCSPlugin.IChat c in chats) {
 				_chats.Add(c);
 				// 現在のフォントでの文字列の長さを取得する
 				_widthList.Add(System.Windows.Forms.TextRenderer.MeasureText(c.Message, dataGridView1.Font).Width);
@@ -160,7 +160,7 @@ namespace OpenCommentViewer.Control
 		/// カラムを追加する
 		/// </summary>
 		/// <param name="ext"></param>
-		public void AddColumn(NCSPlugin.IColumnExtention ext) {
+		public void AddColumn(Hal.NCSPlugin.IColumnExtention ext) {
 			if (ext != null && ext.Column != null) {
 				if (ext.Column.SortMode == DataGridViewColumnSortMode.Automatic) {
 					ext.Column.SortMode = DataGridViewColumnSortMode.Programmatic;
@@ -198,7 +198,7 @@ namespace OpenCommentViewer.Control
 				return;
 			}
 
-			NCSPlugin.IChat chat = _chats[e.RowIndex];
+			Hal.NCSPlugin.IChat chat = _chats[e.RowIndex];
 			switch (e.ColumnIndex) {
 				case 0:
 					e.Value = chat.No;
@@ -243,7 +243,7 @@ namespace OpenCommentViewer.Control
 				return;
 			}
 
-			NCSPlugin.IChat chat = _chats[e.RowIndex];
+			Hal.NCSPlugin.IChat chat = _chats[e.RowIndex];
 
 			// 主コメントをオレンジ色にする
 			if (e.ColumnIndex == 1 && chat.IsOwnerComment) {
@@ -262,7 +262,7 @@ namespace OpenCommentViewer.Control
 				return;
 			}
 
-			NCSPlugin.IChat chat = _chats[e.RowIndex];
+			Hal.NCSPlugin.IChat chat = _chats[e.RowIndex];
 			e.ToolTipText = chat.Message;
 		}
 

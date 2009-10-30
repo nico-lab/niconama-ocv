@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenCommentViewer.NicoAPI {
+namespace Hal.OpenCommentViewer.NicoAPI {
 
 	/// <summary>
 	/// アカウント情報をあらわすインターフェース

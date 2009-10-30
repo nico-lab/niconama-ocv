@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenCommentViewer.Plugin
+namespace Hal.OpenCommentViewer.Plugin
 {
 	class PluginInfo : IPluginInfo
 	{
@@ -45,7 +45,7 @@ namespace OpenCommentViewer.Plugin
 			List<IPluginInfo> plugins = new List<IPluginInfo>();
 			
 			//IPlugin型の名前
-			string ipluginName = typeof(NCSPlugin.IPlugin).FullName;
+			string ipluginName = typeof(Hal.NCSPlugin.IPlugin).FullName;
 
 			//プラグインフォルダ
 			string folder = ApplicationSettings.Default.PluginsFolder;
@@ -94,14 +94,14 @@ namespace OpenCommentViewer.Plugin
 		/// プラグインクラスのインスタンスを作成する
 		/// </summary>
 		/// <returns>プラグインクラスのインスタンス</returns>
-		public NCSPlugin.IPlugin CreateInstance()
+		public Hal.NCSPlugin.IPlugin CreateInstance()
 		{
 			try {
 				//アセンブリを読み込む
 				System.Reflection.Assembly asm = System.Reflection.Assembly.LoadFrom(this.Location);
 				
 				//クラス名からインスタンスを作成する
-				NCSPlugin.IPlugin plugin = (NCSPlugin.IPlugin)asm.CreateInstance(this.ClassName);
+				Hal.NCSPlugin.IPlugin plugin = (Hal.NCSPlugin.IPlugin)asm.CreateInstance(this.ClassName);
 				
 				return plugin;
 

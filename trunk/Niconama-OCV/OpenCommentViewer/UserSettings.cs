@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenCommentViewer
+namespace Hal.OpenCommentViewer
 {
 
 	/// <summary>

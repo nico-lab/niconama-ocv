@@ -1,4 +1,4 @@
-﻿namespace OpenCommentViewer.Control {
+﻿namespace Hal.OpenCommentViewer.Control {
   partial class MainForm {
     /// <summary>
     /// 必要なデザイナ変数です。
@@ -37,13 +37,13 @@
 		this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 		this.toolStrip2 = new System.Windows.Forms.ToolStrip();
 		this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-		this.idBox = new OpenCommentViewer.CustomControl.ToolStripSpringTextBox();
+		this.idBox = new Hal.OpenCommentViewer.CustomControl.ToolStripSpringTextBox();
 		this.startButton = new System.Windows.Forms.ToolStripButton();
 		this.stopButton = new System.Windows.Forms.ToolStripButton();
 		this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 		this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 		this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-		this.chatGridView1 = new OpenCommentViewer.Control.ChatGridView();
+		this.chatGridView1 = new Hal.OpenCommentViewer.Control.ChatGridView();
 		this.idBoxContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 		this.cutIdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 		this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
@@ -325,10 +325,10 @@
     #endregion
 
 		private System.Windows.Forms.StatusStrip statusStrip1;
-		private OpenCommentViewer.Control.ChatGridView chatGridView1;
+		private Hal.OpenCommentViewer.Control.ChatGridView chatGridView1;
 		private System.Windows.Forms.ToolStripStatusLabel statusLabel;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel1;
-		private OpenCommentViewer.CustomControl.ToolStripSpringTextBox idBox;
+		private Hal.OpenCommentViewer.CustomControl.ToolStripSpringTextBox idBox;
 		private System.Windows.Forms.ToolStripButton startButton;
 		private System.Windows.Forms.ToolStripButton stopButton;
 		private System.Windows.Forms.ToolStripMenuItem saveTicketToolStripMenuItem;

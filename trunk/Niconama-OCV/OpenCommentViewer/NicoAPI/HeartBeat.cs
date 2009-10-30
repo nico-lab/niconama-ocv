@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenCommentViewer.NicoAPI
+namespace Hal.OpenCommentViewer.NicoAPI
 {
 	/// <summary>
 	/// ハートビートを取得する
@@ -16,7 +16,7 @@ namespace OpenCommentViewer.NicoAPI
 
 			try {
 				HeartBeat hb = new HeartBeat();
-				string url = string.Format(ApplicationSettings.Default.GetHeartBeatUrlFormat, liveId);
+				string url = string.Format(ApiSettings.Default.GetHeartBeatUrlFormat, liveId);
 				hb._xnode = new CustomControl.ExXMLDocument();
 				((CustomControl.ExXMLDocument)hb._xnode).Load(url, cookies);
 

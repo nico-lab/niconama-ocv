@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace OpenCommentViewer.Control
+namespace Hal.OpenCommentViewer.Control
 {
 	public partial class MainForm : Form, IMainView
 	{
@@ -32,7 +32,7 @@ namespace OpenCommentViewer.Control
 			get { return "SimpleViewerのメインフォーム"; }
 		}
 
-		public void Initialize(NCSPlugin.IPluginHost host)
+		public void Initialize(Hal.NCSPlugin.IPluginHost host)
 		{
 			_core = host as Control.ICore;
 			if (_core == null) {
@@ -68,7 +68,7 @@ namespace OpenCommentViewer.Control
 
 		}
 
-		public void OnComment(NCSPlugin.IChat chat)
+		public void OnComment(Hal.NCSPlugin.IChat chat)
 		{
 			chatGridView1.Add((NicoAPI.Chat)chat);
 
@@ -102,17 +102,17 @@ namespace OpenCommentViewer.Control
 			statusLabel.Text = message;
 		}
 
-		public void RegisterColumnExtention(NCSPlugin.IColumnExtention columnExtention)
+		public void RegisterColumnExtention(Hal.NCSPlugin.IColumnExtention columnExtention)
 		{
 			this.chatGridView1.AddColumn(columnExtention);
 		}
 
-		public void RegisterContextMenuExtention(NCSPlugin.IContextMenuExtention contextMenuExtention)
+		public void RegisterContextMenuExtention(Hal.NCSPlugin.IContextMenuExtention contextMenuExtention)
 		{
 			throw new Exception("The method or operation is not implemented.");
 		}
 
-		public void RegisterMenuStripExtention(NCSPlugin.IMenuStripExtention menuStripExtention)
+		public void RegisterMenuStripExtention(Hal.NCSPlugin.IMenuStripExtention menuStripExtention)
 		{
 			throw new Exception("The method or operation is not implemented.");
 		}
@@ -240,7 +240,7 @@ statusStrip1.Visible = !statusStrip1.Visible;
 		private void copyIdAsURLToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			string id = Utility.GetLiveIdFromUrl(idBox.Text);
-			Utility.SetTxetToClipboard(string.Format(ApplicationSettings.Default.LiveWatchUrlFormat, id));
+			Utility.SetTxetToClipboard(string.Format(ApiSettings.Default.LiveWatchUrlFormat, id));
 		}
 
 		private void pasteToolStripMenuItem_Click(object sender, EventArgs e)

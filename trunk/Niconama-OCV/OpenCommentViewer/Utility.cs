@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using System.Net;
 using System.Web;
 
-namespace OpenCommentViewer
+namespace Hal.OpenCommentViewer
 {
 
 	/// <summary>
@@ -153,9 +153,9 @@ namespace OpenCommentViewer
 
 				HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(url);
 				webReq.Method = "POST";
-				webReq.Referer = ApplicationSettings.Default.PostOwnerCommentReferer;
+				webReq.Referer = ApiSettings.Default.PostOwnerCommentReferer;
 				webReq.ContentType = "application/x-www-form-urlencoded";
-				webReq.UserAgent = ApplicationSettings.Default.PostOwnerCommentUserAgent;
+				webReq.UserAgent = ApiSettings.Default.PostOwnerCommentUserAgent;
 
 				webReq.ContentLength = postDataBytes.Length;
 				webReq.Timeout = defaultTimeout;
@@ -341,7 +341,7 @@ namespace OpenCommentViewer
 		public static string GetLiveIdFromUrl(string url)
 		{
 
-			System.Text.RegularExpressions.Match match = System.Text.RegularExpressions.Regex.Match(url, ApplicationSettings.Default.LiveIdRegPattern);
+			System.Text.RegularExpressions.Match match = System.Text.RegularExpressions.Regex.Match(url, ApiSettings.Default.LiveIdRegPattern);
 
 			if (match.Success) {
 				return match.Groups["id"].Value;

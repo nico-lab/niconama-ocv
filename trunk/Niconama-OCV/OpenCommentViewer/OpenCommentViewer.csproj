@@ -7,7 +7,7 @@
     <ProjectGuid>{75AC91B7-F004-42D1-8DEA-E7616B9C4612}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenCommentViewer</RootNamespace>
+    <RootNamespace>Hal.OpenCommentViewer</RootNamespace>
     <AssemblyName>OpenCommentViewer</AssemblyName>
     <ApplicationIcon>ocv.ico</ApplicationIcon>
     <StartupObject>
@@ -149,6 +149,7 @@
     <Compile Include="Control\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApiSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NCSPlugin\NCSPlugin.csproj">

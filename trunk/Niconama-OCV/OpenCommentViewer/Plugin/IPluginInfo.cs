@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenCommentViewer.Plugin
+namespace Hal.OpenCommentViewer.Plugin
 {
 	interface IPluginInfo
 	{
 		string ClassName { get; }
 		string Location { get; }
-		NCSPlugin.IPlugin CreateInstance();
+		Hal.NCSPlugin.IPlugin CreateInstance();
 	}
 }

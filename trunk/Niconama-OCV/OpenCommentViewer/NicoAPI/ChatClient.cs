@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Xml;
 
-namespace OpenCommentViewer.NicoAPI
+namespace Hal.OpenCommentViewer.NicoAPI
 {
 
 	/// <summary>
@@ -124,7 +124,7 @@ namespace OpenCommentViewer.NicoAPI
 						// 既定時間以上応答が無かった場合はタイムアウト
 						_tcpClient.BeginConnect(data.Address, data.Port, ac, _tcpClient);
 
-						if (!m.WaitOne(ApplicationSettings.Default.DefaultConnectionTimeout, false)) {
+						if (!m.WaitOne(ApiSettings.Default.DefaultConnectionTimeout, false)) {
 							timeouted = true;
 							throw new Exception("コメント受信：サーバーコネクションタイムアウト");
 						}
@@ -133,11 +133,11 @@ namespace OpenCommentViewer.NicoAPI
 
 
 
-					string msg = String.Format(ApplicationSettings.Default.ThreadStartMessageFormat, data.Thread, resFrom);
+					string msg = String.Format(ApiSettings.Default.ThreadStartMessageFormat, data.Thread, resFrom);
 					SendMessge(msg);
 
 					NetworkStream ns = _tcpClient.GetStream();
-					StateObject obj = new StateObject(ApplicationSettings.Default.ReceiveBufferSize, ns);
+					StateObject obj = new StateObject(ApiSettings.Default.ReceiveBufferSize, ns);
 					ns.BeginRead(obj.Buffer, 0, obj.BufferSize, new AsyncCallback(ReadCallback), obj);
 
 					// キャンセルイベントをリセット

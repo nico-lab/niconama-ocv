@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace OpenCommentViewer
+namespace Hal.OpenCommentViewer
 {
 	static class Program
 	{
@@ -13,21 +13,19 @@ namespace OpenCommentViewer
 		static void Main(string[] args)
 		{
 
-			//Cookie.OperaCookieGetter ocg = new OpenCommentViewer.Cookie.OperaCookieGetter();
-			//ocg.GetCookieValues(".nicovideo.jp", "user_session");
-
+			
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
 			Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
 			System.Threading.Thread.GetDomain().UnhandledException += new UnhandledExceptionEventHandler(Program_UnhandledException);
 
-			OpenCommentViewer.Control.Core c = new OpenCommentViewer.Control.Core();
-			OpenCommentViewer.Control.MainForm m = new OpenCommentViewer.Control.MainForm();
+			Hal.OpenCommentViewer.Control.Core c = new Hal.OpenCommentViewer.Control.Core();
+			Hal.OpenCommentViewer.Control.MainForm m = new Hal.OpenCommentViewer.Control.MainForm();
 			c.SetMainView(m);
 
 			for (int i = 0; i < args.Length; i++) {
-				string id = OpenCommentViewer.Utility.GetLiveIdFromUrl(args[i]);
+				string id = Hal.OpenCommentViewer.Utility.GetLiveIdFromUrl(args[i]);
 				if (id != null) {
 					c.Reserve(id);
 					break;

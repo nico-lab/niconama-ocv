@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
-namespace OpenCommentViewer.Control
+namespace Hal.OpenCommentViewer.Control
 {
 	/// <summary>
 	/// ビューのカラムに00：00形式の時間を追加するためのクラス
 	/// </summary>
-	class VposColumnExtention : NCSPlugin.IColumnExtention
+	class VposColumnExtention : Hal.NCSPlugin.IColumnExtention
 	{
 
 		DataGridViewColumn _column = null;
@@ -29,12 +29,12 @@ namespace OpenCommentViewer.Control
 			get { return _column; }
 		}
 
-		public object OnCellValueNeeded(NCSPlugin.IChat chat)
+		public object OnCellValueNeeded(Hal.NCSPlugin.IChat chat)
 		{
 			return VposToTimeString(chat.Vpos);
 		}
 
-		public void OnCellFormatting(NCSPlugin.IChat chat, System.Windows.Forms.DataGridViewCellFormattingEventArgs e)
+		public void OnCellFormatting(Hal.NCSPlugin.IChat chat, System.Windows.Forms.DataGridViewCellFormattingEventArgs e)
 		{
 		}
 
@@ -42,7 +42,7 @@ namespace OpenCommentViewer.Control
 
 		#region IComparer<IChat> メンバ
 
-		public int Compare(NCSPlugin.IChat x, NCSPlugin.IChat y)
+		public int Compare(Hal.NCSPlugin.IChat x, Hal.NCSPlugin.IChat y)
 		{
 			return x.Vpos - y.Vpos;
 		}

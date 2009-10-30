@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-using NCSPlugin;
+using Hal.NCSPlugin;
 
 using Regex = System.Text.RegularExpressions.Regex;
 using Match = System.Text.RegularExpressions.Match;
 
 
-namespace OpenCommentViewer.Control
+namespace Hal.OpenCommentViewer.Control
 {
 
 	/// <summary>
@@ -35,7 +35,7 @@ namespace OpenCommentViewer.Control
 		{
 			this.ClearFilter();
 
-			NCSPlugin.INgClient[] clients = core.GetNgClients();
+			Hal.NCSPlugin.INgClient[] clients = core.GetNgClients();
 			if (clients != null && clients.Length != 0) {
 				
 				BuildRegex(clients);
@@ -224,7 +224,7 @@ namespace OpenCommentViewer.Control
 		/// <summary>
 		/// NGフィルターを構築する
 		/// </summary>
-		private void BuildRegex(NCSPlugin.INgClient[] clients)
+		private void BuildRegex(Hal.NCSPlugin.INgClient[] clients)
 		{
 			ClearFilter();
 			_clients.AddRange(clients);

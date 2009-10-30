@@ -10,7 +10,7 @@ using System.Data.SQLite;
 #endif
 
 
-namespace OpenCommentViewer.Cookie
+namespace Hal.OpenCommentViewer.Cookie
 {
 
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Net;
 
 
-namespace OpenCommentViewer.NicoAPI
+namespace Hal.OpenCommentViewer.NicoAPI
 {
 
 	/// <summary>
@@ -34,17 +34,17 @@ namespace OpenCommentViewer.NicoAPI
 				command = System.Web.HttpUtility.UrlEncode(command);
 				string postData;
 
-				postData = String.Format(ApplicationSettings.Default.PostOwnerCommentDataFormat, message, command);
+				postData = String.Format(ApiSettings.Default.PostOwnerCommentDataFormat, message, command);
 				
 				
 				byte[] postDataBytes = System.Text.Encoding.UTF8.GetBytes(postData);
 
-				string url = string.Format(ApplicationSettings.Default.PostOwnerCommentUrlFormat, liveId);
+				string url = string.Format(ApiSettings.Default.PostOwnerCommentUrlFormat, liveId);
 				HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(url);
 				webReq.Method = "POST";
-				webReq.Referer = ApplicationSettings.Default.PostOwnerCommentReferer;
+				webReq.Referer = ApiSettings.Default.PostOwnerCommentReferer;
 				webReq.ContentType = "application/x-www-form-urlencoded";
-				webReq.UserAgent = ApplicationSettings.Default.PostOwnerCommentUserAgent;
+				webReq.UserAgent = ApiSettings.Default.PostOwnerCommentUserAgent;
 
 				webReq.ContentLength = postDataBytes.Length;
 				webReq.Timeout = 1000;

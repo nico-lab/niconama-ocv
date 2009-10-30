@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenCommentViewer.NicoAPI
+namespace Hal.OpenCommentViewer.NicoAPI
 {
 	/// <summary>
 	/// 現在の総来場者数、コメント数をあらわすインターフェース

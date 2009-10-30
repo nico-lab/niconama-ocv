@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenCommentViewer.Control
+namespace Hal.OpenCommentViewer.Control
 {
 
 	/// <summary>
@@ -25,7 +25,7 @@ namespace OpenCommentViewer.Control
 	/// コア部分のインターフェース
 	/// メインフォームやシステム内部のプラグインに対して公開される
 	/// </summary>
-	public interface ICore : NCSPlugin.IPluginHost
+	public interface ICore : Hal.NCSPlugin.IPluginHost
 	{
 		/// <summary>
 		/// アリーナか立ち見かを返します
