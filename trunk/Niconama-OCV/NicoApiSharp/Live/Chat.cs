@@ -8,7 +8,7 @@ namespace Hal.NicoApiSharp.Live
 	/// <summary>
 	/// サーバーから受け取ったチャットを表すクラス
 	/// </summary>
-	public class Chat : IChat, IErrorData
+	public class Chat : IErrorData, Hal.NCSPlugin.IChat
 	{
 
 		/// <summary>
@@ -42,9 +42,7 @@ namespace Hal.NicoApiSharp.Live
 		private bool _anonymity;
 		private DateTime _date;
 		private int _premium;
-		private NGType _ngType = NGType.None;
-		private string _ngSource = null;
-
+		
 		private ERROR_CODE _errorCode;
 
 		#endregion
@@ -135,11 +133,17 @@ namespace Hal.NicoApiSharp.Live
 
 		#region IErrorData メンバ
 
+		/// <summary>
+		/// エラーコード
+		/// </summary>
 		public string ErrorCode
 		{
 			get { return _errorCode.ToString(); }
 		}
 
+		/// <summary>
+		/// エラーコードの説明
+		/// </summary>
 		public string ErrorMessage
 		{
 			get
@@ -158,6 +162,9 @@ namespace Hal.NicoApiSharp.Live
 			}
 		}
 
+		/// <summary>
+		/// エラーがあるか
+		/// </summary>
 		public bool HasError
 		{
 			get { return _errorCode != ERROR_CODE.None; }
@@ -177,7 +184,6 @@ namespace Hal.NicoApiSharp.Live
 		/// <summary>
 		/// 指定された文字列で初期化します。
 		/// </summary>
-		/// <exception cref="NicoApi.NicoParseException"></exception>		
 		/// <param name="xml"></param>
 		public Chat(string xml)
 			: this()
@@ -188,7 +194,6 @@ namespace Hal.NicoApiSharp.Live
 		/// <summary>
 		/// 指定されたExXMLDocumentで初期化します。
 		/// </summary>
-		/// <exception cref="NicoApi.NicoParseException"></exception>		
 		/// <param name="xml"></param>
 		public Chat(System.Xml.XmlNode xml)
 			: this()
@@ -200,7 +205,7 @@ namespace Hal.NicoApiSharp.Live
 		/// 複製
 		/// </summary>
 		/// <param name="chat"></param>
-		public Chat(IChat chat)
+		public Chat(NCSPlugin.IChat chat)
 			: this()
 		{
 			this._anonymity = chat.Anonymity;
@@ -286,7 +291,7 @@ namespace Hal.NicoApiSharp.Live
 		/// <summary>
 		/// ChatをあらわすXmlを解析する
 		/// </summary>
-		/// <param name="xdoc"></param>
+		/// <param name="node"></param>
 		void parse(System.Xml.XmlNode node)
 		{
 
@@ -313,30 +318,18 @@ namespace Hal.NicoApiSharp.Live
 			this._message = this._message.Replace("\r\n", "\n").Replace("\n", "\r\n");
 		}
 
-
-		#region IFilterdChat メンバ
-
-		public NGType NgType
-		{
-			get { return _ngType; }
-			set { _ngType = value; }
-		}
-
-		public string NgSource
-		{
-			get { return _ngSource; }
-			set { _ngSource = value; }
-		}
-
-		#endregion
-
+		/// <summary>
+		/// スレッド番号とコメント番号が一致しているか調べる
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
 		public override bool Equals(object obj)
 		{
 			if (obj == null) {
 				return false;
 			}
 
-			IChat that = obj as IChat;
+			NCSPlugin.IChat that = obj as NCSPlugin.IChat;
 			if (that == null) {
 				return false;
 			}
@@ -344,6 +337,10 @@ namespace Hal.NicoApiSharp.Live
 			return this.Thread == that.Thread && this.No == that.No;
 		}
 
+		/// <summary>
+		/// コメント番号とスレッド番号からハッシュコードを生成する
+		/// </summary>
+		/// <returns></returns>
 		public override int GetHashCode()
 		{
 			return this.Thread ^ this.No;

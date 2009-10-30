@@ -11,6 +11,10 @@ namespace Hal.NicoApiSharp
 	public class ApiSettings
 	{
 		const int SETTING_VERSION = 1;
+
+		/// <summary>
+		/// 設定値のバージョン（値を大きくすると、古いデータは更新される）
+		/// </summary>
 		public int SettingVersion = SETTING_VERSION;
 
 		#region NicoAPI URLs

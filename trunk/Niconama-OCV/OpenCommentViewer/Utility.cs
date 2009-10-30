@@ -10,7 +10,7 @@ namespace Hal.OpenCommentViewer
 	/// <summary>
 	/// 汎用関数群
 	/// </summary>
-	public static class Utility
+	public static class Utility 
 	{
 
 		/// <summary>

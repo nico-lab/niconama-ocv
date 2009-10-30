@@ -5,7 +5,11 @@ using System.Xml;
 
 namespace Hal.NicoApiSharp.Live
 {
-	public class NgClient : INgClient
+
+	/// <summary>
+	/// NGを格納するクラス
+	/// </summary>
+	public class NgClient : Hal.NCSPlugin.INgClient
 	{
 
 		#region Static Methods
@@ -18,7 +22,7 @@ namespace Hal.NicoApiSharp.Live
 		/// <param name="source"></param>
 		/// <param name="cookies"></param>
 		/// <returns></returns>
-		public static bool AddNg(string liveId, NGType type, string source, System.Net.CookieContainer cookies)
+		public static bool AddNg(string liveId, NCSPlugin.NGType type, string source, System.Net.CookieContainer cookies)
 		{
 			string res = SendNgCommand(liveId, "add", type.ToString(), source, cookies);
 			return (res != null && res.Contains("status=\"ok\""));
@@ -32,7 +36,7 @@ namespace Hal.NicoApiSharp.Live
 		/// <param name="source"></param>
 		/// <param name="cookies"></param>
 		/// <returns></returns>
-		public static bool DeleteNg(string liveId, NGType type, string source, System.Net.CookieContainer cookies)
+		public static bool DeleteNg(string liveId, NCSPlugin.NGType type, string source, System.Net.CookieContainer cookies)
 		{
 			string res = SendNgCommand(liveId, "del", type.ToString(), source, cookies);
 			return (res != null && res.Contains("status=\"ok\""));
@@ -44,7 +48,7 @@ namespace Hal.NicoApiSharp.Live
 		/// <param name="liveId"></param>
 		/// <param name="cookies"></param>
 		/// <returns>NG一覧　失敗時はnull</returns>
-		public static INgClient[] GetNgClients(string liveId, System.Net.CookieContainer cookies)
+		public static Hal.NCSPlugin.INgClient[] GetNgClients(string liveId, System.Net.CookieContainer cookies)
 		{
 			string res = SendNgCommand(liveId, "get", "", "", cookies);
 
@@ -101,7 +105,7 @@ namespace Hal.NicoApiSharp.Live
 			IsRegex = 4
 		}
 
-		NGType _type;
+		NCSPlugin.NGType _type;
 		string _source;
 		DateTime _regTime;
 		NGOption _options;
@@ -111,7 +115,13 @@ namespace Hal.NicoApiSharp.Live
 			this.Parse(node);
 		}
 
-		public NgClient(NGType type, string source, DateTime regTime)
+		/// <summary>
+		/// パラメータを指定してNgClientを生成する
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="source"></param>
+		/// <param name="regTime"></param>
+		public NgClient(NCSPlugin.NGType type, string source, DateTime regTime)
 		{
 			_type = type;
 			_source = source;
@@ -124,13 +134,13 @@ namespace Hal.NicoApiSharp.Live
 			_regTime = Utility.UnixTimeToDateTime(int.Parse(node["register_time"].InnerText));
 			switch (node["type"].InnerText) {
 				case "word":
-					_type = NGType.Word;
+					_type = NCSPlugin.NGType.Word;
 					break;
 				case "id":
-					_type = NGType.Id;
+					_type = NCSPlugin.NGType.Id;
 					break;
 				case "command":
-					_type = NGType.Command;
+					_type = NCSPlugin.NGType.Command;
 					break;
 			}
 
@@ -151,31 +161,49 @@ namespace Hal.NicoApiSharp.Live
 
 		#region INgClients メンバ
 
-		public NGType Type
+		/// <summary>
+		/// NGの種類
+		/// </summary>
+		public NCSPlugin.NGType Type
 		{
 			get { return _type; }
 		}
 
+		/// <summary>
+		/// NGソース
+		/// </summary>
 		public string Source
 		{
 			get { return _source; }
 		}
 
+		/// <summary>
+		/// 登録日
+		/// </summary>
 		public DateTime RegisterTime
 		{
 			get { return _regTime; }
 		}
 
+		/// <summary>
+		/// 読み込み専用のNGであるかを取得する（運営などが設定したもの）
+		/// </summary>
 		public bool ReadOnly
 		{
 			get { return (_options & NGOption.Readonly) != 0; }
 		}
 
+		/// <summary>
+		/// 文字の種類を区別するかどうかを取得する
+		/// </summary>
 		public bool UseCaseUnify
 		{
 			get { return (_options & NGOption.UseCaseUnify) != 0; }
 		}
 
+		/// <summary>
+		/// 正規表現かどうかを取得する
+		/// </summary>
 		public bool IsRegex
 		{
 			get { return (_options & NGOption.IsRegex) != 0; }
@@ -184,6 +212,11 @@ namespace Hal.NicoApiSharp.Live
 
 		#endregion
 
+		/// <summary>
+		/// NGのタイプとソースが一致しているかどうかを調べる
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
 		public override bool Equals(object obj)
 		{
 			if (obj == null) {
@@ -198,6 +231,10 @@ namespace Hal.NicoApiSharp.Live
 			return this._type == that._type && this._source.Equals(that._source);
 		}
 
+		/// <summary>
+		/// ソースとタイプからハッシュコードを生成する
+		/// </summary>
+		/// <returns></returns>
 		public override int GetHashCode()
 		{
 			return this._source.GetHashCode() ^ (int)this._type;

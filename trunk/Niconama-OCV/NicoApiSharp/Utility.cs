@@ -229,7 +229,7 @@ namespace Hal.NicoApiSharp
 		/// <summary>
 		/// DateTimeをUnix時間に変換する
 		/// </summary>
-		/// <param name="UnixTime"></param>
+		/// <param name="time"></param>
 		/// <returns></returns>
 		public static int DateTimeToUnixTime(DateTime time)
 		{
@@ -239,6 +239,12 @@ namespace Hal.NicoApiSharp
 
 		#region XML操作
 
+		/// <summary>
+		/// XMLノードから文字列を取得する
+		/// </summary>
+		/// <param name="node"></param>
+		/// <param name="xpath"></param>
+		/// <returns></returns>
 		public static string SelectString(System.Xml.XmlNode node, string xpath)
 		{
 			System.Diagnostics.Debug.Assert(node != null, "Utility SelectString node is null!");
@@ -254,6 +260,13 @@ namespace Hal.NicoApiSharp
 			return null;
 		}
 
+		/// <summary>
+		/// XMLノードから整数値を取得する
+		/// </summary>
+		/// <param name="node"></param>
+		/// <param name="xpath"></param>
+		/// <param name="defaultValue"></param>
+		/// <returns></returns>
 		public static int SelectInt(System.Xml.XmlNode node, string xpath, int defaultValue)
 		{
 			string data = SelectString(node, xpath);
@@ -268,6 +281,12 @@ namespace Hal.NicoApiSharp
 			return defaultValue;
 		}
 
+		/// <summary>
+		/// XMLノードから日付を取得する
+		/// </summary>
+		/// <param name="node"></param>
+		/// <param name="xpath"></param>
+		/// <returns></returns>
 		public static DateTime SelectDateTime(System.Xml.XmlNode node, string xpath)
 		{
 			int unixTime = SelectInt(node, xpath, 0);

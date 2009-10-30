@@ -62,7 +62,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// 結果はchatオブジェクトのIFilterdChatインターフェースの実装に格納される
 		/// </summary>
 		/// <param name="chat"></param>
-		public void Check(NicoAPI.Chat chat)
+		public void Check(OcvChat chat)
 		{
 
 			if (chat.IsOwnerComment && chat.Message.StartsWith("/ng")) {
@@ -118,9 +118,9 @@ namespace Hal.OpenCommentViewer.Control
 
 		}
 
-		public void Check(ICollection<NicoAPI.Chat> chats)
+		public void Check(ICollection<OcvChat> chats)
 		{
-			foreach (NicoAPI.Chat chat in chats) {
+			foreach (OcvChat chat in chats) {
 				this.Check(chat);
 			}
 		}
@@ -158,7 +158,7 @@ namespace Hal.OpenCommentViewer.Control
 		private void AddNg(NGType type, string src)
 		{
 
-			AddNg(new NicoAPI.NgClient(type, src, DateTime.Now));
+			AddNg(new NicoApiSharp.Live.NgClient(type, src, DateTime.Now));
 
 		}
 
@@ -204,7 +204,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// <param name="src"></param>
 		private void DelNg(NGType type, string src)
 		{
-			DelNg(new NicoAPI.NgClient(type, src, DateTime.Now));
+			DelNg(new NicoApiSharp.Live.NgClient(type, src, DateTime.Now));
 		}
 
 		/// <summary>
