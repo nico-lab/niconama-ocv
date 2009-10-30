@@ -23,7 +23,7 @@ namespace OpenCommentViewer.Cookie
 	{
 
 		const string CONNECTIONSTRING_FORMAT = "Data Source={0}";
-		public abstract string GetCookieValue(string url, string key);
+		public abstract string[] GetCookieValues(string url, string key);
 
 
 		/// <summary>
@@ -32,7 +32,7 @@ namespace OpenCommentViewer.Cookie
 		/// <param name="path"></param>
 		/// <param name="query"></param>
 		/// <returns></returns>
-		protected string getDatabaseValue(string path, string query)
+		protected string[] getDatabaseValues(string path, string query)
 		{
 
 			try {
@@ -43,7 +43,7 @@ namespace OpenCommentViewer.Cookie
 					connection.Open();
 					string res = command.ExecuteScalar() as string;
 					connection.Close();
-					return res;
+					return new string[] { res };
 
 				}
 

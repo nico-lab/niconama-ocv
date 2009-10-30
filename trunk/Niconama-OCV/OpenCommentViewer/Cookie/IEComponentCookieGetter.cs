@@ -16,7 +16,7 @@ namespace OpenCommentViewer.Cookie
 		private extern static bool InternetGetCookie(string lpszUrl, string lpszCookieName,
 		StringBuilder lpCookieData, ref uint lpdwSize);
 
-		public string GetCookieValue(string url, string key)
+		public string[] GetCookieValues(string url, string key)
 		{
 			try {
 				string cookie = GetIECookies(url);
@@ -24,7 +24,7 @@ namespace OpenCommentViewer.Cookie
 				for (int i = 0; i < datas.Length; i++) {
 					string[] data = datas[i].Split('=');
 					if (data[0].Equals(key)) {
-						return data[1];
+						return new string[] { data[1] };
 					}
 				}
 			} catch {

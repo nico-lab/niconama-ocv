@@ -9,7 +9,7 @@ namespace OpenCommentViewer.Plugin
 		private string _location;
 		private string _className;
 
-		// <summary>
+		/// <summary>
 		/// PluginInfoクラスのコンストラクタ
 		/// </summary>
 		/// <param name="path">アセンブリファイルのパス</param>

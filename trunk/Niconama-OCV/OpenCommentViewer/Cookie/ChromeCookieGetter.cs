@@ -36,7 +36,7 @@ namespace OpenCommentViewer.Cookie
 			_path = path;
 		}
 
-		public override string GetCookieValue(string url, string key)
+		public override string[] GetCookieValues(string url, string key)
 		{
 
 			if (!System.IO.File.Exists(_path)) {
@@ -47,7 +47,7 @@ namespace OpenCommentViewer.Cookie
 				string query = string.Format(QUERY_FORMAT, url, key);
 
 				// SqliteCookieGetterに処理を投げる
-				return base.getDatabaseValue(_path, query);
+				return base.getDatabaseValues(_path, query);
 
 			} catch (Exception ex) {
 				Logger.Default.LogException(ex);

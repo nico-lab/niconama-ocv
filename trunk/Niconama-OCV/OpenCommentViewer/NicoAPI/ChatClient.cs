@@ -29,13 +29,18 @@ namespace OpenCommentViewer.NicoAPI
 		/// サーバーから切断したときに発生するイベント
 		/// </summary>
 		public event EventHandler DisconnectServer;
+		
+		/// <summary>
+		/// スレッド情報
+		/// </summary>
+		protected ThreadHeader _threadHeader = null;
 
 		private bool _disconnecting = false;
 		private object _disconnectingSync = new object();
 		private System.Threading.ManualResetEvent _cancelEvent;
 
 		private TcpClient _tcpClient;
-		protected ThreadHeader _threadHeader = null;
+		
 
 		/// <summary>
 		/// 通信が中断状態にあるかどうかを取得・設定する
@@ -347,7 +352,7 @@ namespace OpenCommentViewer.NicoAPI
 		/// <summary>
 		/// 接続に失敗したことを通知します。
 		/// </summary>
-		/// <param name="lastRes"></param>
+		/// <param name="ex"></param>
 		protected virtual void OnConnectionError(Exception ex)
 		{
 			if (this.ConnectionError != null) {
@@ -369,7 +374,6 @@ namespace OpenCommentViewer.NicoAPI
 		/// <summary>
 		/// メッセージサーバーから切断したことを通知します。
 		/// </summary>
-		/// <param name="lastRes"></param>
 		protected virtual void OnDisconnectServer()
 		{
 			if (this.DisconnectServer != null) {
@@ -421,7 +425,7 @@ namespace OpenCommentViewer.NicoAPI
 			/// <summary>
 			/// コメントを受信した際に発生するイベントの引数
 			/// </summary>
-			/// <param name="last"></param>
+			/// <param name="ex"></param>
 			internal ConnectionErrorEventArgs(Exception ex)
 			{
 				_ex = ex;

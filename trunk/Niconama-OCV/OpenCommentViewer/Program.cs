@@ -12,6 +12,10 @@ namespace OpenCommentViewer
 		[STAThread]
 		static void Main(string[] args)
 		{
+
+			//Cookie.OperaCookieGetter ocg = new OpenCommentViewer.Cookie.OperaCookieGetter();
+			//ocg.GetCookieValues(".nicovideo.jp", "user_session");
+
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
@@ -31,8 +35,9 @@ namespace OpenCommentViewer
 			}
 
 			Application.Run(m);
-
-			Logger.Default.Save("log.txt");
+			if (Logger.Default.HasErrorLog) {
+				Logger.Default.Save("log.txt");
+			}
 		}
 
 		/// <summary>

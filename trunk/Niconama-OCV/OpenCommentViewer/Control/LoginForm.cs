@@ -8,8 +8,15 @@ using System.Windows.Forms;
 
 namespace OpenCommentViewer.Control
 {
+
+	/// <summary>
+	/// ログイン画面を構成するクラス
+	/// </summary>
 	public partial class LoginForm : Form
 	{
+		/// <summary>
+		/// ログインフォームを生成します
+		/// </summary>
 		public LoginForm()
 		{
 			InitializeComponent();

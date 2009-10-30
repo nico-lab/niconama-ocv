@@ -23,6 +23,9 @@ namespace OpenCommentViewer.NicoAPI
 		private int _lastRes = 0;
 		private object _lastResSync = new object();
 
+		/// <summary>
+		/// 初期化を行います
+		/// </summary>
 		protected override void Initialize()
 		{
 			base.Initialize();
@@ -32,6 +35,9 @@ namespace OpenCommentViewer.NicoAPI
 			}
 		}
 
+		/// <summary>
+		/// 最後に受け取ったコメント番号を取得します
+		/// </summary>
 		public int LastRes
 		{
 			get { return _lastRes; }

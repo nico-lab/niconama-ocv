@@ -66,7 +66,7 @@ namespace OpenCommentViewer.NicoAPI
 						case "NOTLOGIN":
 							return "ログインが完了していません。";
 						default:
-							Logger.Default.LogMessage("HeartBeat UnknownErrorCode:" + this.ErrorCode);
+							Logger.Default.LogErrorMessage("HeartBeat UnknownErrorCode:" + this.ErrorCode);
 							return "未定義のエラーが発生しました";
 					}
 				} else {

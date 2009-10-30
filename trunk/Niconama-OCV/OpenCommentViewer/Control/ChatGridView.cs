@@ -13,22 +13,32 @@ namespace OpenCommentViewer.Control
 	/// </summary>
 	public partial class ChatGridView : UserControl
 	{
-
+		/// <summary>
+		/// カラムを拡張するプラグインを格納する配列
+		/// </summary>
 		protected List<NCSPlugin.IColumnExtention> _columnExtentions = new List<NCSPlugin.IColumnExtention>();
+
+		/// <summary>
+		/// プラグイン追加前のカラムの量
+		/// </summary>
+		protected int _defaultColmunCount = 0;
+		
 		List<NCSPlugin.IChat> _chats = new List<NCSPlugin.IChat>();
 		List<int> _widthList = new List<int>();
 		int _dgHeight = 0;
 
 		int _messageColumnWidth = 40;
 
-		protected int _columnIndexOffset = 0;
-
+		
+		/// <summary>
+		/// チャットビューを生成します
+		/// </summary>
 		public ChatGridView()
 		{
 			InitializeComponent();
 
 			// プラグイン追加前のカラムの量を保存しておく
-			_columnIndexOffset = dataGridView1.Columns.Count;
+			_defaultColmunCount = dataGridView1.Columns.Count;
 
 			// 現在のフォントの高さを取得しておく
 			_dgHeight = System.Windows.Forms.TextRenderer.MeasureText("measure height", dataGridView1.Font).Height;
@@ -208,7 +218,7 @@ namespace OpenCommentViewer.Control
 			}
 
 			// 拡張カラムの値を処理する
-			int index = e.ColumnIndex - _columnIndexOffset;
+			int index = e.ColumnIndex - _defaultColmunCount;
 			if (0 <= index && index < _columnExtentions.Count) {
 				try {
 					e.Value = _columnExtentions[index].OnCellValueNeeded(chat);

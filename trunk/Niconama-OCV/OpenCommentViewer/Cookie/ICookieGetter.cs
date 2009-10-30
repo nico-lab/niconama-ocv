@@ -17,6 +17,7 @@ namespace OpenCommentViewer.Cookie
 		/// <param name="url"></param>
 		/// <param name="key"></param>
 		/// <returns></returns>
-		string GetCookieValue(string url, string key);
+		string[] GetCookieValues(string url, string key);
+
 	}
 }

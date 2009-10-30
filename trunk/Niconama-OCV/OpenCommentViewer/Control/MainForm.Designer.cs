@@ -23,6 +23,7 @@
     /// コード エディタで変更しないでください。
     /// </summary>
     private void InitializeComponent() {
+		this.components = new System.ComponentModel.Container();
 		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 		this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 		this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -43,9 +44,21 @@
 		this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 		this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 		this.chatGridView1 = new OpenCommentViewer.Control.ChatGridView();
+		this.idBoxContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+		this.cutIdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+		this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
+		this.copyIdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+		this.copyIdAsIdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+		this.copyIdAsURLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+		this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
+		this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+		this.pasteAndStartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+		this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+		this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 		this.statusStrip1.SuspendLayout();
 		this.menuStrip1.SuspendLayout();
 		this.toolStrip2.SuspendLayout();
+		this.idBoxContextMenu.SuspendLayout();
 		this.SuspendLayout();
 		// 
 		// statusStrip1
@@ -150,6 +163,7 @@
 		this.idBox.MaxSize = 300;
 		this.idBox.Name = "idBox";
 		this.idBox.Size = new System.Drawing.Size(300, 25);
+		this.idBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.idBox_KeyDown);
 		// 
 		// startButton
 		// 
@@ -200,6 +214,87 @@
 		this.chatGridView1.Size = new System.Drawing.Size(490, 260);
 		this.chatGridView1.TabIndex = 3;
 		// 
+		// idBoxContextMenu
+		// 
+		this.idBoxContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cutIdToolStripMenuItem,
+            this.toolStripSeparator11,
+            this.copyIdToolStripMenuItem,
+            this.copyIdAsIdToolStripMenuItem,
+            this.copyIdAsURLToolStripMenuItem,
+            this.toolStripSeparator10,
+            this.pasteToolStripMenuItem,
+            this.pasteAndStartToolStripMenuItem,
+            this.toolStripSeparator9,
+            this.selectAllToolStripMenuItem});
+		this.idBoxContextMenu.Name = "idBoxContextMenu";
+		this.idBoxContextMenu.Size = new System.Drawing.Size(192, 176);
+		this.idBoxContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.idBoxContextMenu_Opening);
+		// 
+		// cutIdToolStripMenuItem
+		// 
+		this.cutIdToolStripMenuItem.Name = "cutIdToolStripMenuItem";
+		this.cutIdToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+		this.cutIdToolStripMenuItem.Text = "切り取り(&T)";
+		this.cutIdToolStripMenuItem.Click += new System.EventHandler(this.cutIdToolStripMenuItem_Click);
+		// 
+		// toolStripSeparator11
+		// 
+		this.toolStripSeparator11.Name = "toolStripSeparator11";
+		this.toolStripSeparator11.Size = new System.Drawing.Size(188, 6);
+		// 
+		// copyIdToolStripMenuItem
+		// 
+		this.copyIdToolStripMenuItem.Name = "copyIdToolStripMenuItem";
+		this.copyIdToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+		this.copyIdToolStripMenuItem.Text = "コピー(&C)";
+		this.copyIdToolStripMenuItem.Click += new System.EventHandler(this.copyIdToolStripMenuItem_Click);
+		// 
+		// copyIdAsIdToolStripMenuItem
+		// 
+		this.copyIdAsIdToolStripMenuItem.Name = "copyIdAsIdToolStripMenuItem";
+		this.copyIdAsIdToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+		this.copyIdAsIdToolStripMenuItem.Text = "IDをコピー(&I)";
+		this.copyIdAsIdToolStripMenuItem.Click += new System.EventHandler(this.copyIdAsIdToolStripMenuItem_Click);
+		// 
+		// copyIdAsURLToolStripMenuItem
+		// 
+		this.copyIdAsURLToolStripMenuItem.Name = "copyIdAsURLToolStripMenuItem";
+		this.copyIdAsURLToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+		this.copyIdAsURLToolStripMenuItem.Text = "URLをコピー(&U)";
+		this.copyIdAsURLToolStripMenuItem.Click += new System.EventHandler(this.copyIdAsURLToolStripMenuItem_Click);
+		// 
+		// toolStripSeparator10
+		// 
+		this.toolStripSeparator10.Name = "toolStripSeparator10";
+		this.toolStripSeparator10.Size = new System.Drawing.Size(188, 6);
+		// 
+		// pasteToolStripMenuItem
+		// 
+		this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+		this.pasteToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+		this.pasteToolStripMenuItem.Text = "貼り付け(&P)";
+		this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
+		// 
+		// pasteAndStartToolStripMenuItem
+		// 
+		this.pasteAndStartToolStripMenuItem.Name = "pasteAndStartToolStripMenuItem";
+		this.pasteAndStartToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+		this.pasteAndStartToolStripMenuItem.Text = "貼り付けして接続(&O)";
+		this.pasteAndStartToolStripMenuItem.Click += new System.EventHandler(this.pasteAndStartToolStripMenuItem_Click);
+		// 
+		// toolStripSeparator9
+		// 
+		this.toolStripSeparator9.Name = "toolStripSeparator9";
+		this.toolStripSeparator9.Size = new System.Drawing.Size(188, 6);
+		// 
+		// selectAllToolStripMenuItem
+		// 
+		this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
+		this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+		this.selectAllToolStripMenuItem.Text = "すべて選択(&A)";
+		this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
+		// 
 		// MainForm
 		// 
 		this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -221,6 +316,7 @@
 		this.menuStrip1.PerformLayout();
 		this.toolStrip2.ResumeLayout(false);
 		this.toolStrip2.PerformLayout();
+		this.idBoxContextMenu.ResumeLayout(false);
 		this.ResumeLayout(false);
 		this.PerformLayout();
 
@@ -247,5 +343,16 @@
 		protected System.Windows.Forms.MenuStrip menuStrip1;
 	  protected System.Windows.Forms.ToolStripMenuItem ファイルFToolStripMenuItem;
 	  private System.Windows.Forms.ToolStrip toolStrip2;
+	  private System.Windows.Forms.ContextMenuStrip idBoxContextMenu;
+	  private System.Windows.Forms.ToolStripMenuItem copyIdToolStripMenuItem;
+	  private System.Windows.Forms.ToolStripMenuItem copyIdAsIdToolStripMenuItem;
+	  private System.Windows.Forms.ToolStripMenuItem copyIdAsURLToolStripMenuItem;
+	  private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
+	  private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
+	  private System.Windows.Forms.ToolStripMenuItem pasteAndStartToolStripMenuItem;
+	  private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
+	  private System.Windows.Forms.ToolStripMenuItem cutIdToolStripMenuItem;
+	  private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
+	  private System.Windows.Forms.ToolStripMenuItem selectAllToolStripMenuItem;
   }
 }

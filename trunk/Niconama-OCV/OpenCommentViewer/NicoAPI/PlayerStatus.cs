@@ -45,11 +45,17 @@ namespace OpenCommentViewer.NicoAPI
 
 		}
 
+		/// <summary>
+		/// 取得時のサーバー上での時間
+		/// </summary>
 		public DateTime ServerGetTime
 		{
 			get { return Utility.SelectDateTime(_xnode, "getplayerstatus/@time"); }
 		}
 
+		/// <summary>
+		/// 取得時のローカルでの時間
+		/// </summary>
 		public DateTime LocalGetTime
 		{
 			get { return _localGetTime; }
@@ -66,21 +72,33 @@ namespace OpenCommentViewer.NicoAPI
 
 		#region ILiveBasicData メンバ
 
+		/// <summary>
+		/// 放送IDを取得する
+		/// </summary>
 		public string LiveId
 		{
 			get { return Utility.SelectString(_xnode, "getplayerstatus/stream/id"); }
 		}
 
+		/// <summary>
+		/// コミュニティ情報を取得する
+		/// </summary>
 		public string CommunityId
 		{
 			get { return Utility.SelectString(_xnode, "getplayerstatus/stream/default_community"); }
 		}
 
+		/// <summary>
+		/// サーバー上での放送開始時間を取得する
+		/// </summary>
 		public DateTime StartTime
 		{
 			get { return Utility.SelectDateTime(_xnode, "getplayerstatus/stream/start_time"); }
 		}
 
+		/// <summary>
+		/// PC上での放送開始時間を取得する
+		/// </summary>
 		public DateTime LocalStartTime
 		{
 			get { return this.StartTime + this.ServerTimeDelay; }
@@ -90,16 +108,25 @@ namespace OpenCommentViewer.NicoAPI
 
 		#region IMessageServerData メンバ
 
+		/// <summary>
+		/// メッセージサーバーのアドレス
+		/// </summary>
 		public string Address
 		{
 			get { return Utility.SelectString(_xnode, "getplayerstatus/ms/addr"); }
 		}
 
+		/// <summary>
+		/// メッセージサーバーのポート番号
+		/// </summary>
 		public int Port
 		{
 			get { return Utility.SelectInt(_xnode, "getplayerstatus/ms/port", -1); }
 		}
 
+		/// <summary>
+		/// スレッド番号
+		/// </summary>
 		public int Thread
 		{
 			get { return Utility.SelectInt(_xnode, "getplayerstatus/ms/thread", -1); }
@@ -109,31 +136,49 @@ namespace OpenCommentViewer.NicoAPI
 
 		#region ILiveWatcherData メンバ
 
+		/// <summary>
+		/// 座席名を取得する
+		/// </summary>
 		public string RoomLabel
 		{
 			get { return Utility.SelectString(_xnode, "getplayerstatus/user/room_label"); }
 		}
 
+		/// <summary>
+		/// 座席番号
+		/// </summary>
 		public int SheetNo
 		{
 			get { return Utility.SelectInt(_xnode, "getplayerstatus/user/room_seetno", 0); }
 		}
 
+		/// <summary>
+		/// 放送主かどうか
+		/// </summary>
 		public bool IsOwner
 		{
 			get { return this.SheetNo == ApplicationSettings.Default.OwnerSheetNo; }
 		}
 
+		/// <summary>
+		/// プレミアム会員かどうか
+		/// </summary>
 		public bool IsPremium
 		{
 			get { return Utility.SelectInt(_xnode, "getplayerstatus/user/is_premium", 0) == 1; }
 		}
 
+		/// <summary>
+		/// ユーザーIDを取得する
+		/// </summary>
 		public int UserId
 		{
 			get { return Utility.SelectInt(_xnode, "getplayerstatus/user/user_id", 0); }
 		}
 
+		/// <summary>
+		/// ユーザー名を取得する
+		/// </summary>
 		public string UserName
 		{
 			get { return Utility.SelectString(_xnode, "getplayerstatus/user/nickname"); }
@@ -143,11 +188,17 @@ namespace OpenCommentViewer.NicoAPI
 
 		#region ILiveCountStatus メンバ
 
+		/// <summary>
+		/// 総来場者数
+		/// </summary>
 		public int WatchCount
 		{
 			get { return Utility.SelectInt(_xnode, "getplayerstatus/stream/watch_count", 0); }
 		}
 
+		/// <summary>
+		/// コメント数
+		/// </summary>
 		public int CommentCount
 		{
 			get { return Utility.SelectInt(_xnode, "getplayerstatus/stream/comment_count", 0); }
@@ -157,11 +208,17 @@ namespace OpenCommentViewer.NicoAPI
 
 		#region IErrorCode メンバ
 
+		/// <summary>
+		/// サーバーから送られてきたエラーコード
+		/// </summary>
 		public string ErrorCode
 		{
 			get { return Utility.SelectString(_xnode, "getplayerstatus/error/code"); }
 		}
 
+		/// <summary>
+		/// エラーコードの意味
+		/// </summary>
 		public string ErrorMessage
 		{
 			get
@@ -181,7 +238,7 @@ namespace OpenCommentViewer.NicoAPI
 						case "require_community_member":
 							return "メンバー限定のためアクセスできませんでした。";
 						default:
-							Logger.Default.LogMessage("PlayerStatus UnknownErrorCode:"+this.ErrorCode);
+							Logger.Default.LogErrorMessage("PlayerStatus UnknownErrorCode:"+this.ErrorCode);
 							return "未定義のエラーが発生しました";
 					}
 
@@ -193,6 +250,9 @@ namespace OpenCommentViewer.NicoAPI
 			}
 		}
 
+		/// <summary>
+		/// エラーがあるかどうか
+		/// </summary>
 		public bool HasError
 		{
 			get

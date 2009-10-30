@@ -33,7 +33,7 @@ namespace OpenCommentViewer.NicoAPI
 		/// <summary>
 		/// 放送ページから放送タイトルなどを含む情報を取得する
 		/// </summary>
-		/// <param name="liveData"></param>
+		/// <param name="liveId"></param>
 		/// <param name="cookies"></param>
 		/// <returns></returns>
 		public static LiveDescription GetInstance(string liveId, System.Net.CookieContainer cookies)
@@ -86,26 +86,41 @@ namespace OpenCommentViewer.NicoAPI
 
 		#region IDescription メンバ
 
+		/// <summary>
+		/// 放送IDを取得します
+		/// </summary>
 		public string LiveId
 		{
 			get { return _liveId; }
 		}
 
+		/// <summary>
+		/// コミュニティIDを取得します
+		/// </summary>
 		public string CommunityId
 		{
 			get { return _communityId; }
 		}
 
+		/// <summary>
+		/// 番組名を取得します
+		/// </summary>
 		public string LiveName
 		{
 			get { return _title; }
 		}
 
+		/// <summary>
+		/// コミュニティ名を取得します
+		/// </summary>
 		public string CommunityName
 		{
 			get { return _communityName; }
 		}
 
+		/// <summary>
+		/// 放送者を取得します
+		/// </summary>
 		public string Caster
 		{
 			get { return _caster; }
@@ -115,16 +130,25 @@ namespace OpenCommentViewer.NicoAPI
 
 		#region IErrorData メンバ
 
+		/// <summary>
+		/// エラーコードを取得します
+		/// </summary>
 		public string ErrorCode
 		{
 			get { return _errorCode.ToString(); }
 		}
 
+		/// <summary>
+		/// エラーコードの説明を取得します
+		/// </summary>
 		public string ErrorMessage
 		{
 			get { return _errorCode.ToString(); }
 		}
 
+		/// <summary>
+		/// エラーがあるかどうかを確かめます
+		/// </summary>
 		public bool HasError
 		{
 			get { return _errorCode != ERROR_CODE.None; }
