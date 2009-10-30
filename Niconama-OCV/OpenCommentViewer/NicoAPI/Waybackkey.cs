@@ -6,6 +6,12 @@ namespace OpenCommentViewer.NicoAPI
 {
 	public class Waybackkey
 	{
+		/// <summary>
+		/// Waybackkeyをサーバーから取得します
+		/// </summary>
+		/// <param name="thread"></param>
+		/// <param name="cookies"></param>
+		/// <returns></returns>
 		public static Waybackkey GetInstance(int thread, System.Net.CookieContainer cookies)
 		{
 			try {
@@ -27,6 +33,9 @@ namespace OpenCommentViewer.NicoAPI
 
 		private string _value = null;
 
+		/// <summary>
+		/// Waybackkeyを取得します
+		/// </summary>
 		public string Value
 		{
 			get { return _value; }

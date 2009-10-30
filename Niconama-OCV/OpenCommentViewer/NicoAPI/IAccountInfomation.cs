@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenCommentViewer.NicoAPI {
-  public interface IAccountInfomation {
+
+	/// <summary>
+	/// アカウント情報をあらわすインターフェース
+	/// </summary>
+	public interface IAccountInfomation
+	{
 		/// <summary>
 		/// ユーザーIDを取得する
 		/// </summary>
@@ -18,5 +23,5 @@ namespace OpenCommentViewer.NicoAPI {
 		/// プレミアム会員かどうか
 		/// </summary>
 		bool IsPremium { get; }
-  }
+	}
 }

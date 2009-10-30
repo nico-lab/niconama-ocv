@@ -4,6 +4,10 @@ using System.Text;
 
 namespace OpenCommentViewer.Control
 {
+
+	/// <summary>
+	/// コメントサーバーに再接続するためのデータを格納するためのクラス
+	/// </summary>
 	public class LiveTicket : NicoAPI.ILiveBasicStatus, NicoAPI.IMessageServerStatus, NicoAPI.ILiveDescription
 	{
 
@@ -19,11 +23,20 @@ namespace OpenCommentViewer.Control
 		string _communityName;
 		string _caster;
 
+		/// <summary>
+		/// デフォルトコンストラクタ
+		/// </summary>
 		public LiveTicket()
 		{
 
 		}
 
+		/// <summary>
+		/// チケットの生成に必要な情報をもとにチケットを生成します
+		/// </summary>
+		/// <param name="basicStatus"></param>
+		/// <param name="messageStatus"></param>
+		/// <param name="liveDescription"></param>
 		public LiveTicket(NicoAPI.ILiveBasicStatus basicStatus, NicoAPI.IMessageServerStatus messageStatus, NicoAPI.ILiveDescription liveDescription)
 		{
 			this._liveId = basicStatus.LiveId;
@@ -41,30 +54,45 @@ namespace OpenCommentViewer.Control
 
 		#region ILiveBasicStatus メンバ
 
+		/// <summary>
+		/// 放送IDを取得、設定します
+		/// </summary>
 		public string LiveId
 		{
 			get { return _liveId; }
 			set { _liveId = value; }
 		}
 
+		/// <summary>
+		/// コミュニティIDを取得、設定します
+		/// </summary>
 		public string CommunityId
 		{
 			get { return _communityId; }
 			set { _communityId = value; }
 		}
 
+		/// <summary>
+		/// サーバー上での開始時間を取得、設定します
+		/// </summary>
 		public DateTime StartTime
 		{
 			get { return _startTime; }
 			set { _startTime = value; }
 		}
 
+		/// <summary>
+		/// ローカルPC上での放送開始時間を取得、設定します
+		/// </summary>
 		public DateTime LocalStartTime
 		{
 			get { return _localStartTime; }
 			set { _localStartTime = value; }
 		}
 
+		/// <summary>
+		/// 座席名を取得、設定します
+		/// </summary>
 		public string RoomLabel
 		{
 			get { return _roomLabel; }
@@ -75,18 +103,27 @@ namespace OpenCommentViewer.Control
 
 		#region IMessageServerStatus メンバ
 
+		/// <summary>
+		/// メッセージサーバーのアドレスを取得、設定します
+		/// </summary>
 		public string Address
 		{
 			get { return _address; }
 			set { _address = value; }
 		}
 
+		/// <summary>
+		/// メッセージサーバーのポート番号を取得、設定します
+		/// </summary>
 		public int Port
 		{
 			get { return _port; }
 			set { _port = value; }
 		}
 
+		/// <summary>
+		/// スレッド番号を取得、設定します
+		/// </summary>
 		public int Thread
 		{
 			get { return _thread; }
@@ -97,19 +134,27 @@ namespace OpenCommentViewer.Control
 
 		#region ILiveDescription メンバ
 
-
+		/// <summary>
+		/// 番組名を取得、設定します
+		/// </summary>
 		public string LiveName
 		{
 			get { return _liveName; }
 			set { _liveName = value; }
 		}
 
+		/// <summary>
+		/// コミュニティ名を取得、設定します
+		/// </summary>
 		public string CommunityName
 		{
 			get { return _communityName; }
 			set { _communityName = value; }
 		}
 
+		/// <summary>
+		/// 放送者を取得、設定します
+		/// </summary>
 		public string Caster
 		{
 			get { return _caster; }

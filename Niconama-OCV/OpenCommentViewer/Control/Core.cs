@@ -290,24 +290,34 @@ namespace OpenCommentViewer.Control
 		/// <returns></returns>
 		public virtual bool Login(Cookie.CookieGetter.BROWSER_TYPE browserType, string cookieFilePath)
 		{
-			string userSession = Cookie.CookieGetter.GetCookie("nicovideo.jp", "user_session", browserType, cookieFilePath);
+			string[] userSessions = Cookie.CookieGetter.GetCookies("nicovideo.jp", "user_session", browserType, cookieFilePath);
 
-			if (string.IsNullOrEmpty(userSession)) {
+			if (userSessions == null) {
 				_mainview.ShowFatalMessage("指定されたブラウザからクッキーを取得できませんでした。");
+				Logger.Default.LogMessage(string.Format("Login not found: type-{0}", browserType.ToString()));
 				return false;
 			}
+			
+			Logger.Default.LogMessage(string.Format("Login: type-{0}, cookies-{1}", browserType.ToString(), userSessions.Length));
 
-			System.Net.Cookie cuid = new System.Net.Cookie("user_session", userSession, "/", ".nicovideo.jp");
-			_cookies.Add(cuid);
+			foreach (string session in userSessions) {
+				
+				System.Net.Cookie cuid = new System.Net.Cookie("user_session", session, "/", ".nicovideo.jp");
+				_cookies.Add(cuid);
 
-			_accountInfomation = NicoAPI.AccountInfomation.GetInstance(_cookies);
-			if (_accountInfomation != null) {
-				_mainview.ShowStatusMessage(string.Format("ログイン成功 : ユーザー名【{0}】", _accountInfomation.UserName));
-				return true;
-			} else {
-				_mainview.ShowFatalMessage("ログインに失敗しました。");
-				return false;
+				_accountInfomation = NicoAPI.AccountInfomation.GetInstance(_cookies);
+				if (_accountInfomation != null) {
+					_mainview.ShowStatusMessage(string.Format("ログイン成功 : ユーザー名【{0}】", _accountInfomation.UserName));
+					return true;
+				} else {
+					
+				}
 			}
+			
+			_mainview.ShowFatalMessage("ログインに失敗しました。");
+			return false;
+
+			
 		}
 
 		// デバッグ用

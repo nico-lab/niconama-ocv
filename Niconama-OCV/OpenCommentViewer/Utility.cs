@@ -237,6 +237,24 @@ namespace OpenCommentViewer
 			return (int)t.TotalSeconds;
 		}
 
+		public static void SetTxetToClipboard(string text)
+		{
+			//virtual pc 導入環境だとエラーが発生する可能性がある
+
+			try {
+				if (string.IsNullOrEmpty(text)) {
+					System.Windows.Forms.Clipboard.Clear();
+				} else { 
+					System.Windows.Forms.Clipboard.SetText(text);
+				}
+				
+			} catch (Exception ex){
+				Logger.Default.LogException(ex);
+				System.Windows.Forms.MessageBox.Show("クリップボードへの貼り付けに失敗しました。このエラーが頻繁に発生する場合は作者まで連絡してください。", "コピーが失敗しました。",
+					System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation);
+			}
+		}
+
 		#region 文字操作
 
 		public static bool IsZenkakuJapanese(char c)

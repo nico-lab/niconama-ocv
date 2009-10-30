@@ -4,16 +4,20 @@ using System.Text;
 
 namespace OpenCommentViewer.NicoAPI
 {
+
+	/// <summary>
+	/// コメントをポストするためのキーを取得するためのクラス
+	/// </summary>
 	public class PostKey
 	{
 
 		/// <summary>
-		/// 
+		/// サーバーからキーを取得します
 		/// </summary>
 		/// <param name="thread"></param>
 		/// <param name="lastCommentNo"></param>
 		/// <param name="cookies"></param>
-		/// <returns>失敗したらnullを返す</returns>
+		/// <returns></returns>
 		public static PostKey GetInstance(int thread, int lastCommentNo, System.Net.CookieContainer cookies)
 		{
 			try {
@@ -36,6 +40,9 @@ namespace OpenCommentViewer.NicoAPI
 
 		private string _value = null;
 
+		/// <summary>
+		/// キーを取得します
+		/// </summary>
 		public string Value
 		{
 			get { return _value; }

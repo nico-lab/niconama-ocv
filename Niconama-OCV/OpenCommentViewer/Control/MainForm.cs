@@ -16,6 +16,7 @@ namespace OpenCommentViewer.Control
 		public MainForm()
 		{
 			InitializeComponent();
+			idBox.TextBox.ContextMenuStrip = idBoxContextMenu;
 		}
 
 		#region IPlugin メンバ
@@ -117,16 +118,25 @@ namespace OpenCommentViewer.Control
 		}
 
 		#endregion
-
-		private void startButton_Click(object sender, EventArgs e)
+		
+		private void StartLive()
 		{
-			string liveId = Utility.GetLiveIdFromUrl(idBox.Text);
-			if (liveId != null) {
-				if (_core.ConnectLive(liveId)) {
-					startButton.Enabled = false;
+			lock (this) {
+				string liveId = Utility.GetLiveIdFromUrl(idBox.Text);
+				if (liveId != null) {
+					if (_core.ConnectLive(liveId)) {
+						startButton.Enabled = false;
+					}
 				}
 			}
 		}
+
+		private void startButton_Click(object sender, EventArgs e)
+		{
+			StartLive();
+		}
+
+		
 
 		private void stopButton_Click(object sender, EventArgs e)
 		{
@@ -194,6 +204,89 @@ namespace OpenCommentViewer.Control
 menuStrip1.Visible = !menuStrip1.Visible;
 statusStrip1.Visible = !statusStrip1.Visible;
 #endif
+		}
+
+		private void idBox_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter) {
+				StartLive();
+			}
+		}
+
+		private void cutIdToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (idBox.SelectionLength != 0) { 
+				Utility.SetTxetToClipboard(idBox.SelectedText);
+				int selectedStart = idBox.SelectionStart;
+				idBox.Text = idBox.Text.Remove(selectedStart, idBox.SelectionLength);
+
+				idBox.SelectionStart = selectedStart;
+			}
+		}
+
+		private void copyIdToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (idBox.SelectionLength != 0) {
+				Utility.SetTxetToClipboard(idBox.SelectedText);
+			}
+		}
+
+		private void copyIdAsIdToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			string id = Utility.GetLiveIdFromUrl(idBox.Text);
+			Utility.SetTxetToClipboard(id);
+		}
+
+		private void copyIdAsURLToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			string id = Utility.GetLiveIdFromUrl(idBox.Text);
+			Utility.SetTxetToClipboard(string.Format(ApplicationSettings.Default.LiveWatchUrlFormat, id));
+		}
+
+		private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if(Clipboard.ContainsText()){
+				int selectedStart = idBox.SelectionStart;
+				string txt = idBox.Text.Remove(selectedStart, idBox.SelectionLength);
+				string pasteTxt = Clipboard.GetText();
+				txt = txt.Insert(selectedStart, pasteTxt);
+				idBox.Text = txt;
+
+				idBox.SelectionStart = selectedStart + pasteTxt.Length;
+			}
+		}
+
+		private void pasteAndStartToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (Clipboard.ContainsText()) {
+				idBox.Text = Clipboard.GetText();
+				StartLive();
+			}
+		}
+
+		
+
+		private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			idBox.SelectionStart = 0;
+			idBox.SelectionLength = idBox.Text.Length;
+		}
+
+		private void idBoxContextMenu_Opening(object sender, CancelEventArgs e)
+		{
+			bool st = (idBox.SelectionLength != 0);
+			bool ct = Utility.GetLiveIdFromUrl(idBox.Text) != null;
+			bool pt = Clipboard.ContainsText();
+			bool ptag = (pt && Utility.GetLiveIdFromUrl(Clipboard.GetText()) != null);
+
+			cutIdToolStripMenuItem.Enabled = st;
+			copyIdToolStripMenuItem.Enabled = st;
+
+			copyIdAsIdToolStripMenuItem.Enabled = ct;
+			copyIdAsURLToolStripMenuItem.Enabled = ct;
+
+			pasteToolStripMenuItem.Enabled = pt;
+			pasteAndStartToolStripMenuItem.Enabled = ptag;
 		}
 
 	}

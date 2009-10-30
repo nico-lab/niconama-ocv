@@ -125,7 +125,7 @@ namespace OpenCommentViewer
 		/// <summary>
 		/// 放送ページから放送者名を取得するための正規表現パターン
 		/// </summary>
-		public string LiveCasterRegPattern = "放送者:<strong class=\\\"[^\\\"]*\\\">(?\'t\'[^<>]*)";
+		public string LiveCasterRegPattern = "放送者:<strong class=\"[^\"]*\">(<a href=\"http://www.nicovideo.jp/user/\\d+\" target=\"_blank\">)?(?'t'[^<>]*)";
 
 		/// <summary>
 		/// 放送ページからコミュニティ名を取得するための正規表現パターン
@@ -165,8 +165,14 @@ namespace OpenCommentViewer
 		/// </summary>
 		public int DefaultConnectionTimeout = 3000;
 
+		/// <summary>
+		/// メイン画面のステータスメッセージ色の内部表現
+		/// </summary>
 		public int _StatusMessageColor = System.Drawing.Color.Black.ToArgb();
 
+		/// <summary>
+		/// メイン画面の警告メッセージ色の内部表現
+		/// </summary>
 		public int _FatalMessageColor = System.Drawing.Color.Red.ToArgb();
 
 		/// <summary>
@@ -194,7 +200,9 @@ namespace OpenCommentViewer
 		public string _PluginsFolder = "Plugins";
 
 
-
+		/// <summary>
+		/// Plugin用DLLが保存されるフォルダ　%APPDATA%はアプリケーションデータフォルダーに置換される(例 %APPDATA%/Plugins)
+		/// </summary>
 		[System.Xml.Serialization.XmlIgnoreAttribute()]
 		public string PluginsFolder
 		{
@@ -215,6 +223,9 @@ namespace OpenCommentViewer
 		/// </summary>
 		public string _PluginsDataFolder = "Plugins";
 
+		/// <summary>
+		/// Pluginの設定が保存されるフォルダ　%APPDATA%はアプリケーションデータフォルダーに置換される(例 %APPDATA%/Plugins)
+		/// </summary>
 		[System.Xml.Serialization.XmlIgnoreAttribute()]
 		public string PluginsDataFolder
 		{
@@ -253,6 +264,9 @@ namespace OpenCommentViewer
 			}
 		}
 
+		/// <summary>
+		/// アプリケーションデータフォルダー
+		/// </summary>
 		[System.Xml.Serialization.XmlIgnoreAttribute()]
 		public string ApplicationDataFolder
 		{

@@ -124,6 +124,9 @@
 
 		#endregion
 
+		/// <summary>
+		/// 
+		/// </summary>
 		protected OpenCommentViewer.CustomControl.BufferedDataGridView dataGridView1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn noDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn messageDataGridViewTextBoxColumn;

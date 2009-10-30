@@ -10,11 +10,12 @@ namespace OpenCommentViewer.Cookie
 	/// </summary>
 	class IESafeModeCookieGetter : ICookieGetter
 	{
-		public string GetCookieValue(string url, string key)
+		public string[] GetCookieValues(string url, string key)
 		{
 
 			string cookieFolder = Environment.GetFolderPath(Environment.SpecialFolder.Cookies);
 			cookieFolder = System.IO.Path.Combine(cookieFolder, "low");
+			List<string> results = new List<string>();
 
 			//URLの最後の部分（.jpとか）を取り除く
 			int l = url.LastIndexOf('.');
@@ -29,13 +30,18 @@ namespace OpenCommentViewer.Cookie
 					string fileName = System.IO.Path.GetFileNameWithoutExtension(path);
 
 					if (fileName != null && fileName.Contains(fileNameKey)) {
-						string candidate = GetCookie(path, url, key);
-						if (candidate != null) {
-							return candidate;
+
+						string d = GetCookie(path, url, key);
+						if (d != null) {
+							results.Add(d);
 						}
 					}
 				}
 
+			}
+
+			if (results.Count != 0) {
+				return results.ToArray();
 			}
 
 			return null;

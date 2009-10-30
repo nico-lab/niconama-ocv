@@ -45,9 +45,9 @@ namespace OpenCommentViewer.Cookie
 		/// <param name="key"></param>
 		/// <param name="type"></param>
 		/// <returns>成功したらその値、失敗したらnull</returns>
-		public static string GetCookie(string url, string key, BROWSER_TYPE type)
+		public static string[] GetCookies(string url, string key, BROWSER_TYPE type)
 		{
-			return GetCookie(url, key, type, null);
+			return GetCookies(url, key, type, null);
 		}
 
 		/// <summary>
@@ -58,7 +58,7 @@ namespace OpenCommentViewer.Cookie
 		/// <param name="type"></param>
 		/// <param name="path">クッキーが保存されているファイル、Nullにするとデフォルトのパスへ探しにいく</param>
 		/// <returns>成功したらその値、失敗したらnull</returns>
-		public static string GetCookie(string url, string key, BROWSER_TYPE type, string path)
+		public static string[] GetCookies(string url, string key, BROWSER_TYPE type, string path)
 		{
 
 			if (url != null && key != null) {
@@ -94,7 +94,7 @@ namespace OpenCommentViewer.Cookie
 				}
 
 				if (getter != null) {
-					return getter.GetCookieValue(url, key);
+					return getter.GetCookieValues(url, key);
 				}
 
 			}
