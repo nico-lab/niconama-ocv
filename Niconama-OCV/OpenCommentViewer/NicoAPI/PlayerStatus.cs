@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenCommentViewer.NicoAPI
+namespace Hal.OpenCommentViewer.NicoAPI
 {
 
 	/// <summary>
@@ -25,7 +25,7 @@ namespace OpenCommentViewer.NicoAPI
 
 			try {
 				PlayerStatus status = new PlayerStatus();
-				string url = string.Format(ApplicationSettings.Default.GetPlayerStatusUrlFormat, liveId);
+				string url = string.Format(ApiSettings.Default.GetPlayerStatusUrlFormat, liveId);
 				status._xnode = new CustomControl.ExXMLDocument();
 				((CustomControl.ExXMLDocument)status._xnode).Load(url, cookies);
 				status._localGetTime = DateTime.Now;
@@ -157,7 +157,7 @@ namespace OpenCommentViewer.NicoAPI
 		/// </summary>
 		public bool IsOwner
 		{
-			get { return this.SheetNo == ApplicationSettings.Default.OwnerSheetNo; }
+			get { return this.SheetNo == ApiSettings.Default.OwnerSheetNo; }
 		}
 
 		/// <summary>

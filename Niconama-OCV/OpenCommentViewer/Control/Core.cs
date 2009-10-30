@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenCommentViewer.Control
+namespace Hal.OpenCommentViewer.Control
 {
 	/// <summary>
 	/// コア
 	/// </summary>
-	public class Core : NCSPlugin.IPluginHost, ICore
+	public class Core : Hal.NCSPlugin.IPluginHost, ICore
 	{
 
 		/// <summary>
@@ -45,24 +45,24 @@ namespace OpenCommentViewer.Control
 		System.Net.CookieContainer _cookies;
 		NgChecker _ngChecker;
 
-		protected List<NCSPlugin.IPlugin> _plugins = null;
+		protected List<Hal.NCSPlugin.IPlugin> _plugins = null;
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public Core()
 		{
-			_chats = new List<OpenCommentViewer.NicoAPI.Chat>();
+			_chats = new List<Hal.OpenCommentViewer.NicoAPI.Chat>();
 			_cookies = new System.Net.CookieContainer();
-			_chatReceiver = new OpenCommentViewer.NicoAPI.ChatReceiver();
-			_chatReceiver.ConnectServer += new EventHandler<OpenCommentViewer.NicoAPI.ChatReceiver.ConnectServerEventArgs>(_chatReceiver_ConnectServer);
-			_chatReceiver.ReceiveChat += new EventHandler<OpenCommentViewer.NicoAPI.ChatReceiver.ChatReceiveEventArgs>(_chatReceiver_ReceiveChat);
+			_chatReceiver = new Hal.OpenCommentViewer.NicoAPI.ChatReceiver();
+			_chatReceiver.ConnectServer += new EventHandler<Hal.OpenCommentViewer.NicoAPI.ChatReceiver.ConnectServerEventArgs>(_chatReceiver_ConnectServer);
+			_chatReceiver.ReceiveChat += new EventHandler<Hal.OpenCommentViewer.NicoAPI.ChatReceiver.ChatReceiveEventArgs>(_chatReceiver_ReceiveChat);
 			_chatReceiver.DisconnectServer += new EventHandler(_chatReceiver_DisconnectServer);
 
 			_ngChecker = new NgChecker();
 			_ngChecker.Initialize(this);
 
-			_plugins = new List<NCSPlugin.IPlugin>();
+			_plugins = new List<Hal.NCSPlugin.IPlugin>();
 
 
 		}
@@ -75,23 +75,23 @@ namespace OpenCommentViewer.Control
 			Plugin.IPluginInfo[] infos = Plugin.PluginInfo.FindPlugins();
 			foreach (Plugin.IPluginInfo pinfo in infos) {
 				try {
-					NCSPlugin.IPlugin pins = pinfo.CreateInstance();
+					Hal.NCSPlugin.IPlugin pins = pinfo.CreateInstance();
 					pins.Initialize(this);
 					_plugins.Add(pins);
 
 					// カラム拡張プラグイン
-					if (pins is NCSPlugin.IColumnExtention) {
-						_mainview.RegisterColumnExtention((NCSPlugin.IColumnExtention)pins);
+					if (pins is Hal.NCSPlugin.IColumnExtention) {
+						_mainview.RegisterColumnExtention((Hal.NCSPlugin.IColumnExtention)pins);
 					}
 
 					// コンテクストメニュー拡張プラグイン
-					if (pins is NCSPlugin.IContextMenuExtention) {
-						_mainview.RegisterContextMenuExtention((NCSPlugin.IContextMenuExtention)pins);
+					if (pins is Hal.NCSPlugin.IContextMenuExtention) {
+						_mainview.RegisterContextMenuExtention((Hal.NCSPlugin.IContextMenuExtention)pins);
 					}
 
 					// メニューストリップ拡張プラグイン
-					if (pins is NCSPlugin.IMenuStripExtention) {
-						_mainview.RegisterMenuStripExtention((NCSPlugin.IMenuStripExtention)pins);
+					if (pins is Hal.NCSPlugin.IMenuStripExtention) {
+						_mainview.RegisterMenuStripExtention((Hal.NCSPlugin.IMenuStripExtention)pins);
 					}
 
 				} catch (Exception ex) {
@@ -186,7 +186,7 @@ namespace OpenCommentViewer.Control
 			_form = mainview as System.Windows.Forms.Form;
 			System.Diagnostics.Debug.Assert(_form != null, "mainviewはSystem.Windows.Forms.Formの派生クラスである必要があります。");
 
-			NCSPlugin.IPlugin plugin = mainview as NCSPlugin.IPlugin;
+			Hal.NCSPlugin.IPlugin plugin = mainview as Hal.NCSPlugin.IPlugin;
 			_mainview = mainview;
 			plugin.Initialize(this);
 			_form.Load += new EventHandler(_form_Load);
@@ -305,7 +305,7 @@ namespace OpenCommentViewer.Control
 				System.Net.Cookie cuid = new System.Net.Cookie("user_session", session, "/", ".nicovideo.jp");
 				_cookies.Add(cuid);
 
-				_accountInfomation = NicoAPI.AccountInfomation.GetInstance(_cookies);
+				_accountInfomation = NicoAPI.AccountInfomation.GetMyAccountInfomation(_cookies);
 				if (_accountInfomation != null) {
 					_mainview.ShowStatusMessage(string.Format("ログイン成功 : ユーザー名【{0}】", _accountInfomation.UserName));
 					return true;
@@ -323,6 +323,8 @@ namespace OpenCommentViewer.Control
 		// デバッグ用
 		public void CallTestMethod()
 		{
+			NicoAPI.AccountInfomation ac = NicoAPI.AccountInfomation.GetUserAccountInfomation("9417784", _cookies);
+			_mainview.ShowStatusMessage(ac.UserName);
 		}
 
 
@@ -361,7 +363,7 @@ namespace OpenCommentViewer.Control
 			_mainview = null;
 
 			// プラグインを破棄
-			foreach (NCSPlugin.IPlugin plugin in _plugins) {
+			foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
 				plugin.Dispose();
 			}
 
@@ -369,7 +371,7 @@ namespace OpenCommentViewer.Control
 			_plugins = null;
 		}
 
-		private void _chatReceiver_ConnectServer(object sender, OpenCommentViewer.NicoAPI.ChatReceiver.ConnectServerEventArgs e)
+		private void _chatReceiver_ConnectServer(object sender, Hal.OpenCommentViewer.NicoAPI.ChatReceiver.ConnectServerEventArgs e)
 		{
 			if (_mainview != null) {
 				if (_form.InvokeRequired) {
@@ -392,7 +394,7 @@ namespace OpenCommentViewer.Control
 			_ngChecker.Check(_chats);
 
 			// プラグインに通知
-			foreach (NCSPlugin.IPlugin plugin in _plugins) {
+			foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
 				plugin.OnLiveStart(this.LiveId, this.ServerStartTime, _chats.Count);
 			}
 
@@ -405,7 +407,7 @@ namespace OpenCommentViewer.Control
 			}
 		}
 
-		private void _chatReceiver_ReceiveChat(object sender, OpenCommentViewer.NicoAPI.ChatReceiver.ChatReceiveEventArgs e)
+		private void _chatReceiver_ReceiveChat(object sender, Hal.OpenCommentViewer.NicoAPI.ChatReceiver.ChatReceiveEventArgs e)
 		{
 			if (_mainview != null) {
 				if (_form.InvokeRequired) {
@@ -424,13 +426,13 @@ namespace OpenCommentViewer.Control
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void onReceivedChat(object sender, OpenCommentViewer.NicoAPI.ChatReceiver.ChatReceiveEventArgs e)
+		private void onReceivedChat(object sender, Hal.OpenCommentViewer.NicoAPI.ChatReceiver.ChatReceiveEventArgs e)
 		{
 			_chats.Add(e.Chat);
 			_ngChecker.Check(e.Chat);
 
 			//プラグインに通知
-			foreach (NCSPlugin.IPlugin plugin in _plugins) {
+			foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
 				plugin.OnComment(e.Chat);
 			}
 
@@ -459,7 +461,7 @@ namespace OpenCommentViewer.Control
 		private void OnDisconnectServer(object sender, EventArgs e)
 		{
 			_mainview.ShowStatusMessage("メッセージサーバーから切断しました");
-			foreach (NCSPlugin.IPlugin plugin in _plugins) {
+			foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
 				plugin.OnLiveStop();
 			}
 		}
@@ -495,7 +497,7 @@ namespace OpenCommentViewer.Control
 		}
 
 		NicoAPI.Chat[] __chatsCache = null;
-		public NCSPlugin.IChat[] Chats
+		public Hal.NCSPlugin.IChat[] Chats
 		{
 			get
 			{
@@ -626,7 +628,7 @@ namespace OpenCommentViewer.Control
 
 		}
 
-		public bool AddNG(NCSPlugin.NGType type, string source)
+		public bool AddNG(Hal.NCSPlugin.NGType type, string source)
 		{
 			if (this.IsConnected && this.IsOwner && _liveBasicStatus != null) {
 				return NicoAPI.NgClient.AddNg(_liveBasicStatus.LiveId, type, source, _cookies);
@@ -635,7 +637,7 @@ namespace OpenCommentViewer.Control
 			return false;
 		}
 
-		public bool DeleteNG(NCSPlugin.NGType type, string source)
+		public bool DeleteNG(Hal.NCSPlugin.NGType type, string source)
 		{
 			if (this.IsConnected && this.IsOwner && _liveBasicStatus != null) {
 				return NicoAPI.NgClient.DeleteNg(_liveBasicStatus.LiveId, type, source, _cookies);
@@ -657,7 +659,7 @@ namespace OpenCommentViewer.Control
 			}
 		}
 
-		public NCSPlugin.INgClient[] GetNgClients()
+		public Hal.NCSPlugin.INgClient[] GetNgClients()
 		{
 			if (this.LiveId != null) {
 				return NicoAPI.NgClient.GetNgClients(this.LiveId, _cookies);
@@ -666,7 +668,7 @@ namespace OpenCommentViewer.Control
 			return null;
 		}
 
-		public NCSPlugin.IChat GetSelectedChat()
+		public Hal.NCSPlugin.IChat GetSelectedChat()
 		{
 			throw new Exception("The method or operation is not implemented.");
 		}

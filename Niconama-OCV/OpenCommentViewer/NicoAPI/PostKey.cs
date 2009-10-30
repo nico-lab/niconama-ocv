@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenCommentViewer.NicoAPI
+namespace Hal.OpenCommentViewer.NicoAPI
 {
 
 	/// <summary>
@@ -22,8 +22,8 @@ namespace OpenCommentViewer.NicoAPI
 		{
 			try {
 				int blockNo = (lastCommentNo + 1) / 100;
-				string url = string.Format(ApplicationSettings.Default.GetPostKeyUrlFormat, thread, blockNo);
-				string res = Utility.GetResponseText(url, cookies, ApplicationSettings.Default.DefaultApiTimeout);
+				string url = string.Format(ApiSettings.Default.GetPostKeyUrlFormat, thread, blockNo);
+				string res = Utility.GetResponseText(url, cookies, ApiSettings.Default.DefaultApiTimeout);
 				if (res != null) {
 					string[] p = res.Split('=');
 					if (p.Length == 2) {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenCommentViewer.NicoAPI
+namespace Hal.OpenCommentViewer.NicoAPI
 {
 	/// <summary>
 	/// コメントサーバーと通信を開始した直後のスレッドの状態を表すクラス

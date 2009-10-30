@@ -5,7 +5,7 @@ using System.Text;
 using Regex = System.Text.RegularExpressions.Regex;
 using Match = System.Text.RegularExpressions.Match;
 
-namespace OpenCommentViewer.NicoAPI
+namespace Hal.OpenCommentViewer.NicoAPI
 {
 
 	/// <summary>
@@ -46,17 +46,17 @@ namespace OpenCommentViewer.NicoAPI
 			LiveDescription info = new LiveDescription();
 
 			try {
-				string url = string.Format(ApplicationSettings.Default.LiveWatchUrlFormat, liveId);
-				string html = Utility.GetResponseText(url, cookies, ApplicationSettings.Default.DefaultApiTimeout);
+				string url = string.Format(ApiSettings.Default.LiveWatchUrlFormat, liveId);
+				string html = Utility.GetResponseText(url, cookies, ApiSettings.Default.DefaultApiTimeout);
 
 				if (html != null) {
 
 					info._liveId = liveId;
 
-					Match title = Regex.Match(html, ApplicationSettings.Default.LiveTitleRegPattern);
-					Match caster = Regex.Match(html, ApplicationSettings.Default.LiveCasterRegPattern);
-					Match comid = Regex.Match(html, ApplicationSettings.Default.LiveCommunityIdRegPattern);
-					Match comname = Regex.Match(html, ApplicationSettings.Default.LiveCommunityNameRegPattern);
+					Match title = Regex.Match(html, ApiSettings.Default.LiveTitleRegPattern);
+					Match caster = Regex.Match(html, ApiSettings.Default.LiveCasterRegPattern);
+					Match comid = Regex.Match(html, ApiSettings.Default.LiveCommunityIdRegPattern);
+					Match comname = Regex.Match(html, ApiSettings.Default.LiveCommunityNameRegPattern);
 
 					if (title.Groups["t"].Success && caster.Groups["t"].Success && comname.Groups["t"].Success) {
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace NCSPlugin {
+namespace Hal.NCSPlugin {
 	
 	/// <summary>
 	/// プラグインのインターフェース

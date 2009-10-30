@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenCommentViewer.NicoAPI
+namespace Hal.OpenCommentViewer.NicoAPI
 {
 	public class Waybackkey
 	{
@@ -15,8 +15,8 @@ namespace OpenCommentViewer.NicoAPI
 		public static Waybackkey GetInstance(int thread, System.Net.CookieContainer cookies)
 		{
 			try {
-				string url = string.Format(ApplicationSettings.Default.WaybackkeyUrlFormat, thread);
-				string res = Utility.GetResponseText(url, cookies, ApplicationSettings.Default.DefaultApiTimeout);
+				string url = string.Format(ApiSettings.Default.WaybackkeyUrlFormat, thread);
+				string res = Utility.GetResponseText(url, cookies, ApiSettings.Default.DefaultApiTimeout);
 				if (res != null) {
 					string[] p = res.Split('=');
 					if (p.Length == 2) {

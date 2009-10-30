@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-using OpenCommentViewer.CustomControl;
+using Hal.OpenCommentViewer.CustomControl;
 
-namespace OpenCommentViewer.NicoAPI
+namespace Hal.OpenCommentViewer.NicoAPI
 {
 
 	/// <summary>
 	/// サーバーから受け取ったチャットを表すクラス
 	/// </summary>
-	public class Chat : NCSPlugin.IChat, NCSPlugin.IFilterdChat, IErrorData
+	public class Chat : Hal.NCSPlugin.IChat, Hal.NCSPlugin.IFilterdChat, IErrorData
 	{
 
 		/// <summary>
@@ -44,7 +44,7 @@ namespace OpenCommentViewer.NicoAPI
 		private bool _anonymity;
 		private DateTime _date;
 		private int _premium;
-		private NCSPlugin.NGType _ngType = NCSPlugin.NGType.None;
+		private Hal.NCSPlugin.NGType _ngType = Hal.NCSPlugin.NGType.None;
 		private string _ngSource = null;
 
 		private ERROR_CODE _errorCode;
@@ -202,7 +202,7 @@ namespace OpenCommentViewer.NicoAPI
 		/// 複製
 		/// </summary>
 		/// <param name="chat"></param>
-		public Chat(NCSPlugin.IChat chat)
+		public Chat(Hal.NCSPlugin.IChat chat)
 			: this()
 		{
 			this._anonymity = chat.Anonymity;
@@ -318,7 +318,7 @@ namespace OpenCommentViewer.NicoAPI
 
 		#region IFilterdChat メンバ
 
-		public NCSPlugin.NGType NgType
+		public Hal.NCSPlugin.NGType NgType
 		{
 			get { return _ngType; }
 			set { _ngType = value; }
@@ -338,7 +338,7 @@ namespace OpenCommentViewer.NicoAPI
 				return false;
 			}
 
-			NCSPlugin.IChat that = obj as NCSPlugin.IChat;
+			Hal.NCSPlugin.IChat that = obj as Hal.NCSPlugin.IChat;
 			if (that == null) {
 				return false;
 			}

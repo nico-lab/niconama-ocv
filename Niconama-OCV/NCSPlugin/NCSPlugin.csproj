@@ -7,7 +7,7 @@
     <ProjectGuid>{9CC20246-79AA-43B0-9736-CA65EDB1C334}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NCSPlugin</RootNamespace>
+    <RootNamespace>Hal.NCSPlugin</RootNamespace>
     <AssemblyName>NCSPlugin</AssemblyName>
     <StartupObject>
     </StartupObject>

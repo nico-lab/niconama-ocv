@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Xml;
 
-namespace OpenCommentViewer.NicoAPI
+namespace Hal.OpenCommentViewer.NicoAPI
 {
 
 	/// <summary>
@@ -117,7 +117,7 @@ namespace OpenCommentViewer.NicoAPI
 						tcpClient.BeginConnect(data.Address, data.Port, ac, tcpClient);
 
 						// 既定時間以内に接続できない場合は失敗とする
-						if (!m.WaitOne(ApplicationSettings.Default.DefaultConnectionTimeout, false)) {
+						if (!m.WaitOne(ApiSettings.Default.DefaultConnectionTimeout, false)) {
 							timeouted = true;
 							throw new Exception("過去ログ取得：コネクションタイムアウト");
 						}
@@ -126,12 +126,12 @@ namespace OpenCommentViewer.NicoAPI
 					// NetworkStreamは自動的に開放されないのでusingで囲む
 					using (NetworkStream ns = tcpClient.GetStream()) {
 
-						string msg = String.Format(ApplicationSettings.Default.WaybackThreadStartMessageFormat, data.Thread, resFrom, Utility.DateTimeToUnixTime(when), key.Value, userId);
+						string msg = String.Format(ApiSettings.Default.WaybackThreadStartMessageFormat, data.Thread, resFrom, Utility.DateTimeToUnixTime(when), key.Value, userId);
 						byte[] sendBytes = System.Text.Encoding.UTF8.GetBytes(msg + '\0');
 
 						ns.Write(sendBytes, 0, sendBytes.Length);
 
-						byte[] buffer = new byte[ApplicationSettings.Default.ReceiveBufferSize];
+						byte[] buffer = new byte[ApiSettings.Default.ReceiveBufferSize];
 						int last = 0;
 
 						//DataAvailableはすべて取得しきる前にfalseを返してしまうので使えない

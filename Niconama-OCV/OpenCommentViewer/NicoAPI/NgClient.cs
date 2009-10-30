@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 
-namespace OpenCommentViewer.NicoAPI
+namespace Hal.OpenCommentViewer.NicoAPI
 {
-	public class NgClient : NCSPlugin.INgClient
+	public class NgClient : Hal.NCSPlugin.INgClient
 	{
 
 		#region Static Methods
@@ -18,7 +18,7 @@ namespace OpenCommentViewer.NicoAPI
 		/// <param name="source"></param>
 		/// <param name="cookies"></param>
 		/// <returns></returns>
-		public static bool AddNg(string liveId, NCSPlugin.NGType type, string source, System.Net.CookieContainer cookies)
+		public static bool AddNg(string liveId, Hal.NCSPlugin.NGType type, string source, System.Net.CookieContainer cookies)
 		{
 			string res = SendNgCommand(liveId, "add", type.ToString(), source, cookies);
 			return (res != null && res.Contains("status=\"ok\""));
@@ -32,7 +32,7 @@ namespace OpenCommentViewer.NicoAPI
 		/// <param name="source"></param>
 		/// <param name="cookies"></param>
 		/// <returns></returns>
-		public static bool DeleteNg(string liveId, NCSPlugin.NGType type, string source, System.Net.CookieContainer cookies)
+		public static bool DeleteNg(string liveId, Hal.NCSPlugin.NGType type, string source, System.Net.CookieContainer cookies)
 		{
 			string res = SendNgCommand(liveId, "del", type.ToString(), source, cookies);
 			return (res != null && res.Contains("status=\"ok\""));
@@ -44,7 +44,7 @@ namespace OpenCommentViewer.NicoAPI
 		/// <param name="liveId"></param>
 		/// <param name="cookies"></param>
 		/// <returns>NG一覧　失敗時はnull</returns>
-		public static NCSPlugin.INgClient[] GetNgClients(string liveId, System.Net.CookieContainer cookies)
+		public static Hal.NCSPlugin.INgClient[] GetNgClients(string liveId, System.Net.CookieContainer cookies)
 		{
 			string res = SendNgCommand(liveId, "get", "", "", cookies);
 
@@ -85,8 +85,8 @@ namespace OpenCommentViewer.NicoAPI
 
 			source = System.Web.HttpUtility.UrlEncode(source);
 
-			string url = string.Format(ApplicationSettings.Default.NgcommandUrlFormat, liveId, mode, source, type);
-			return Utility.GetResponseText(url, cookies, ApplicationSettings.Default.DefaultApiTimeout);
+			string url = string.Format(ApiSettings.Default.NgcommandUrlFormat, liveId, mode, source, type);
+			return Utility.GetResponseText(url, cookies, ApiSettings.Default.DefaultApiTimeout);
 		}
 
 
@@ -101,7 +101,7 @@ namespace OpenCommentViewer.NicoAPI
 			IsRegex = 4
 		}
 
-		NCSPlugin.NGType _type;
+		Hal.NCSPlugin.NGType _type;
 		string _source;
 		DateTime _regTime;
 		NGOption _options;
@@ -111,7 +111,7 @@ namespace OpenCommentViewer.NicoAPI
 			this.Parse(node);
 		}
 
-		public NgClient(NCSPlugin.NGType type, string source, DateTime regTime)
+		public NgClient(Hal.NCSPlugin.NGType type, string source, DateTime regTime)
 		{
 			_type = type;
 			_source = source;
@@ -124,13 +124,13 @@ namespace OpenCommentViewer.NicoAPI
 			_regTime = Utility.UnixTimeToDateTime(int.Parse(node["register_time"].InnerText));
 			switch (node["type"].InnerText) {
 				case "word":
-					_type = NCSPlugin.NGType.Word;
+					_type = Hal.NCSPlugin.NGType.Word;
 					break;
 				case "id":
-					_type = NCSPlugin.NGType.Id;
+					_type = Hal.NCSPlugin.NGType.Id;
 					break;
 				case "command":
-					_type = NCSPlugin.NGType.Command;
+					_type = Hal.NCSPlugin.NGType.Command;
 					break;
 			}
 
@@ -151,7 +151,7 @@ namespace OpenCommentViewer.NicoAPI
 
 		#region INgClients メンバ
 
-		public NCSPlugin.NGType Type
+		public Hal.NCSPlugin.NGType Type
 		{
 			get { return _type; }
 		}

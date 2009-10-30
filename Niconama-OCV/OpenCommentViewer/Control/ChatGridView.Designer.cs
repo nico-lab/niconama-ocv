@@ -1,4 +1,4 @@
-﻿namespace OpenCommentViewer.Control
+﻿namespace Hal.OpenCommentViewer.Control
 {
 	partial class ChatGridView
 	{
@@ -28,7 +28,7 @@
 		private void InitializeComponent()
 		{
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			this.dataGridView1 = new OpenCommentViewer.CustomControl.BufferedDataGridView();
+			this.dataGridView1 = new Hal.OpenCommentViewer.CustomControl.BufferedDataGridView();
 			this.noDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.messageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.mailDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -127,7 +127,7 @@
 		/// <summary>
 		/// 
 		/// </summary>
-		protected OpenCommentViewer.CustomControl.BufferedDataGridView dataGridView1;
+		protected Hal.OpenCommentViewer.CustomControl.BufferedDataGridView dataGridView1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn noDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn messageDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn mailDataGridViewTextBoxColumn;

@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace OpenCommentViewer.CustomControl
+namespace Hal.OpenCommentViewer.CustomControl
 {
 	public class ToolStripSpringTextBox : ToolStripTextBox
 	{

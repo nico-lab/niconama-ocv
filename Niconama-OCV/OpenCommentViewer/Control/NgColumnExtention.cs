@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
-namespace OpenCommentViewer.Control
+namespace Hal.OpenCommentViewer.Control
 {
-	class NgColumnExtention : NCSPlugin.IColumnExtention
+	class NgColumnExtention : Hal.NCSPlugin.IColumnExtention
 	{
 		DataGridViewColumn _column = null;
 
@@ -25,9 +25,9 @@ namespace OpenCommentViewer.Control
 			get { return _column; }
 		}
 
-		public object OnCellValueNeeded(NCSPlugin.IChat chat)
+		public object OnCellValueNeeded(Hal.NCSPlugin.IChat chat)
 		{
-			NCSPlugin.IFilterdChat f = chat as NCSPlugin.IFilterdChat;
+			Hal.NCSPlugin.IFilterdChat f = chat as Hal.NCSPlugin.IFilterdChat;
 			if (f != null) {
 				return f.NgSource;
 			} else {
@@ -53,7 +53,7 @@ namespace OpenCommentViewer.Control
 
 		#region IComparer<IChat> メンバ
 
-		public int Compare(NCSPlugin.IChat x, NCSPlugin.IChat y)
+		public int Compare(Hal.NCSPlugin.IChat x, Hal.NCSPlugin.IChat y)
 		{
 			throw new Exception("The method or operation is not implemented.");
 		}

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenCommentViewer.CustomControl
+namespace Hal.OpenCommentViewer.CustomControl
 {
   /// <summary>
   /// XMLDocumentの拡張クラス
@@ -16,8 +16,8 @@ namespace OpenCommentViewer.CustomControl
 			if (url == null || !url.StartsWith("http://")) {
 				throw new ArgumentException("urlが正しく設定されていません", "url");
 			}
-			
-			string xml = Utility.GetResponseText(url, cookies, ApplicationSettings.Default.DefaultApiTimeout);
+
+			string xml = Utility.GetResponseText(url, cookies, ApiSettings.Default.DefaultApiTimeout);
 			if (xml == null) {
 				throw new System.Xml.XmlException("WEB上からXMLを取得できませんでした。");
 			}

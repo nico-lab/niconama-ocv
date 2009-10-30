@@ -1,4 +1,4 @@
-﻿namespace OpenCommentViewer.Control
+﻿namespace Hal.OpenCommentViewer.Control
 {
 	partial class LoginForm
 	{

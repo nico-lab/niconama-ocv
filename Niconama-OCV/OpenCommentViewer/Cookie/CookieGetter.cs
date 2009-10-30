@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenCommentViewer.Cookie
+namespace Hal.OpenCommentViewer.Cookie
 {
 
 	/// <summary>
