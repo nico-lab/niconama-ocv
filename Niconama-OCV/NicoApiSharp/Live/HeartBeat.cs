@@ -11,6 +11,12 @@ namespace Hal.NicoApiSharp.Live
 	{
 		System.Xml.XmlNode _xnode;
 
+		/// <summary>
+		/// サーバーからハートビートを取得する
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <param name="cookies"></param>
+		/// <returns></returns>
 		public static HeartBeat GetInstance(string liveId, System.Net.CookieContainer cookies)
 		{
 
@@ -31,11 +37,17 @@ namespace Hal.NicoApiSharp.Live
 
 		#region ILiveCountStatus メンバ
 
+		/// <summary>
+		/// 総来場者数を取得する
+		/// </summary>
 		public int WatchCount
 		{
 			get { return Utility.SelectInt(_xnode, "heartbeat/watchCount", 0); }
 		}
 
+		/// <summary>
+		/// コメント数を取得する
+		/// </summary>
 		public int CommentCount
 		{
 			get { return Utility.SelectInt(_xnode, "heartbeat/commentCount", 0); }
@@ -45,11 +57,17 @@ namespace Hal.NicoApiSharp.Live
 
 		#region IErrorData メンバ
 
+		/// <summary>
+		/// エラーコードを取得する
+		/// </summary>
 		public string ErrorCode
 		{
 			get { return Utility.SelectString(_xnode, "heartbeat/error/code"); }
 		}
 
+		/// <summary>
+		/// エラーコードの説明を取得する
+		/// </summary>
 		public string ErrorMessage
 		{
 			get
@@ -75,6 +93,9 @@ namespace Hal.NicoApiSharp.Live
 			}
 		}
 
+		/// <summary>
+		/// エラーが発生しているか調べる
+		/// </summary>
 		public bool HasError
 		{
 			get

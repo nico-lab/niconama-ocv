@@ -38,6 +38,9 @@ namespace Hal.NicoApiSharp
 			}
 		}
 
+		/// <summary>
+		/// ログ一覧
+		/// </summary>
 		public List<LogData> Loglist = new List<LogData>();
 		private bool _saveLog = true;
 		private bool _hasErrorLog = false;
@@ -135,24 +138,56 @@ namespace Hal.NicoApiSharp
 			}
 		}
 
+		/// <summary>
+		/// ログデータ
+		/// </summary>
 		public class LogData
 		{
 
+			/// <summary>
+			/// ログの種類
+			/// </summary>
 			public enum LogType
 			{
+				/// <summary>
+				/// メッセージ
+				/// </summary>
 				Message,
+
+				/// <summary>
+				/// エラーメッセージ
+				/// </summary>
 				Error
 			}
 
+			/// <summary>
+			/// ログの種類
+			/// </summary>
 			public LogType Type = LogType.Message;
+
+			/// <summary>
+			/// ログメッセージ
+			/// </summary>
 			public string Message;
+
+			/// <summary>
+			/// 登録日
+			/// </summary>
 			public DateTime Date;
 
+			/// <summary>
+			/// デフォルトコンストラクタ
+			/// </summary>
 			public LogData()
 			{
 				Date = DateTime.Now;
 			}
 
+			/// <summary>
+			/// ログの内容を指定してログデータを生成する
+			/// </summary>
+			/// <param name="type"></param>
+			/// <param name="message"></param>
 			public LogData(LogType type, string message)
 				: this()
 			{

@@ -13,35 +13,35 @@ namespace Hal.OpenCommentViewer.Control
 		/// <summary>
 		/// 番組の基本情報
 		/// </summary>
-		protected NicoAPI.ILiveBasicStatus _liveBasicStatus = null;
+		protected NicoApiSharp.Live.ILiveBasicStatus _liveBasicStatus = null;
 
 		/// <summary>
 		/// メッセージサーバー接続用の情報
 		/// </summary>
-		protected NicoAPI.IMessageServerStatus _messageServerStatus = null;
+		protected NicoApiSharp.Live.IMessageServerStatus _messageServerStatus = null;
 
 		/// <summary>
 		/// 視聴者に関する情報
 		/// </summary>
-		protected NicoAPI.ILiveWatcherStatus _liveWatcherStatus = null;
+		protected NicoApiSharp.Live.ILiveWatcherStatus _liveWatcherStatus = null;
 
 		/// <summary>
 		/// 放送の詳細情報
 		/// </summary>
-		protected NicoAPI.ILiveDescription _liveDescription = null;
+		protected NicoApiSharp.Live.ILiveDescription _liveDescription = null;
 
 		/// <summary>
 		/// アカウント情報
 		/// </summary>
-		protected NicoAPI.IAccountInfomation _accountInfomation = null;
+		protected NicoApiSharp.IAccountInfomation _accountInfomation = null;
 
-		protected List<NicoAPI.Chat> _chats;
+		protected List<OcvChat> _chats;
 		protected Control.IMainView _mainview = null;
 		protected System.Windows.Forms.Form _form = null;
 		protected SeetType _seetType = SeetType.Arena;
 
 		string _reservedId = null;
-		NicoAPI.ChatReceiver _chatReceiver;
+		NicoApiSharp.Live.ChatReceiver _chatReceiver;
 		System.Net.CookieContainer _cookies;
 		NgChecker _ngChecker;
 
@@ -52,11 +52,11 @@ namespace Hal.OpenCommentViewer.Control
 		/// </summary>
 		public Core()
 		{
-			_chats = new List<Hal.OpenCommentViewer.NicoAPI.Chat>();
+			_chats = new List<OcvChat>();
 			_cookies = new System.Net.CookieContainer();
-			_chatReceiver = new Hal.OpenCommentViewer.NicoAPI.ChatReceiver();
-			_chatReceiver.ConnectServer += new EventHandler<Hal.OpenCommentViewer.NicoAPI.ChatReceiver.ConnectServerEventArgs>(_chatReceiver_ConnectServer);
-			_chatReceiver.ReceiveChat += new EventHandler<Hal.OpenCommentViewer.NicoAPI.ChatReceiver.ChatReceiveEventArgs>(_chatReceiver_ReceiveChat);
+			_chatReceiver = new NicoApiSharp.Live.ChatReceiver();
+			_chatReceiver.ConnectServer += new EventHandler<NicoApiSharp.Live.ChatReceiver.ConnectServerEventArgs>(_chatReceiver_ConnectServer);
+			_chatReceiver.ReceiveChat += new EventHandler<NicoApiSharp.Live.ChatReceiver.ChatReceiveEventArgs>(_chatReceiver_ReceiveChat);
 			_chatReceiver.DisconnectServer += new EventHandler(_chatReceiver_DisconnectServer);
 
 			_ngChecker = new NgChecker();
@@ -115,14 +115,14 @@ namespace Hal.OpenCommentViewer.Control
 				return false;
 			}
 
-			NicoAPI.PlayerStatus playerStatus = NicoAPI.PlayerStatus.GetInstance(liveId, _cookies);
+			NicoApiSharp.Live.PlayerStatus playerStatus = NicoApiSharp.Live.PlayerStatus.GetInstance(liveId, _cookies);
 
 			if (playerStatus != null) {
 				if (!playerStatus.HasError) {
 					_liveBasicStatus = playerStatus;
 					_liveWatcherStatus = playerStatus;
 					_messageServerStatus = playerStatus;
-					_liveDescription = NicoAPI.LiveDescription.GetInstance(liveId, _cookies);
+					_liveDescription = NicoApiSharp.Live.LiveDescription.GetInstance(liveId, _cookies);
 					_seetType = _liveBasicStatus.RoomLabel != "立ち見席" ? SeetType.Arena : SeetType.Standing;
 
 					return ConnectServer(_accountInfomation, _liveDescription, _messageServerStatus);
@@ -141,7 +141,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// <param name="liveDescription">放送の詳細情報</param>
 		/// <param name="messageServerStatus">メッセージサーバにアクセスするための情報</param>
 		/// <returns>接続に成功したか</returns>
-		protected bool ConnectServer(NicoAPI.IAccountInfomation accountInfomation, NicoAPI.ILiveDescription liveDescription, NicoAPI.IMessageServerStatus messageServerStatus)
+		protected bool ConnectServer(NicoApiSharp.IAccountInfomation accountInfomation, NicoApiSharp.Live.ILiveDescription liveDescription, NicoApiSharp.Live.IMessageServerStatus messageServerStatus)
 		{
 
 			if (accountInfomation == null) {
@@ -159,8 +159,11 @@ namespace Hal.OpenCommentViewer.Control
 			UserSettings.Default.LastAccessLiveId = liveDescription.LiveId;
 			UserSettings.Default.Save();
 
-			NicoAPI.Chat[] chats = NicoAPI.ChatReceiver.ReceiveAllLog(messageServerStatus, _cookies, accountInfomation.UserId);
-			_chats.AddRange(chats);
+			NicoApiSharp.Live.Chat[] chats = NicoApiSharp.Live.ChatReceiver.ReceiveAllLog(messageServerStatus, _cookies, accountInfomation.UserId);
+			foreach (NicoApiSharp.Live.Chat chat in chats) {
+				_chats.Add(new OcvChat(chat));
+			}
+
 			_chatReceiver.Connect(messageServerStatus, chats.Length + 1);
 			return true;
 
@@ -216,7 +219,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// </summary>
 		/// <param name="messageServerStatus"></param>
 		/// <returns></returns>
-		public bool GetLogComment(NicoAPI.IMessageServerStatus messageServerStatus)
+		public bool GetLogComment(NicoApiSharp.Live.IMessageServerStatus messageServerStatus)
 		{
 			if (messageServerStatus != null) {
 
@@ -233,8 +236,10 @@ namespace Hal.OpenCommentViewer.Control
 				_messageServerStatus = messageServerStatus;
 
 				if (_accountInfomation.IsPremium) {
-					NicoAPI.Chat[] chats = NicoAPI.ChatReceiver.ReceiveAllLog(_messageServerStatus, _cookies, _accountInfomation.UserId);
-					_chats.AddRange(chats);
+					NicoApiSharp.Live.Chat[] chats = NicoApiSharp.Live.ChatReceiver.ReceiveAllLog(_messageServerStatus, _cookies, _accountInfomation.UserId);
+					foreach (NicoApiSharp.Live.Chat chat in chats) {
+						_chats.Add(new OcvChat(chat));
+					}
 
 					// プラグインには開始通知の直後に終了通知する
 					OnStartLive(null, null);
@@ -305,7 +310,7 @@ namespace Hal.OpenCommentViewer.Control
 				System.Net.Cookie cuid = new System.Net.Cookie("user_session", session, "/", ".nicovideo.jp");
 				_cookies.Add(cuid);
 
-				_accountInfomation = NicoAPI.AccountInfomation.GetMyAccountInfomation(_cookies);
+				_accountInfomation = NicoApiSharp.AccountInfomation.GetMyAccountInfomation(_cookies);
 				if (_accountInfomation != null) {
 					_mainview.ShowStatusMessage(string.Format("ログイン成功 : ユーザー名【{0}】", _accountInfomation.UserName));
 					return true;
@@ -323,7 +328,7 @@ namespace Hal.OpenCommentViewer.Control
 		// デバッグ用
 		public void CallTestMethod()
 		{
-			NicoAPI.AccountInfomation ac = NicoAPI.AccountInfomation.GetUserAccountInfomation("9417784", _cookies);
+			NicoApiSharp.AccountInfomation ac = NicoApiSharp.AccountInfomation.GetUserAccountInfomation("9417784", _cookies);
 			_mainview.ShowStatusMessage(ac.UserName);
 		}
 
@@ -371,11 +376,11 @@ namespace Hal.OpenCommentViewer.Control
 			_plugins = null;
 		}
 
-		private void _chatReceiver_ConnectServer(object sender, Hal.OpenCommentViewer.NicoAPI.ChatReceiver.ConnectServerEventArgs e)
+		private void _chatReceiver_ConnectServer(object sender, NicoApiSharp.Live.ChatReceiver.ConnectServerEventArgs e)
 		{
 			if (_mainview != null) {
 				if (_form.InvokeRequired) {
-					_form.BeginInvoke(new EventHandler<NicoAPI.ChatReceiver.ConnectServerEventArgs>(OnStartLive), new object[] { sender, e });
+					_form.BeginInvoke(new EventHandler<NicoApiSharp.Live.ChatReceiver.ConnectServerEventArgs>(OnStartLive), new object[] { sender, e });
 				} else {
 					OnStartLive(sender, e);
 				}
@@ -388,7 +393,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void OnStartLive(object sender, NicoAPI.ChatReceiver.ConnectServerEventArgs e)
+		private void OnStartLive(object sender, NicoApiSharp.Live.ChatReceiver.ConnectServerEventArgs e)
 		{
 			_mainview.ShowStatusMessage("メッセージサーバーに接続しました");
 			_ngChecker.Check(_chats);
@@ -407,11 +412,11 @@ namespace Hal.OpenCommentViewer.Control
 			}
 		}
 
-		private void _chatReceiver_ReceiveChat(object sender, Hal.OpenCommentViewer.NicoAPI.ChatReceiver.ChatReceiveEventArgs e)
+		private void _chatReceiver_ReceiveChat(object sender, NicoApiSharp.Live.ChatReceiver.ChatReceiveEventArgs e)
 		{
 			if (_mainview != null) {
 				if (_form.InvokeRequired) {
-					_form.BeginInvoke(new EventHandler<NicoAPI.ChatReceiver.ChatReceiveEventArgs>(onReceivedChat), new object[] { sender, e });
+					_form.BeginInvoke(new EventHandler<NicoApiSharp.Live.ChatReceiver.ChatReceiveEventArgs>(onReceivedChat), new object[] { sender, e });
 				} else {
 					onReceivedChat(sender, e);
 				}
@@ -426,14 +431,15 @@ namespace Hal.OpenCommentViewer.Control
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void onReceivedChat(object sender, Hal.OpenCommentViewer.NicoAPI.ChatReceiver.ChatReceiveEventArgs e)
+		private void onReceivedChat(object sender, NicoApiSharp.Live.ChatReceiver.ChatReceiveEventArgs e)
 		{
-			_chats.Add(e.Chat);
-			_ngChecker.Check(e.Chat);
+			OcvChat chat = new OcvChat(e.Chat);
+			_chats.Add(chat);
+			_ngChecker.Check(chat);
 
 			//プラグインに通知
 			foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
-				plugin.OnComment(e.Chat);
+				plugin.OnComment(chat);
 			}
 
 
@@ -496,7 +502,7 @@ namespace Hal.OpenCommentViewer.Control
 			get { return this._liveWatcherStatus != null && this._liveWatcherStatus.IsPremium; }
 		}
 
-		NicoAPI.Chat[] __chatsCache = null;
+		NicoApiSharp.Live.Chat[] __chatsCache = null;
 		public Hal.NCSPlugin.IChat[] Chats
 		{
 			get
@@ -620,7 +626,7 @@ namespace Hal.OpenCommentViewer.Control
 		{
 			if (this.CanPostOwnerComment) {
 				if (_liveBasicStatus != null && !string.IsNullOrEmpty(message) && command != null) {
-					return NicoAPI.OwnerCommentPoster.Post(_liveBasicStatus.LiveId, message, command, _cookies);
+					return NicoApiSharp.Live.OwnerCommentPoster.Post(_liveBasicStatus.LiveId, message, command, _cookies);
 				}
 			}
 
@@ -631,7 +637,7 @@ namespace Hal.OpenCommentViewer.Control
 		public bool AddNG(Hal.NCSPlugin.NGType type, string source)
 		{
 			if (this.IsConnected && this.IsOwner && _liveBasicStatus != null) {
-				return NicoAPI.NgClient.AddNg(_liveBasicStatus.LiveId, type, source, _cookies);
+				return NicoApiSharp.Live.NgClient.AddNg(_liveBasicStatus.LiveId, type, source, _cookies);
 			}
 
 			return false;
@@ -640,7 +646,7 @@ namespace Hal.OpenCommentViewer.Control
 		public bool DeleteNG(Hal.NCSPlugin.NGType type, string source)
 		{
 			if (this.IsConnected && this.IsOwner && _liveBasicStatus != null) {
-				return NicoAPI.NgClient.DeleteNg(_liveBasicStatus.LiveId, type, source, _cookies);
+				return NicoApiSharp.Live.NgClient.DeleteNg(_liveBasicStatus.LiveId, type, source, _cookies);
 			}
 
 			return false;
@@ -662,7 +668,7 @@ namespace Hal.OpenCommentViewer.Control
 		public Hal.NCSPlugin.INgClient[] GetNgClients()
 		{
 			if (this.LiveId != null) {
-				return NicoAPI.NgClient.GetNgClients(this.LiveId, _cookies);
+				return NicoApiSharp.Live.NgClient.GetNgClients(this.LiveId, _cookies);
 			}
 
 			return null;

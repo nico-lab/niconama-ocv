@@ -4,6 +4,10 @@ using System.Text;
 
 namespace Hal.NicoApiSharp.Live
 {
+
+	/// <summary>
+	/// 過去ログ取得用のキー
+	/// </summary>
 	public class Waybackkey
 	{
 		/// <summary>

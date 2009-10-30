@@ -19,6 +19,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
+    <DocumentationFile>bin\Debug\NicoApiSharp.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
+    <DocumentationFile>bin\Release\NicoApiSharp.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -45,13 +47,11 @@
     <Compile Include="Live\HeartBeat.cs" />
     <Compile Include="IAccountInfomation.cs" />
     <Compile Include="IErrorData.cs" />
-    <Compile Include="Live\IChat.cs" />
     <Compile Include="Live\ILiveBasicStatus.cs" />
     <Compile Include="Live\ILiveCountStatus.cs" />
     <Compile Include="Live\ILiveDescription.cs" />
     <Compile Include="Live\ILiveWatcherStatus.cs" />
     <Compile Include="Live\IMessageServerStatus.cs" />
-    <Compile Include="Live\INgClient.cs" />
     <Compile Include="Live\LiveDescription.cs" />
     <Compile Include="Live\NgClient.cs" />
     <Compile Include="Live\OwnerCommentPoster.cs" />
@@ -62,6 +62,12 @@
     <Compile Include="Live\ThreadHeader.cs" />
     <Compile Include="Live\Waybackkey.cs" />
     <Compile Include="Utility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NCSPlugin\NCSPlugin.csproj">
+      <Project>{9CC20246-79AA-43B0-9736-CA65EDB1C334}</Project>
+      <Name>NCSPlugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

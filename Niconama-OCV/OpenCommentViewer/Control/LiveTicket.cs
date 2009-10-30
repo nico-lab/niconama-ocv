@@ -8,7 +8,7 @@ namespace Hal.OpenCommentViewer.Control
 	/// <summary>
 	/// コメントサーバーに再接続するためのデータを格納するためのクラス
 	/// </summary>
-	public class LiveTicket : NicoAPI.ILiveBasicStatus, NicoAPI.IMessageServerStatus, NicoAPI.ILiveDescription
+	public class LiveTicket : NicoApiSharp.Live.ILiveBasicStatus, NicoApiSharp.Live.IMessageServerStatus, NicoApiSharp.Live.ILiveDescription
 	{
 
 		string _liveId;
@@ -37,7 +37,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// <param name="basicStatus"></param>
 		/// <param name="messageStatus"></param>
 		/// <param name="liveDescription"></param>
-		public LiveTicket(NicoAPI.ILiveBasicStatus basicStatus, NicoAPI.IMessageServerStatus messageStatus, NicoAPI.ILiveDescription liveDescription)
+		public LiveTicket(NicoApiSharp.Live.ILiveBasicStatus basicStatus, NicoApiSharp.Live.IMessageServerStatus messageStatus, NicoApiSharp.Live.ILiveDescription liveDescription)
 		{
 			this._liveId = basicStatus.LiveId;
 			this._communityId = basicStatus.CommunityId;
