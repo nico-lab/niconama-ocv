@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Hal.NCSPlugin {
+namespace Hal.NCSPlugin
+{
 
 	/// <summary>
 	/// NGの種類
 	/// </summary>
-	public enum NGType {
+	public enum NGType
+	{
 		/// <summary>
 		/// NGなし
 		/// </summary>
@@ -32,7 +34,8 @@ namespace Hal.NCSPlugin {
 	/// <summary>
 	/// NGクライアントをあらわすインターフェース
 	/// </summary>
-  public interface INgClient {
+	public interface INgClient
+	{
 
 		/// <summary>
 		/// NGの種類を取得します
@@ -63,5 +66,5 @@ namespace Hal.NCSPlugin {
 		/// 正規表現であるかどうかを取得します
 		/// </summary>
 		bool IsRegex { get; }
-  }
+	}
 }
