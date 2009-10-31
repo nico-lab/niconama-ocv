@@ -28,24 +28,31 @@ namespace Hal.OpenCommentViewer.Control
 		/// </summary>
 		/// <param name="message"></param>
 		void ShowFatalMessage(string message);
+		
+		/// <summary>
+		/// セルフォーマット時の外部操作を登録する
+		/// </summary>
+		/// <param name="callback"></param>
+		void RegisterCellFormattingCallback(Hal.NCSPlugin.CellFormattingCallback callback);
 
 		/// <summary>
-		/// カラム拡張を登録する
+		/// 拡張カラムを登録する
 		/// </summary>
 		/// <param name="columnExtention"></param>
 		void RegisterColumnExtention(Hal.NCSPlugin.IColumnExtention columnExtention);
 
 		/// <summary>
-		/// コンテクストメニュー拡張を登録する
+		/// コンテクストメニューを拡張する
 		/// </summary>
-		/// <param name="contextMenuExtention"></param>
-		void RegisterContextMenuExtention(Hal.NCSPlugin.IContextMenuExtention contextMenuExtention);
+		/// <param name="menuItem"></param>
+		void RegisterContextMenuExtention(System.Windows.Forms.ToolStripMenuItem menuItem);
 
 		/// <summary>
-		/// メニューストリップ拡張を登録する
+		/// メニューストリップを拡張する
 		/// </summary>
-		/// <param name="menuStripExtention"></param>
-		void RegisterMenuStripExtention(Hal.NCSPlugin.IMenuStripExtention menuStripExtention);
+		/// <param name="category"></param>
+		/// <param name="menuItem"></param>
+		void RegisterMenuStripExtention(string category, System.Windows.Forms.ToolStripMenuItem menuItem);
 
 	}
 }

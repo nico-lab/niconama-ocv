@@ -42,11 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICellFormatter.cs" />
     <Compile Include="IChat.cs" />
     <Compile Include="IColumnExtention.cs" />
-    <Compile Include="IContextMenuExtention.cs" />
     <Compile Include="IFilterdChat.cs" />
-    <Compile Include="IMenuStripExtention.cs" />
     <Compile Include="INgClient.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="IPluginHost.cs" />

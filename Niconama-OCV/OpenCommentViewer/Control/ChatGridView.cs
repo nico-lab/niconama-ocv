@@ -16,7 +16,9 @@ namespace Hal.OpenCommentViewer.Control
 		/// <summary>
 		/// カラムを拡張するプラグインを格納する配列
 		/// </summary>
-		protected List<Hal.NCSPlugin.IColumnExtention> _columnExtentions = new List<Hal.NCSPlugin.IColumnExtention>();
+		protected List<Hal.NCSPlugin.IColumnExtention> _columnExtention = new List<Hal.NCSPlugin.IColumnExtention>();
+
+		protected List<Hal.NCSPlugin.CellFormattingCallback> _cellFormattingCallbacks = new List<Hal.NCSPlugin.CellFormattingCallback>();
 
 		/// <summary>
 		/// プラグイン追加前のカラムの量
@@ -159,16 +161,29 @@ namespace Hal.OpenCommentViewer.Control
 		/// <summary>
 		/// カラムを追加する
 		/// </summary>
-		/// <param name="ext"></param>
-		public void AddColumn(Hal.NCSPlugin.IColumnExtention ext) {
-			if (ext != null && ext.Column != null) {
-				if (ext.Column.SortMode == DataGridViewColumnSortMode.Automatic) {
-					ext.Column.SortMode = DataGridViewColumnSortMode.Programmatic;
+		/// <param name="columnExtention"></param>
+		public void AddColumnExtention(NCSPlugin.IColumnExtention columnExtention)
+		{
+			if (columnExtention != null && columnExtention.Column != null) {
+				if (columnExtention.Column.SortMode == DataGridViewColumnSortMode.Automatic) {
+					columnExtention.Column.SortMode = DataGridViewColumnSortMode.Programmatic;
 				}
-				dataGridView1.Columns.Add(ext.Column);
-				_columnExtentions.Add(ext);
+				dataGridView1.Columns.Add(columnExtention.Column);
+				_columnExtention.Add(columnExtention);
 			}
 		}
+
+		/// <summary>
+		/// カラムを追加する
+		/// </summary>
+		/// <param name="cfm"></param>
+		public void AddCellFormattingCallback(Hal.NCSPlugin.CellFormattingCallback callback)
+		{
+			if (callback != null) {
+				_cellFormattingCallbacks.Add(callback);
+			}
+		}
+
 
 		/// <summary>
 		/// チャットをすべて取り除く
@@ -219,11 +234,11 @@ namespace Hal.OpenCommentViewer.Control
 
 			// 拡張カラムの値を処理する
 			int index = e.ColumnIndex - _defaultColmunCount;
-			if (0 <= index && index < _columnExtentions.Count) {
+			if (0 <= index && index < _columnExtention.Count) {
 				try {
-					e.Value = _columnExtentions[index].OnCellValueNeeded(chat);
+					e.Value = _columnExtention[index].OnCellValueNeeded(chat);
 				} catch (Exception ex) {
-					Logger.Default.LogErrorMessage("Column extention error on " + _columnExtentions[index].Column.Name);
+					Logger.Default.LogErrorMessage("Column extention error on " + dataGridView1.Columns[e.ColumnIndex].Name);
 					Logger.Default.LogException(ex);
 					e.Value = "Error";
 				}
@@ -244,10 +259,9 @@ namespace Hal.OpenCommentViewer.Control
 			}
 
 			Hal.NCSPlugin.IChat chat = _chats[e.RowIndex];
-
-			// 主コメントをオレンジ色にする
-			if (e.ColumnIndex == 1 && chat.IsOwnerComment) {
-				e.CellStyle.ForeColor = System.Drawing.Color.OrangeRed;
+			
+			for (int i = 0; i < _cellFormattingCallbacks.Count; i++) {
+				_cellFormattingCallbacks[i](chat, e);
 			}
 		}
 

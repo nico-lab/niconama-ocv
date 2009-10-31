@@ -102,20 +102,41 @@ namespace Hal.OpenCommentViewer.Control
 			statusLabel.Text = message;
 		}
 
+		public void RegisterCellFormattingCallback(Hal.NCSPlugin.CellFormattingCallback callback)
+		{
+			chatGridView1.AddCellFormattingCallback(callback);
+		}
+
 		public void RegisterColumnExtention(Hal.NCSPlugin.IColumnExtention columnExtention)
 		{
-			this.chatGridView1.AddColumn(columnExtention);
+			this.chatGridView1.AddColumnExtention(columnExtention);
 		}
 
-		public void RegisterContextMenuExtention(Hal.NCSPlugin.IContextMenuExtention contextMenuExtention)
+		public void RegisterContextMenuExtention(System.Windows.Forms.ToolStripMenuItem menuItem)
 		{
 			throw new Exception("The method or operation is not implemented.");
 		}
 
-		public void RegisterMenuStripExtention(Hal.NCSPlugin.IMenuStripExtention menuStripExtention)
+		public void RegisterMenuStripExtention(string category, System.Windows.Forms.ToolStripMenuItem menuItem)
 		{
-			throw new Exception("The method or operation is not implemented.");
+			ToolStripMenuItem target = null;
+			foreach (ToolStripMenuItem item in menuStrip1.Items) {
+				if (item.Text.Equals(category)) {
+					target = item;
+					break;
+				}
+			}
+
+			if(target == null){
+				target = new ToolStripMenuItem(category);
+				menuStrip1.Items.Add(target);
+			}
+			
+			target.DropDownItems.Add(menuItem);
 		}
+
+
+		
 
 		#endregion
 		
