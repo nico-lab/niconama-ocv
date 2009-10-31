@@ -7,27 +7,46 @@ namespace Hal.NCSPlugin
 
 	/// <summary>
 	/// プラグインホストのインターフェース
-	/// version 0
+	/// version 1
 	/// </summary>
 	public interface IPluginHost
 	{
+
+		#region アプリケーション情報
+
+		/// <summary>
+		/// プラグイン用データ保存フォルダーへのパスを取得します。
+		/// </summary>
+		string PluginDataFolder { get; }
+
+		/// <summary>
+		/// プラグインが格納されているフォルダーへのパスを取得します。
+		/// </summary>
+		string PluginsFolder { get; }
+
+		/// <summary>
+		/// PluginHostが実装しているインターフェースのバージョンを取得します。
+		/// </summary>
+		int InterfaceVersion { get; }
+
+		/// <summary>
+		/// アプリケーションの名前を取得します。
+		/// </summary>
+		string ApplicationName { get; }
+
+		/// <summary>
+		/// アプリケーションのバージョンを取得します。
+		/// </summary>
+		System.Version ApplicationVersion { get; }
+
+		#endregion
+
+		#region 放送情報
 
 		/// <summary>
 		/// 放送に接続中かどうかを取得します。
 		/// </summary>
 		bool IsConnected { get; }
-
-		/// <summary>
-		/// 一般コメントが投稿可能かどうかを取得します。
-		/// コメント投稿機能が実装されていない場合は常にfalseが返される
-		/// </summary>
-		bool CanPostComment { get; }
-
-		/// <summary>
-		/// 運営コメントが投稿可能かどうかを取得します。
-		/// 運営コメント投稿機能が実装されていない場合は常にfalseが返される
-		/// </summary>
-		bool CanPostOwnerComment { get; }
 
 		/// <summary>
 		/// 放送主かどうかを取得します。
@@ -74,37 +93,25 @@ namespace Hal.NCSPlugin
 		/// </summary>
 		DateTime ServerStartTime { get; }
 
-		/// <summary>
-		/// ウィンドウオーナー
-		/// Formをshowする場合にこれをIWin32Windowにキャストして引数に渡すと
-		/// Formがメイン画面の裏に隠れなくなる
-		/// </summary>
-		object Win32WindowOwner { get; }
+		#endregion
+
+
+		
+
+
+		#region 操作
 
 		/// <summary>
-		/// プラグイン用データ保存フォルダーへのパスを取得します。
+		/// 一般コメントが投稿可能かどうかを取得します。
+		/// コメント投稿機能が実装されていない場合は常にfalseが返される
 		/// </summary>
-		string PluginDataFolder { get; }
+		bool CanPostComment { get; }
 
 		/// <summary>
-		/// プラグインが格納されているフォルダーへのパスを取得します。
+		/// 運営コメントが投稿可能かどうかを取得します。
+		/// 運営コメント投稿機能が実装されていない場合は常にfalseが返される
 		/// </summary>
-		string PluginsFolder { get; }
-
-		/// <summary>
-		/// PluginHostが実装しているインターフェースのバージョンを取得します。
-		/// </summary>
-		int InterfaceVersion { get; }
-
-		/// <summary>
-		/// アプリケーションの名前を取得します。
-		/// </summary>
-		string ApplicationName { get; }
-
-		/// <summary>
-		/// アプリケーションのバージョンを取得します。
-		/// </summary>
-		System.Version ApplicationVersion { get; }
+		bool CanPostOwnerComment { get; }
 
 		/// <summary>
 		/// 一般コメントを投稿投稿します。
@@ -164,6 +171,20 @@ namespace Hal.NCSPlugin
 		/// <returns>選択されているChat。何も選択されていない場合はnullを返す</returns>
 		IChat GetSelectedChat();
 
+		#endregion
+
+		
+
+
+		#region フォーム操作
+
+		/// <summary>
+		/// ウィンドウオーナー
+		/// Formをshowする場合にこれをIWin32Windowにキャストして引数に渡すと
+		/// Formがメイン画面の裏に隠れなくなる
+		/// </summary>
+		object Win32WindowOwner { get; }
+
 		/// <summary>
 		/// noで指定したコメントを選択状態にして画面上に表示します。
 		/// </summary>
@@ -182,6 +203,75 @@ namespace Hal.NCSPlugin
 		/// </summary>
 		/// <param name="message">表示内容</param>
 		void ShowFaitalMessage(string message);
+
+		/// <summary>
+		/// プラグインからコメントサーバーとは別のコメントを挿入する
+		/// 実装は任意
+		/// インターフェースバージョン1
+		/// </summary>
+		/// <param name="chat"></param>
+		/// <returns></returns>
+		bool InsertPluginChat(IChat chat);
+
+		/// <summary>
+		/// ビューフォーマット時の外部操作をサポートするか
+		/// インターフェースバージョン1
+		/// </summary>
+		bool SupportAddCellFormattingCallBack { get; }
+
+		/// <summary>
+		/// カラム拡張をサポートするかを取得します
+		/// インターフェースバージョン1
+		/// </summary>
+		bool SupportAddColumn { get; }
+
+		/// <summary>
+		/// コンテクストメニュー拡張をサポートするかを取得します
+		/// インターフェースバージョン1
+		/// </summary>
+		bool SupportAddContextMenuItem { get; }
+
+		/// <summary>
+		/// メニューストリップ拡張をサポートするか
+		/// インターフェースバージョン1
+		/// </summary>
+		bool SupportAddMenuStripItem { get; }
+
+		/// <summary>
+		/// ビューフォーマット時の外部操作を追加します
+		/// 実装は任意
+		/// インターフェースバージョン1
+		/// </summary>
+		/// <param name="callback"></param>
+		void AddCellFormattingCallBack(CellFormattingCallback callback);
+
+		/// <summary>
+		/// ビューのカラムを追加します
+		/// 実装は任意
+		/// インターフェースバージョン1
+		/// </summary>
+		/// <param name="columnExtention"></param>
+		void AddColumnExtention(IColumnExtention columnExtention);
+
+		/// <summary>
+		/// コンテクストメニューを拡張します
+		/// 実装は任意
+		/// インターフェースバージョン1
+		/// </summary>
+		/// <param name="menuItem"></param>
+		void AddContextMenuItem(System.Windows.Forms.ToolStripMenuItem menuItem);
+
+		/// <summary>
+		/// メニューストリップを拡張します
+		/// 実装は任意
+		/// インターフェースバージョン1
+		/// </summary>
+		/// <param name="category">ファイル、編集、表示などなるべく一般的なもの</param>
+		/// <param name="menuItem"></param>
+		void AddMenuStripItem(string category, System.Windows.Forms.ToolStripMenuItem menuItem);
+
+		#endregion
+
 
 	}
 }

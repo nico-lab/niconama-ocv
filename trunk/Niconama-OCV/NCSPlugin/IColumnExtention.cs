@@ -24,8 +24,8 @@ namespace Hal.NCSPlugin
 		/// 対応する文字列などを返してください
 		/// なおビューアは仮想モードで動くことを前提にしてあります
 		/// </summary>
-		/// <param name="chat"></param>
-		/// <returns></returns>
+		/// <param name="chat">該当するセルが含まれている行に割り当てられているチャット</param>
+		/// <returns>セルに代入される値</returns>
 		object OnCellValueNeeded(IChat chat);
 
 		

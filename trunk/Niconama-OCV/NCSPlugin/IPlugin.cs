@@ -57,5 +57,7 @@ namespace Hal.NCSPlugin
 		/// <param name="chat"></param>
 		void OnComment(IChat chat);
 
+
+
 	}
 }
