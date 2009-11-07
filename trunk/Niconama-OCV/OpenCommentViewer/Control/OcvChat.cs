@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,7 +11,7 @@ namespace Hal.OpenCommentViewer.Control
 		private string _ngSource = null;
 
 		/// <summary>
-		/// NCSPlugin.IChat‚ÉFilteredChatƒCƒ“ƒ^[ƒtƒF[ƒX‚ğ’Ç‰Á‚·‚é
+		/// NCSPlugin.IChatã«FilteredChatã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’è¿½åŠ ã™ã‚‹
 		/// </summary>
 		/// <param name="chat"></param>
 		public OcvChat(NCSPlugin.IChat chat) : base(chat) { 
@@ -19,7 +19,7 @@ namespace Hal.OpenCommentViewer.Control
 		}
 
 
-		#region IFilterdChat ƒƒ“ƒo
+		#region IFilterdChat ãƒ¡ãƒ³ãƒ
 
 		public NCSPlugin.NGType NgType
 		{
