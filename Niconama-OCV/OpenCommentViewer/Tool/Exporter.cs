@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,21 +6,21 @@ namespace Hal.OpenCommentViewer.Tool
 {
 
 	/// <summary>
-	/// XMLŒ`®‚ÌƒRƒƒ“ƒgƒtƒ@ƒCƒ‹‚ğƒGƒNƒXƒ|[ƒg‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+	/// XMLå½¢å¼ã®ã‚³ãƒ¡ãƒ³ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
 	/// </summary>
 	class Exporter : NCSPlugin.IPlugin
 	{
 		NCSPlugin.IPluginHost _host;
 		System.Windows.Forms.ToolStripMenuItem _menuItem;
 
-		#region ƒGƒNƒXƒ|[ƒgˆ—
+		#region ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆå‡¦ç†
 
 		void menuitem_Click(object sender, EventArgs e)
 		{
 			if (_host.Chats.Length != 0) {
 				System.Windows.Forms.SaveFileDialog sf = new System.Windows.Forms.SaveFileDialog();
 				sf.DefaultExt = ".xml";
-				sf.Filter = "XMLƒtƒ@ƒCƒ‹(*.xml)|*.xml";
+				sf.Filter = "XMLãƒ•ã‚¡ã‚¤ãƒ«(*.xml)|*.xml";
 				sf.FileName = "export_" + _host.LiveId + ".xml";
 				if (sf.ShowDialog((System.Windows.Forms.IWin32Window)_host.Win32WindowOwner) == System.Windows.Forms.DialogResult.OK) {
 					string xml = buildNicoXML();
@@ -31,11 +31,11 @@ namespace Hal.OpenCommentViewer.Tool
 								sw.Close();
 							}
 
-							_host.ShowStatusMessage("ƒGƒNƒXƒ|[ƒg‚É¬Œ÷‚µ‚Ü‚µ‚½B");
+							_host.ShowStatusMessage("ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã«æˆåŠŸã—ã¾ã—ãŸã€‚");
 
 						} catch (Exception ex) {
 							Logger.Default.LogException(ex);
-							_host.ShowFaitalMessage("ƒGƒNƒXƒ|[ƒg‚É¸”s‚µ‚Ü‚µ‚½BÚ‚µ‚¢î•ñ‚ÍƒƒOƒtƒ@ƒCƒ‹‚ğQÆ‚µ‚Ä‚­‚¾‚³‚¢");
+							_host.ShowFaitalMessage("ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚è©³ã—ã„æƒ…å ±ã¯ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‚ç…§ã—ã¦ãã ã•ã„");
 						}
 					}
 				}
@@ -95,7 +95,7 @@ namespace Hal.OpenCommentViewer.Tool
 		}
 
 		/// <summary>
-		/// ƒXƒgƒŠƒ“ƒOƒrƒ‹ƒ_[‚É‘Î‚µ‚ÄXML‚ÌAttribute•¶š—ñ‚ğ’Ç‰Á‚·‚é
+		/// ã‚¹ãƒˆãƒªãƒ³ã‚°ãƒ“ãƒ«ãƒ€ãƒ¼ã«å¯¾ã—ã¦XMLã®Attributeæ–‡å­—åˆ—ã‚’è¿½åŠ ã™ã‚‹
 		/// </summary>
 		/// <param name="sb"></param>
 		/// <param name="name"></param>
@@ -111,11 +111,11 @@ namespace Hal.OpenCommentViewer.Tool
 
 		#endregion
 
-		#region IPlugin ƒƒ“ƒo
+		#region IPlugin ãƒ¡ãƒ³ãƒ
 
 		public string Name
 		{
-			get { return "ƒGƒNƒXƒ|[ƒg"; }
+			get { return "ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ"; }
 		}
 
 		public int InterfaceVersion
@@ -125,16 +125,16 @@ namespace Hal.OpenCommentViewer.Tool
 
 		public string Description
 		{
-			get { return "ƒRƒƒ“ƒg‚ğƒGƒNƒXƒ|[ƒg‚µ‚Ü‚·"; }
+			get { return "ã‚³ãƒ¡ãƒ³ãƒˆã‚’ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã—ã¾ã™"; }
 		}
 
 		public void Initialize(Hal.NCSPlugin.IPluginHost host)
 		{
 			_host = host;
 
-			_menuItem = new System.Windows.Forms.ToolStripMenuItem("ƒGƒNƒXƒ|[ƒg(&E)");
+			_menuItem = new System.Windows.Forms.ToolStripMenuItem("ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ(&E)");
 			_menuItem.Click += new EventHandler(menuitem_Click);
-			_host.AddMenuStripItem("ƒtƒ@ƒCƒ‹(&F)", _menuItem, contextemenuOpeningCallback);
+			_host.AddMenuStripItem("ãƒ•ã‚¡ã‚¤ãƒ«(&F)", _menuItem, contextemenuOpeningCallback);
 
 		}
 
@@ -158,7 +158,7 @@ namespace Hal.OpenCommentViewer.Tool
 
 		#endregion
 
-		#region IDisposable ƒƒ“ƒo
+		#region IDisposable ãƒ¡ãƒ³ãƒ
 
 		public void Dispose()
 		{

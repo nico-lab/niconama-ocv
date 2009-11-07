@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,39 +6,39 @@ namespace Hal.OpenCommentViewer.Tool
 {
 
 	/// <summary>
-	/// XMLŒ`®‚ÌƒRƒƒ“ƒgƒtƒ@ƒCƒ‹‚ğƒCƒ“ƒ|[ƒg‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX
+	/// XMLå½¢å¼ã®ã‚³ãƒ¡ãƒ³ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
 	/// </summary>
 	class Importer : NCSPlugin.IPlugin
 	{
 		NCSPlugin.IPluginHost _host;
 		System.Windows.Forms.ToolStripMenuItem _menuItem;
 
-		#region ƒCƒ“ƒ|[ƒgˆ—
+		#region ã‚¤ãƒ³ãƒãƒ¼ãƒˆå‡¦ç†
 
 		void menuitem_Click(object sender, EventArgs e)
 		{
 
 			System.Windows.Forms.OpenFileDialog of = new System.Windows.Forms.OpenFileDialog();
 			of.DefaultExt = ".xml";
-			of.Filter = "XMLƒtƒ@ƒCƒ‹(*.xml)|*.xml";
+			of.Filter = "XMLãƒ•ã‚¡ã‚¤ãƒ«(*.xml)|*.xml";
 			if (of.ShowDialog((System.Windows.Forms.IWin32Window)_host.Win32WindowOwner) == System.Windows.Forms.DialogResult.OK) {
 				try {
 					System.Xml.XmlDocument xdoc = new System.Xml.XmlDocument();
 					xdoc.Load(of.FileName);
 
-					// ‹[—“I‚É•ú‘—‚ÉÚ‘±‚µ‚½ó‘Ô‚É‚·‚é
+					// æ“¬ä¼¼çš„ã«æ”¾é€ã«æ¥ç¶šã—ãŸçŠ¶æ…‹ã«ã™ã‚‹
 					_host.StartMockLive("lv0", System.IO.Path.GetFileNameWithoutExtension(of.FileName), DateTime.Now);
 					
-					// ƒtƒ@ƒCƒ‹“à‚ÌƒRƒƒ“ƒg‚ğƒzƒXƒg‚É“o˜^‚·‚é
+					// ãƒ•ã‚¡ã‚¤ãƒ«å†…ã®ã‚³ãƒ¡ãƒ³ãƒˆã‚’ãƒ›ã‚¹ãƒˆã«ç™»éŒ²ã™ã‚‹
 					foreach (System.Xml.XmlNode node in xdoc.SelectNodes("packet/chat")) {
 						NicoApiSharp.Live.Chat chat = new Hal.NicoApiSharp.Live.Chat(node);
 						_host.InsertPluginChat(chat);
 					}
-					_host.ShowStatusMessage("ƒCƒ“ƒ|[ƒg‚É¬Œ÷‚µ‚Ü‚µ‚½B");
+					_host.ShowStatusMessage("ã‚¤ãƒ³ãƒãƒ¼ãƒˆã«æˆåŠŸã—ã¾ã—ãŸã€‚");
 
 				}catch(Exception ex){
 					Logger.Default.LogException(ex);
-					_host.ShowStatusMessage("ƒCƒ“ƒ|[ƒg‚É¸”s‚µ‚Ü‚µ‚½B");
+					_host.ShowStatusMessage("ã‚¤ãƒ³ãƒãƒ¼ãƒˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
 
 				}
 			}
@@ -47,11 +47,11 @@ namespace Hal.OpenCommentViewer.Tool
 
 		#endregion
 
-		#region IPlugin ƒƒ“ƒo
+		#region IPlugin ãƒ¡ãƒ³ãƒ
 
 		public string Name
 		{
-			get { return "ƒCƒ“ƒ|[ƒg"; }
+			get { return "ã‚¤ãƒ³ãƒãƒ¼ãƒˆ"; }
 		}
 
 		public int InterfaceVersion
@@ -61,16 +61,16 @@ namespace Hal.OpenCommentViewer.Tool
 
 		public string Description
 		{
-			get { return "ƒRƒƒ“ƒg‚ğƒCƒ“ƒ|[ƒg‚µ‚Ü‚·"; }
+			get { return "ã‚³ãƒ¡ãƒ³ãƒˆã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆã—ã¾ã™"; }
 		}
 
 		public void Initialize(Hal.NCSPlugin.IPluginHost host)
 		{
 			_host = host;
 
-			_menuItem = new System.Windows.Forms.ToolStripMenuItem("ƒCƒ“ƒ|[ƒg(&I)");
+			_menuItem = new System.Windows.Forms.ToolStripMenuItem("ã‚¤ãƒ³ãƒãƒ¼ãƒˆ(&I)");
 			_menuItem.Click += new EventHandler(menuitem_Click);
-			_host.AddMenuStripItem("ƒtƒ@ƒCƒ‹(&F)", _menuItem);
+			_host.AddMenuStripItem("ãƒ•ã‚¡ã‚¤ãƒ«(&F)", _menuItem);
 
 		}
 
@@ -92,7 +92,7 @@ namespace Hal.OpenCommentViewer.Tool
 
 		#endregion
 
-		#region IDisposable ƒƒ“ƒo
+		#region IDisposable ãƒ¡ãƒ³ãƒ
 
 		public void Dispose()
 		{
