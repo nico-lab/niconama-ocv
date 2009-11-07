@@ -16,13 +16,17 @@ namespace Hal.NicoApiSharp
 			if (url == null || !url.StartsWith("http://")) {
 				throw new ArgumentException("urlが正しく設定されていません", "url");
 			}
-
-			string xml = Utility.GetResponseText(url, cookies, ApiSettings.Default.DefaultApiTimeout);
-			if (xml == null) {
-				throw new System.Xml.XmlException("WEB上からXMLを取得できませんでした。");
+			try {
+				string xml = Utility.GetResponseText(url, cookies, ApiSettings.Default.DefaultApiTimeout);
+				if (xml == null) {
+					throw new System.Xml.XmlException("WEB上からXMLを取得できませんでした。");
+				}
+				this.LoadXml(xml);
+			} catch (Exception ex) {
+				Logger.Default.LogException(ex);
 			}
 
-			this.LoadXml(xml);
+			
 
 		}
 
