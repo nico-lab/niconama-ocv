@@ -112,12 +112,26 @@ namespace Hal.OpenCommentViewer.Control
 			this.chatGridView1.AddColumnExtention(columnExtention);
 		}
 
-		public void RegisterContextMenuExtention(System.Windows.Forms.ToolStripMenuItem menuItem)
+		public void ExtendContextMenu(System.Windows.Forms.ToolStripMenuItem menuItem)
 		{
-			throw new Exception("The method or operation is not implemented.");
+			ExtendContextMenu(menuItem, null);
 		}
 
-		public void RegisterMenuStripExtention(string category, System.Windows.Forms.ToolStripMenuItem menuItem)
+		public void ExtendMenuStrip(string category, System.Windows.Forms.ToolStripMenuItem menuItem)
+		{
+			ExtendMenuStrip(category, menuItem, null);
+		}
+
+		public void ExtendContextMenu(ToolStripMenuItem menuItem, EventHandler openingCallback)
+		{
+			pluginToolStripSeparator.Visible = true;
+			chatViewContextMenu.Items.Add(menuItem);
+			if (openingCallback != null) {
+				chatViewContextMenu.Opening += new CancelEventHandler(openingCallback);
+			}
+		}
+
+		public void ExtendMenuStrip(string category, ToolStripMenuItem menuItem, EventHandler openingCallback)
 		{
 			ToolStripMenuItem target = null;
 			foreach (ToolStripMenuItem item in menuStrip1.Items) {
@@ -127,16 +141,25 @@ namespace Hal.OpenCommentViewer.Control
 				}
 			}
 
-			if(target == null){
+			if (target == null) {
 				target = new ToolStripMenuItem(category);
 				menuStrip1.Items.Add(target);
 			}
-			
+
 			target.DropDownItems.Add(menuItem);
+			if (openingCallback != null) {
+				target.DropDown.Opening += new CancelEventHandler(openingCallback);
+			}
 		}
 
 
-		
+		public NCSPlugin.IChat GetSelectedChat() {
+			return chatGridView1.GetSelectedChat();
+		}
+
+		public bool SelectChat(int no) {
+			return chatGridView1.SelectChat(no);
+		}
 
 		#endregion
 		
@@ -210,11 +233,6 @@ namespace Hal.OpenCommentViewer.Control
 			if (f.ShowDialog() == DialogResult.OK) {
 				_core.Login(UserSettings.Default.BrowserType, UserSettings.Default.CookieFilePath);
 			}
-		}
-
-		private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			this.Close();
 		}
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
@@ -309,6 +327,31 @@ statusStrip1.Visible = !statusStrip1.Visible;
 			pasteToolStripMenuItem.Enabled = pt;
 			pasteAndStartToolStripMenuItem.Enabled = ptag;
 		}
+
+		private void commentCopyToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			NCSPlugin.IChat chat = chatGridView1.GetSelectedChat();
+			if (chat != null) {
+				Utility.SetTxetToClipboard(chat.Message);
+			}
+		}
+
+		private void idCopyToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			NCSPlugin.IChat chat = chatGridView1.GetSelectedChat();
+			if (chat != null) {
+				Utility.SetTxetToClipboard(chat.UserId);
+			}
+		}
+
+		private void chatViewContextMenu_Opening(object sender, CancelEventArgs e)
+		{
+			bool enable = chatGridView1.GetSelectedChat() != null;
+			commentCopyToolStripMenuItem.Enabled = enable;
+			idCopyToolStripMenuItem.Enabled = enable;
+		}
+
+		
 
 	}
 }

@@ -38,7 +38,6 @@
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.loginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip2 = new System.Windows.Forms.ToolStrip();
 			this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
 			this.idBox = new Hal.OpenCommentViewer.CustomControl.ToolStripSpringTextBox();
@@ -48,6 +47,10 @@
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.chatGridView1 = new Hal.OpenCommentViewer.Control.ChatGridView();
+			this.chatViewContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.commentCopyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.idCopyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.pluginToolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
 			this.idBoxContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.cutIdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
@@ -62,13 +65,14 @@
 			this.statusStrip1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip2.SuspendLayout();
+			this.chatViewContextMenu.SuspendLayout();
 			this.idBoxContextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// statusStrip1
 			// 
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-				this.statusLabel});
+            this.statusLabel});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 311);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(490, 23);
@@ -84,7 +88,7 @@
 			// menuStrip1
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-				this.ファイルFToolStripMenuItem});
+            this.ファイルFToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Size = new System.Drawing.Size(490, 26);
@@ -94,12 +98,11 @@
 			// ファイルFToolStripMenuItem
 			// 
 			this.ファイルFToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-				this.saveTicketToolStripMenuItem,
-				this.loadTicketToolStripMenuItem,
-				this.toolStripSeparator1,
-				this.loginToolStripMenuItem,
-				this.toolStripSeparator2,
-				this.exitToolStripMenuItem});
+            this.saveTicketToolStripMenuItem,
+            this.loadTicketToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.loginToolStripMenuItem,
+            this.toolStripSeparator2});
 			this.ファイルFToolStripMenuItem.Name = "ファイルFToolStripMenuItem";
 			this.ファイルFToolStripMenuItem.Size = new System.Drawing.Size(85, 22);
 			this.ファイルFToolStripMenuItem.Text = "ファイル(&F)";
@@ -107,49 +110,42 @@
 			// saveTicketToolStripMenuItem
 			// 
 			this.saveTicketToolStripMenuItem.Name = "saveTicketToolStripMenuItem";
-			this.saveTicketToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+			this.saveTicketToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.saveTicketToolStripMenuItem.Text = "チケット保存";
 			this.saveTicketToolStripMenuItem.Click += new System.EventHandler(this.saveTicketToolStripMenuItem_Click);
 			// 
 			// loadTicketToolStripMenuItem
 			// 
 			this.loadTicketToolStripMenuItem.Name = "loadTicketToolStripMenuItem";
-			this.loadTicketToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+			this.loadTicketToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.loadTicketToolStripMenuItem.Text = "チケット読込";
 			this.loadTicketToolStripMenuItem.Click += new System.EventHandler(this.loadTicketToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(145, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
 			// 
 			// loginToolStripMenuItem
 			// 
 			this.loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-			this.loginToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+			this.loginToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.loginToolStripMenuItem.Text = "ログイン";
 			this.loginToolStripMenuItem.Click += new System.EventHandler(this.loginToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(145, 6);
-			// 
-			// exitToolStripMenuItem
-			// 
-			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-			this.exitToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-			this.exitToolStripMenuItem.Text = "終了";
-			this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
 			// 
 			// toolStrip2
 			// 
 			this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-this.toolStripLabel1,
-this.idBox,
-this.startButton,
-this.stopButton,
-this.toolStripButton1});
+            this.toolStripLabel1,
+            this.idBox,
+            this.startButton,
+            this.stopButton,
+            this.toolStripButton1});
 			this.toolStrip2.Location = new System.Drawing.Point(0, 26);
 			this.toolStrip2.Name = "toolStrip2";
 			this.toolStrip2.Size = new System.Drawing.Size(490, 25);
@@ -212,25 +208,56 @@ this.toolStripButton1});
 			// 
 			// chatGridView1
 			// 
+			this.chatGridView1.ContextMenuStrip = this.chatViewContextMenu;
 			this.chatGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.chatGridView1.Location = new System.Drawing.Point(0, 51);
 			this.chatGridView1.Name = "chatGridView1";
 			this.chatGridView1.Size = new System.Drawing.Size(490, 260);
 			this.chatGridView1.TabIndex = 3;
 			// 
+			// chatViewContextMenu
+			// 
+			this.chatViewContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.commentCopyToolStripMenuItem,
+            this.idCopyToolStripMenuItem,
+            this.pluginToolStripSeparator});
+			this.chatViewContextMenu.Name = "chatViewContextMenu";
+			this.chatViewContextMenu.Size = new System.Drawing.Size(173, 54);
+			this.chatViewContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.chatViewContextMenu_Opening);
+			// 
+			// commentCopyToolStripMenuItem
+			// 
+			this.commentCopyToolStripMenuItem.Name = "commentCopyToolStripMenuItem";
+			this.commentCopyToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+			this.commentCopyToolStripMenuItem.Text = "コメントをコピー";
+			this.commentCopyToolStripMenuItem.Click += new System.EventHandler(this.commentCopyToolStripMenuItem_Click);
+			// 
+			// idCopyToolStripMenuItem
+			// 
+			this.idCopyToolStripMenuItem.Name = "idCopyToolStripMenuItem";
+			this.idCopyToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+			this.idCopyToolStripMenuItem.Text = "IDをコピー";
+			this.idCopyToolStripMenuItem.Click += new System.EventHandler(this.idCopyToolStripMenuItem_Click);
+			// 
+			// pluginToolStripSeparator
+			// 
+			this.pluginToolStripSeparator.Name = "pluginToolStripSeparator";
+			this.pluginToolStripSeparator.Size = new System.Drawing.Size(169, 6);
+			this.pluginToolStripSeparator.Visible = false;
+			// 
 			// idBoxContextMenu
 			// 
 			this.idBoxContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-this.cutIdToolStripMenuItem,
-this.toolStripSeparator11,
-this.copyIdToolStripMenuItem,
-this.copyIdAsIdToolStripMenuItem,
-this.copyIdAsURLToolStripMenuItem,
-this.toolStripSeparator10,
-this.pasteToolStripMenuItem,
-this.pasteAndStartToolStripMenuItem,
-this.toolStripSeparator9,
-this.selectAllToolStripMenuItem});
+            this.cutIdToolStripMenuItem,
+            this.toolStripSeparator11,
+            this.copyIdToolStripMenuItem,
+            this.copyIdAsIdToolStripMenuItem,
+            this.copyIdAsURLToolStripMenuItem,
+            this.toolStripSeparator10,
+            this.pasteToolStripMenuItem,
+            this.pasteAndStartToolStripMenuItem,
+            this.toolStripSeparator9,
+            this.selectAllToolStripMenuItem});
 			this.idBoxContextMenu.Name = "idBoxContextMenu";
 			this.idBoxContextMenu.Size = new System.Drawing.Size(192, 176);
 			this.idBoxContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.idBoxContextMenu_Opening);
@@ -320,6 +347,7 @@ this.selectAllToolStripMenuItem});
 			this.menuStrip1.PerformLayout();
 			this.toolStrip2.ResumeLayout(false);
 			this.toolStrip2.PerformLayout();
+			this.chatViewContextMenu.ResumeLayout(false);
 			this.idBoxContextMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -342,7 +370,6 @@ this.selectAllToolStripMenuItem});
 		private System.Windows.Forms.OpenFileDialog openFileDialog1;
 		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-		private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
 		protected System.Windows.Forms.MenuStrip menuStrip1;
 		protected System.Windows.Forms.ToolStripMenuItem ファイルFToolStripMenuItem;
@@ -358,5 +385,9 @@ this.selectAllToolStripMenuItem});
 		private System.Windows.Forms.ToolStripMenuItem cutIdToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
 		private System.Windows.Forms.ToolStripMenuItem selectAllToolStripMenuItem;
+		private System.Windows.Forms.ContextMenuStrip chatViewContextMenu;
+		private System.Windows.Forms.ToolStripMenuItem commentCopyToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem idCopyToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator pluginToolStripSeparator;
 	}
 }

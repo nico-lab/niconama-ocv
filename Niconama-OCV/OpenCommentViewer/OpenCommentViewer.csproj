@@ -115,6 +115,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Tool\Importer.cs" />
+    <Compile Include="Tool\Exporter.cs" />
     <Compile Include="UserSettings.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="Control\IMainView.cs" />

@@ -56,7 +56,7 @@ namespace Hal.NicoApiSharp.Live
 			if (node.FirstChild.Name.Equals("chat")) {
 				Chat chat = null;
 				try {
-					chat = new Chat(node);
+					chat = new Chat(node.FirstChild);
 				} catch (Exception ex) {
 					chat = null;
 					Logger.Default.LogErrorMessage(ex.Message);

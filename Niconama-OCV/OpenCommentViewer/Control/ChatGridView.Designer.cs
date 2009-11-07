@@ -56,6 +56,7 @@
 			this.dataGridView1.ReadOnly = true;
 			this.dataGridView1.RowHeadersVisible = false;
 			this.dataGridView1.RowTemplate.Height = 21;
+			this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.dataGridView1.ShowCellErrors = false;
 			this.dataGridView1.ShowEditingIcon = false;
 			this.dataGridView1.ShowRowErrors = false;
