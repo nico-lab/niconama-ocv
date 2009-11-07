@@ -94,7 +94,7 @@ namespace Hal.NicoApiSharp.Live
 				return Utility.GetResponseText(url, cookies, ApiSettings.Default.DefaultApiTimeout);
 			}catch(Exception ex){
 				Logger.Default.LogException(ex);
-				return false;
+				return null;
 			}
 		}
 
