@@ -300,16 +300,16 @@ namespace Hal.OpenCommentViewer.Control
 					// (（）を使ってグループを作るとパフォーマンスが悪化する気がしたので)
 					char h = Utility.ToHiragana(c);
 					char k = Utility.ToKatakana(c);
-					string n = Utility.ToHankaku(k.ToString());
+					string n = Utility.ToHankaku(k);
 					if (n.Length == 1) {
 						sb.AppendFormat("[{0}{1}{2}]", h, k, n);
 					} else {
-						sb.AppendFormat("[{0}{1}{2}]{3}?", h, k, n[0], n[1]);
+						sb.AppendFormat("([{0}{1}]|{2})", h, k, n);
 					}
 
 				} else if (Utility.IsZenkakuCase(c)) {
 					// ひらがなカタカナ以外の全角文字（数字や全角英字）から半角文字でも引っかかるパターンを生成する
-					string n = Utility.ToHankaku(c.ToString()).ToUpper();
+					string n = Utility.ToHankaku(c).ToUpper();
 					sb.AppendFormat("[{0}{1}]", c, n);
 				} else if (Utility.IsHankakuCase(c)) {
 					// 半角文字から全角文字でも引っかかるパターンを生成する

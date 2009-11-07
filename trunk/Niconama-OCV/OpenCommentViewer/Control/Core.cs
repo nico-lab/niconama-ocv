@@ -391,6 +391,13 @@ namespace Hal.OpenCommentViewer.Control
 		// デバッグ用
 		public virtual void CallTestMethod()
 		{
+			string x = "あいうえおカキクケオあひあーばｌｋｊｓｆで";
+			StringBuilder sb = new StringBuilder();
+			foreach (char c in x) {
+				sb.Append(Utility.ToHankaku(c));
+			}
+
+			ShowStatusMessage(sb.ToString());
 		}
 
 		#endregion
@@ -431,7 +438,14 @@ namespace Hal.OpenCommentViewer.Control
 		protected virtual void OnStartLive(object sender, NicoApiSharp.Live.ChatReceiver.ConnectServerEventArgs e)
 		{
 			_mainview.ShowStatusMessage("メッセージサーバーに接続しました");
+
+			DateTime n = DateTime.Now;
+
 			_ngChecker.Check(_chats);
+
+			TimeSpan s = DateTime.Now - n;
+
+			_mainview.ShowStatusMessage(s.TotalMilliseconds.ToString());
 
 			// プラグインに通知
 			foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {

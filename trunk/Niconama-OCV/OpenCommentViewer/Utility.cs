@@ -298,29 +298,38 @@ namespace Hal.OpenCommentViewer
 			return c;
 		}
 
-		public static string ToHankaku(string str)
+		static string[] _dic = new string[]{
+			" ", "ｧ", "ｱ","ｨ","ｲ","ｩ","ｳ","ｪ","ｴ","ｫ","ｵ",
+			"ｶ","ｶﾞ","ｷ","ｷﾞ","ｸ","ｸﾞ","ｹ","ｹﾞ","ｺ","ｺﾞ",
+			"ｻ","ｻﾞ","ｼ","ｼﾞ","ｽ","ｽﾞ","ｾ","ｾﾞ","ｿ","ｿﾞ",
+			"ﾀ","ﾀﾞ","ﾁ","ｼﾞ","ｯ","ﾂ","ﾂﾞ","ﾃ","ﾃﾞ","ﾄ","ﾄﾞ",
+			"ﾅ","ﾆ","ﾇ","ﾈ","ﾉ",
+			"ﾊ","ﾊﾞ","ﾊﾟ","ﾋ","ﾋﾞ","ﾋﾟ","ﾌ","ﾌﾞ","ﾌﾟ","ﾍ","ﾍﾞ","ﾍﾟ","ﾎ","ﾎﾞ","ﾎﾟ",
+			"ﾏ","ﾐ","ﾑ","ﾒ","ﾓ",
+			"ｬ","ﾔ","ｭ","ﾕ","ｮ","ﾖ",
+			"ﾜ","ﾜ","ｳｨ","ｳ","ｦ","ﾝ","ｳﾞ","ｶ","ｹ"
+		};
+		
+
+		public static string ToHankaku(char c)
 		{
-			if (str.Length == 1) {
-				char c = str[0];
-				if (0xFF01 <= c && c <= 0xFF5E) {
-					c -= (char)0xFEE0;
-				} else if (c == 0x3000) {
-					c = (char)0x0020;
-				}
-				str = c.ToString();
+		
+			if (0xFF01 <= c && c <= 0xFF5E) {
+				c -= (char)0xFEE0;
+				return c.ToString();
+			} else if (c == 0x3000) {
+				c = (char)0x0020;
+				return c.ToString();
 			}
 
-			str = System.Text.RegularExpressions.Regex.Replace(str, "\\p{IsKatakana}",
-			(System.Text.RegularExpressions.MatchEvaluator)delegate(System.Text.RegularExpressions.Match match)
-			{
-#if MONO
-				return match.Value;
-#else
-				return Microsoft.VisualBasic.Strings.StrConv(match.Value, Microsoft.VisualBasic.VbStrConv.Narrow, 0x0411);
-#endif
-			});
+			if(0x3040 <= c && c<= 0x30FF){
+				int i = (c - 0x3040) % 0x60;
+				if (i < _dic.Length) {
+					return _dic[i];
+				}
+			}
 
-			return str;
+			return c.ToString();
 		}
 
 		public static char ToZenkaku(char c)
