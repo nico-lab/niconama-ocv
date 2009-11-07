@@ -2,13 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 
-#if MONO
-using SQLiteConnection = Mono.Data.Sqlite.SqliteConnection;
-using SQLiteCommand = Mono.Data.Sqlite.SqliteCommand;
-#else
-using System.Data.SQLite;
-#endif
-
 
 namespace Hal.OpenCommentViewer.Cookie
 {
@@ -16,8 +9,6 @@ namespace Hal.OpenCommentViewer.Cookie
 
 	/// <summary>
 	/// SQLiteを利用してクッキーを保存しているブラウザからクッキーを取得する
-	/// コンパイルオプションにMONOを指定して、Mono.Data.Sqlite編参照を追加してビルドすると
-	/// mono上でもクッキーが取得できるようになる
 	/// </summary>
 	abstract class SqliteCookieGetter : ICookieGetter
 	{
@@ -34,15 +25,29 @@ namespace Hal.OpenCommentViewer.Cookie
 		/// <returns></returns>
 		protected string[] getDatabaseValues(string path, string query)
 		{
-
+			string dpstr;
 			try {
 
-				using (SQLiteConnection connection = new SQLiteConnection(string.Format(CONNECTIONSTRING_FORMAT, path))) {
-					SQLiteCommand command = new SQLiteCommand(query, connection);
+				if (Environment.OSVersion.ToString().Contains("Windows")) {
+					dpstr = "System.Data.SQLite";
+				} else {
+					dpstr = "Mono.Data.Sqlite";
+				}
 
-					connection.Open();
+				// DBプロバイダファクトリ作成
+				System.Data.Common.DbProviderFactory dpf = System.Data.Common.DbProviderFactories.GetFactory(dpstr);
+
+				// 1.DBコネクションオブジェクト作成
+				using (System.Data.Common.DbConnection dbcon = dpf.CreateConnection()) {
+					dbcon.ConnectionString = string.Format(CONNECTIONSTRING_FORMAT, path);
+					dbcon.Open();
+
+					System.Data.Common.DbCommand command = dpf.CreateCommand();
+					command.Connection = dbcon;
+					command.CommandText = query;
+
 					string res = command.ExecuteScalar() as string;
-					connection.Close();
+					dbcon.Close();
 					return new string[] { res };
 
 				}
@@ -54,6 +59,5 @@ namespace Hal.OpenCommentViewer.Cookie
 			return null;
 
 		}
-
 	}
 }
