@@ -279,7 +279,7 @@ namespace Hal.NicoApiSharp.Live
 			try {
 
 				xdoc.LoadXml(str);
-				this.parse(xdoc);
+				this.parse(xdoc.FirstChild);
 
 			} catch (Exception) {
 				this._errorCode = ERROR_CODE.Undefined;
@@ -295,20 +295,20 @@ namespace Hal.NicoApiSharp.Live
 		void parse(System.Xml.XmlNode node)
 		{
 
-			if (node == null || !node.FirstChild.Name.Equals("chat")) {
+			if (node == null || !node.Name.Equals("chat")) {
 				this._errorCode = ERROR_CODE.ParseError;
 				return;
 			}
 
-			this._anonymity = (node.FirstChild.Attributes["anonymity"] != null);
-			this._message = Utility.Unsanitizing(node.FirstChild.InnerText);
-			this._no = Utility.SelectInt(node, "chat/@no", 0);
-			this._vpos = Utility.SelectInt(node, "chat/@vpos", 0);
-			this._mail = Utility.SelectString(node, "chat/@mail");
-			this._userId = Utility.SelectString(node, "chat/@user_id");
-			this._thread = Utility.SelectInt(node, "chat/@thread", 0);
-			this._date = Utility.SelectDateTime(node, "chat/@date");
-			this._premium = Utility.SelectInt(node, "chat/@premium", 0);
+			this._anonymity = (node.Attributes["anonymity"] != null);
+			this._message = Utility.Unsanitizing(node.InnerText);
+			this._no = Utility.SelectInt(node, "@no", 0);
+			this._vpos = Utility.SelectInt(node, "@vpos", 0);
+			this._mail = Utility.SelectString(node, "@mail");
+			this._userId = Utility.SelectString(node, "@user_id");
+			this._thread = Utility.SelectInt(node, "@thread", 0);
+			this._date = Utility.SelectDateTime(node, "@date");
+			this._premium = Utility.SelectInt(node, "@premium", 0);
 
 			if (this.IsOwnerComment && this._message.StartsWith("/hb")) {
 				this._userId = "hb";

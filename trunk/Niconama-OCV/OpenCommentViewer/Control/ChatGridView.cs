@@ -197,6 +197,42 @@ namespace Hal.OpenCommentViewer.Control
 		}
 
 		/// <summary>
+		/// 現在選択されているチャットを返す
+		/// </summary>
+		/// <returns></returns>
+		public NCSPlugin.IChat GetSelectedChat() {
+			if (dataGridView1.SelectedRows.Count == 1) {
+				int index = dataGridView1.SelectedRows[0].Index;
+				if (0 <= index && index < _chats.Count) {
+					return _chats[index];
+				}
+			}
+
+			return null;
+		}
+
+		/// <summary>
+		/// 指定した番号のコメントを選択状態にする
+		/// </summary>
+		/// <param name="no"></param>
+		/// <returns></returns>
+		public bool SelectChat(int no) {
+			for (int i = 0; i < _chats.Count; i++) {
+				if (_chats[i].No == no) {
+					if (i < dataGridView1.RowCount) {
+						dataGridView1.Rows[i].Selected = true;
+						dataGridView1.FirstDisplayedScrollingRowIndex = i;
+						return true;
+					} else {
+						break;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
 		/// ビューの値が必要になったときに呼び出される
 		/// 
 		/// メモリ使用量の削減、大量のコメントがある場合のビュー構築の時間短縮のために
@@ -331,6 +367,5 @@ namespace Hal.OpenCommentViewer.Control
 				}
 			}
 		}
-	
 	}
 }

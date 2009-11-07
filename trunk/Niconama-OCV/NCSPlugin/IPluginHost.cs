@@ -7,7 +7,7 @@ namespace Hal.NCSPlugin
 
 	/// <summary>
 	/// プラグインホストのインターフェース
-	/// version 1
+	/// version 2
 	/// </summary>
 	public interface IPluginHost
 	{
@@ -159,6 +159,28 @@ namespace Hal.NCSPlugin
 		void Disconnect();
 
 		/// <summary>
+		/// コメントサーバーに接続しない状態で放送にアクセスしたときのような動作を起こさせる
+		/// InsertPluginChatとあわせて使い、コメントサーバーとはまったく別ソースのコメントを
+		/// ビューに表示させるときに使う（Ustreamのコメントなど）
+		/// 実装は任意
+		/// インターフェースバージョン2
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <param name="liveName"></param>
+		/// <param name="liveStart"></param>
+		/// <returns>成功したかどうか(未実装の場合はfalseを返す)</returns>
+		bool StartMockLive(string liveId, string liveName, DateTime liveStart);
+
+		/// <summary>
+		/// プラグインからコメントサーバーとは別のコメントを挿入する
+		/// 実装は任意
+		/// インターフェースバージョン1
+		/// </summary>
+		/// <param name="chat"></param>
+		/// <returns>成功したかどうか(未実装の場合はfalseを返す)</returns>
+		bool InsertPluginChat(IChat chat);
+
+		/// <summary>
 		/// NG一覧を取得します。
 		/// ビューアがNG機能を持たない場合は常にNullを返す
 		/// </summary>
@@ -203,15 +225,6 @@ namespace Hal.NCSPlugin
 		/// </summary>
 		/// <param name="message">表示内容</param>
 		void ShowFaitalMessage(string message);
-
-		/// <summary>
-		/// プラグインからコメントサーバーとは別のコメントを挿入する
-		/// 実装は任意
-		/// インターフェースバージョン1
-		/// </summary>
-		/// <param name="chat"></param>
-		/// <returns></returns>
-		bool InsertPluginChat(IChat chat);
 
 		/// <summary>
 		/// ビューフォーマット時の外部操作をサポートするか
@@ -262,6 +275,15 @@ namespace Hal.NCSPlugin
 		void AddContextMenuItem(System.Windows.Forms.ToolStripMenuItem menuItem);
 
 		/// <summary>
+		/// コンテクストメニューを拡張します
+		/// 実装は任意
+		/// インターフェースバージョン2
+		/// </summary>
+		/// <param name="menuItem"></param>
+		/// <param name="openingCallback">コンテクストメニューが開かれた際に実行されるコールバック関数</param>
+		void AddContextMenuItem(System.Windows.Forms.ToolStripMenuItem menuItem, EventHandler openingCallback);
+
+		/// <summary>
 		/// メニューストリップを拡張します
 		/// 実装は任意
 		/// インターフェースバージョン1
@@ -269,6 +291,16 @@ namespace Hal.NCSPlugin
 		/// <param name="category">ファイル、編集、表示などなるべく一般的なもの</param>
 		/// <param name="menuItem"></param>
 		void AddMenuStripItem(string category, System.Windows.Forms.ToolStripMenuItem menuItem);
+
+		/// <summary>
+		/// メニューストリップを拡張します
+		/// 実装は任意
+		/// インターフェースバージョン2
+		/// </summary>
+		/// <param name="category">ファイル、編集、表示などなるべく一般的なもの</param>
+		/// <param name="menuItem"></param>
+		/// <param name="openingCallback">コンテクストメニューが開かれた際に実行されるコールバック関数</param> 
+		void AddMenuStripItem(string category, System.Windows.Forms.ToolStripMenuItem menuItem, EventHandler openingCallback);
 
 		#endregion
 

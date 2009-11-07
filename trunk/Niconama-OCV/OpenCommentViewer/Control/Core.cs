@@ -68,10 +68,13 @@ namespace Hal.OpenCommentViewer.Control
 		}
 
 		/// <summary>
-		/// フォームがロードされたときに呼び出されます
+		/// フォームがセットされたときに呼び出されます
 		/// </summary>
 		protected virtual void Initialize()
 		{
+			// 機能拡張を行う
+			Extend();
+
 			// プラグインの読み込み
 			LoadPlugins();
 
@@ -90,6 +93,32 @@ namespace Hal.OpenCommentViewer.Control
 				_mainview.IdBoxText = _reservedId;
 				ConnectLive(_reservedId);
 			}
+
+			// ファイルメニューの一番下に終了メニューを追加する
+			System.Windows.Forms.ToolStripMenuItem exit = new System.Windows.Forms.ToolStripMenuItem("終了(&X)");
+			exit.Click += (EventHandler)delegate(object sender, EventArgs e){_form.Close();};
+			_mainview.ExtendMenuStrip("ファイル(&F)", exit);
+
+		}
+
+		/// <summary>
+		/// 機能を拡張する
+		/// </summary>
+		protected virtual void Extend()
+		{
+			// VPOSを数値で表示するカラムを追加する
+			_mainview.RegisterColumnExtention(new VposColumnExtention());
+
+			// NGソースを表示するカラムを追加する
+			_mainview.RegisterColumnExtention(new NgColumnExtention());
+
+			// 主コメをオレンジ色にするフォーマッターを追加する
+			_mainview.RegisterCellFormattingCallback(ColoringOwnerComment);
+
+			// コメントのエクスポート機能を実装する
+			AddPlugin(new Tool.Exporter());
+
+			AddPlugin(new Tool.Importer());
 		}
 
 		/// <summary>
@@ -101,19 +130,16 @@ namespace Hal.OpenCommentViewer.Control
 			foreach (Plugin.IPluginInfo pinfo in infos) {
 				try {
 					Hal.NCSPlugin.IPlugin pins = pinfo.CreateInstance();
-					pins.Initialize(this);
-					_plugins.Add(pins);
+					AddPlugin(pins);
 
-					// カラム拡張プラグイン
-					if (pins is Hal.NCSPlugin.IColumnExtention) {
-						Hal.NCSPlugin.IColumnExtention ext = (Hal.NCSPlugin.IColumnExtention)pins;
-						_mainview.RegisterColumnExtention(ext);
-					}
+					// メニューストリップに登録
+					System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem(pins.Name);
+					item.Click += (EventHandler)delegate(object sender, EventArgs e){
+						pins.Run();
+					};
 
-					if (pins is Hal.NCSPlugin.ICellFormatter) {
-						Hal.NCSPlugin.ICellFormatter ext = (Hal.NCSPlugin.ICellFormatter)pins;
-						_mainview.RegisterCellFormattingCallback(ext.OnCellFormatting);
-					}
+					AddMenuStripItem("プラグイン(&P)", item);
+
 
 				} catch (Exception ex) {
 					_mainview.ShowFatalMessage(pinfo.ClassName + "の登録に失敗しました。");
@@ -123,6 +149,24 @@ namespace Hal.OpenCommentViewer.Control
 			}
 
 		}
+
+		private void AddPlugin(Hal.NCSPlugin.IPlugin pins)
+		{
+			pins.Initialize(this);
+			_plugins.Add(pins);
+
+			// カラム拡張プラグイン
+			if (pins is Hal.NCSPlugin.IColumnExtention) {
+				Hal.NCSPlugin.IColumnExtention ext = (Hal.NCSPlugin.IColumnExtention)pins;
+				_mainview.RegisterColumnExtention(ext);
+			}
+
+			if (pins is Hal.NCSPlugin.ICellFormatter) {
+				Hal.NCSPlugin.ICellFormatter ext = (Hal.NCSPlugin.ICellFormatter)pins;
+				_mainview.RegisterCellFormattingCallback(ext.OnCellFormatting);
+			}
+		}
+
 
 		/// <summary>
 		/// LiveIdから放送に接続する
@@ -211,29 +255,10 @@ namespace Hal.OpenCommentViewer.Control
 			Hal.NCSPlugin.IPlugin plugin = mainview as Hal.NCSPlugin.IPlugin;
 			_mainview = mainview;
 			plugin.Initialize(this);
-			_form.Load += new EventHandler(_form_Load);
 			_form.FormClosing += new System.Windows.Forms.FormClosingEventHandler(_form_FormClosing);
 
 			_plugins.Add(plugin);
-
-			ExtendForm();
-			
-		}
-
-		/// <summary>
-		/// フォームを拡張する
-		/// </summary>
-		protected virtual void ExtendForm()
-		{
-			// VPOSを数値で表示するカラムを追加する
-			_mainview.RegisterColumnExtention(new VposColumnExtention());
-
-			// NGソースを表示するカラムを追加する
-			_mainview.RegisterColumnExtention(new NgColumnExtention());
-
-			// 主コメをオレンジ色にするフォーマッターを追加する
-			_mainview.RegisterCellFormattingCallback(ColoringOwnerComment);
-
+			Initialize();
 		}
 
 		private void ColoringOwnerComment(NCSPlugin.IChat chat, System.Windows.Forms.DataGridViewCellFormattingEventArgs e) {
@@ -273,17 +298,17 @@ namespace Hal.OpenCommentViewer.Control
 
 				_messageServerStatus = messageServerStatus;
 
-				if (_accountInfomation.IsPremium) {
-					NicoApiSharp.Live.Chat[] chats = NicoApiSharp.Live.ChatReceiver.ReceiveAllLog(_messageServerStatus, _cookies, _accountInfomation.UserId);
-					foreach (NicoApiSharp.Live.Chat chat in chats) {
-						_chats.Add(new OcvChat(chat));
-					}
 
-					// プラグインには開始通知の直後に終了通知する
-					OnStartLive(null, null);
-					OnDisconnectServer(null, EventArgs.Empty);
-
+				NicoApiSharp.Live.Chat[] chats = NicoApiSharp.Live.ChatReceiver.ReceiveAllLog(_messageServerStatus, _cookies, _accountInfomation.UserId);
+				foreach (NicoApiSharp.Live.Chat chat in chats) {
+					_chats.Add(new OcvChat(chat));
 				}
+
+				// プラグインには開始通知の直後に終了通知する
+				OnStartLive(null, null);
+				OnDisconnectServer(null, EventArgs.Empty);
+
+				
 				return true;
 			}
 
@@ -366,22 +391,11 @@ namespace Hal.OpenCommentViewer.Control
 		// デバッグ用
 		public virtual void CallTestMethod()
 		{
-			NicoApiSharp.AccountInfomation ac = NicoApiSharp.AccountInfomation.GetUserAccountInfomation("9417784", _cookies);
-			_mainview.ShowStatusMessage(ac.UserName);
 		}
-
-
-
 
 		#endregion
 
 		#region イベント処理
-
-		void _form_Load(object sender, EventArgs e)
-		{
-
-			Initialize();
-		}
 
 		void _form_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
 		{
@@ -454,16 +468,23 @@ namespace Hal.OpenCommentViewer.Control
 		/// <param name="e"></param>
 		protected virtual void OnReceivedChat(object sender, NicoApiSharp.Live.ChatReceiver.ChatReceiveEventArgs e)
 		{
-			OcvChat chat = new OcvChat(e.Chat);
-			_chats.Add(chat);
-			_ngChecker.Check(chat);
+			NotifyReceiveChat(e.Chat);
+		}
+
+		/// <summary>
+		/// チャットを受け取ったことを各システムに通知する
+		/// </summary>
+		/// <param name="chat"></param>
+		private void NotifyReceiveChat(NCSPlugin.IChat chat)
+		{
+			OcvChat ochat = new OcvChat(chat);
+			_chats.Add(ochat);
+			_ngChecker.Check(ochat);
 
 			//プラグインに通知
 			foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
-				plugin.OnComment(chat);
+				plugin.OnComment(ochat);
 			}
-
-
 		}
 
 
@@ -697,12 +718,12 @@ namespace Hal.OpenCommentViewer.Control
 
 		public Hal.NCSPlugin.IChat GetSelectedChat()
 		{
-			throw new Exception("The method or operation is not implemented.");
+			return _mainview.GetSelectedChat();
 		}
 
 		public bool SelectChat(int no)
 		{
-			throw new Exception("The method or operation is not implemented.");
+			return _mainview.SelectChat(no);
 		}
 
 		public void ShowStatusMessage(string message)
@@ -715,15 +736,36 @@ namespace Hal.OpenCommentViewer.Control
 			_mainview.ShowFatalMessage(message);
 		}
 
-		public bool InsertPluginChat(Hal.NCSPlugin.IChat chat)
-		{
-			throw new Exception("The method or operation is not implemented.");
+		public bool StartMockLive(string liveId, string liveName, DateTime liveStart) {
+			LiveTicket lt = new LiveTicket();
+			lt.LiveId = liveId;
+			lt.LiveName = liveName;
+			lt.StartTime = liveStart;
+			lt.LocalStartTime = liveStart;
+			_liveBasicStatus = lt;
+			_messageServerStatus = lt;
+			_liveDescription = lt;
+			_seetType = SeetType.Arena;
+
+			_chatReceiver.Disconnect();
+
+			_chats.Clear();
+			_ngChecker.Initialize(this);
+
+			// プラグインに通知
+			foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
+				plugin.OnLiveStart(this.LiveId, this.ServerStartTime, _chats.Count);
+			}
+
+			return true;
+
 		}
 
-		#endregion
-
-
-		#region IPluginHost メンバ
+		public bool InsertPluginChat(Hal.NCSPlugin.IChat chat)
+		{
+			NotifyReceiveChat(chat);
+			return true;
+		}
 
 
 		public bool SupportAddCellFormattingCallBack
@@ -764,17 +806,32 @@ namespace Hal.OpenCommentViewer.Control
 		{
 			System.Diagnostics.Debug.Assert(_mainview != null, "フォームの初期化が完了していません。");
 			
-			_mainview.RegisterContextMenuExtention(menuItem);
+			_mainview.ExtendContextMenu(menuItem);
 		}
 
 		public void AddMenuStripItem(string category, System.Windows.Forms.ToolStripMenuItem menuItem)
 		{
 			System.Diagnostics.Debug.Assert(_mainview != null, "フォームの初期化が完了していません。");
 			
-			_mainview.RegisterMenuStripExtention(category, menuItem);
+			_mainview.ExtendMenuStrip(category, menuItem);
 		}
 
+		public void AddContextMenuItem(System.Windows.Forms.ToolStripMenuItem menuItem, EventHandler openingCallback)
+		{
+			System.Diagnostics.Debug.Assert(_mainview != null, "フォームの初期化が完了していません。");
+
+			_mainview.ExtendContextMenu(menuItem, openingCallback);
+		}
+
+		public void AddMenuStripItem(string category, System.Windows.Forms.ToolStripMenuItem menuItem, EventHandler openingCallback)
+		{
+			System.Diagnostics.Debug.Assert(_mainview != null, "フォームの初期化が完了していません。");
+
+			_mainview.ExtendMenuStrip(category, menuItem, openingCallback);
+		}
 
 		#endregion
+
+		
 	}
 }
