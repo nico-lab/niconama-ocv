@@ -90,7 +90,12 @@ namespace Hal.NicoApiSharp.Live
 			source = System.Web.HttpUtility.UrlEncode(source);
 
 			string url = string.Format(ApiSettings.Default.NgcommandUrlFormat, liveId, mode, source, type);
-			return Utility.GetResponseText(url, cookies, ApiSettings.Default.DefaultApiTimeout);
+			try {
+				return Utility.GetResponseText(url, cookies, ApiSettings.Default.DefaultApiTimeout);
+			}catch(Exception ex){
+				Logger.Default.LogException(ex);
+				return false;
+			}
 		}
 
 
