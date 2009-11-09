@@ -26,16 +26,16 @@ namespace Hal.OpenCommentViewer.Control
 		private void LoginForm_Load(object sender, EventArgs e)
 		{
 			switch (UserSettings.Default.BrowserType) {
-				case Hal.OpenCommentViewer.Cookie.CookieGetter.BROWSER_TYPE.IEComponent:
+				case Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.IEComponent:
 					radioButton1.Checked = true;
 					break;
-				case Hal.OpenCommentViewer.Cookie.CookieGetter.BROWSER_TYPE.IESafeMode:
+				case Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.IESafeMode:
 					radioButton2.Checked = true;
 					break;
-				case Hal.OpenCommentViewer.Cookie.CookieGetter.BROWSER_TYPE.Firefox:
+				case Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Firefox:
 					radioButton3.Checked = true;
 					break;
-				case Hal.OpenCommentViewer.Cookie.CookieGetter.BROWSER_TYPE.Chrome:
+				case Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Chrome:
 					radioButton4.Checked = true;
 					break;
 			}
@@ -51,13 +51,13 @@ namespace Hal.OpenCommentViewer.Control
 		private void button1_Click(object sender, EventArgs e)
 		{
 			if (radioButton1.Checked) {
-				UserSettings.Default.BrowserType = Hal.OpenCommentViewer.Cookie.CookieGetter.BROWSER_TYPE.IEComponent;
+				UserSettings.Default.BrowserType = Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.IEComponent;
 			} else if (radioButton2.Checked) {
-				UserSettings.Default.BrowserType = Hal.OpenCommentViewer.Cookie.CookieGetter.BROWSER_TYPE.IESafeMode;
+				UserSettings.Default.BrowserType = Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.IESafeMode;
 			} else if (radioButton3.Checked) {
-				UserSettings.Default.BrowserType = Hal.OpenCommentViewer.Cookie.CookieGetter.BROWSER_TYPE.Firefox;
+				UserSettings.Default.BrowserType = Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Firefox;
 			} else if (radioButton4.Checked) {
-				UserSettings.Default.BrowserType = Hal.OpenCommentViewer.Cookie.CookieGetter.BROWSER_TYPE.Chrome;
+				UserSettings.Default.BrowserType = Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Chrome;
 			}
 
 			UserSettings.Default.ShowAccountForm = !checkBox1.Checked;

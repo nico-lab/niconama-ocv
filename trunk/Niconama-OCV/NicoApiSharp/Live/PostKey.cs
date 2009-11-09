@@ -38,6 +38,20 @@ namespace Hal.NicoApiSharp.Live
 			return null;
 		}
 
+		/// <summary>
+		/// サーバーからキーを取得します
+		/// </summary>
+		/// <param name="thread"></param>
+		/// <param name="lastCommentNo"></param>
+		/// <returns></returns>
+		public static PostKey GetInstance(int thread, int lastCommentNo) {
+			if (LoginManager.DefaultCookies != null) {
+				return GetInstance(thread, lastCommentNo, LoginManager.DefaultCookies);
+			}
+
+			return null;
+		}
+
 		private string _value = null;
 
 		/// <summary>

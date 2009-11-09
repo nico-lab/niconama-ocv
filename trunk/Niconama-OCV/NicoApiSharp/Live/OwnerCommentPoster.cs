@@ -72,5 +72,21 @@ namespace Hal.NicoApiSharp.Live
 
 			return result;
 		}
+
+		/// <summary>
+		/// 放送主コメントを送信します
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <param name="message"></param>
+		/// <param name="command"></param>
+		/// <returns></returns>
+		public static bool Post(string liveId, string message, string command)
+		{
+			if (LoginManager.DefaultCookies != null) {
+				return Post(liveId, message, command, LoginManager.DefaultCookies);
+			}
+
+			return false;
+		}
 	}
 }

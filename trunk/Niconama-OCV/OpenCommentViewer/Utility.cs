@@ -93,113 +93,6 @@ namespace Hal.OpenCommentViewer
 		}
 
 		/// <summary>
-		/// url上のページを取得する
-		/// </summary>
-		/// <param name="url"></param>
-		/// <param name="cookies"></param>
-		/// <param name="defaultTimeout"></param>
-		/// <returns></returns>
-		static public string GetResponseText(string url, CookieContainer cookies, int defaultTimeout)
-		{
-			HttpWebResponse webRes = null;
-			StreamReader sr = null;
-
-			try {
-				HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(url);
-
-				webReq.Timeout = defaultTimeout;
-				webReq.CookieContainer = cookies;
-
-				try {
-					webRes = (HttpWebResponse)webReq.GetResponse();
-				} catch (WebException ex) {
-					Logger.Default.LogException(ex);
-					webRes = ex.Response as HttpWebResponse;
-
-				}
-
-				if (webRes == null) {
-					return null;
-				}
-
-				sr = new StreamReader(webRes.GetResponseStream(), System.Text.Encoding.UTF8);
-				return sr.ReadToEnd();
-
-			} finally {
-				if (webRes != null)
-					webRes.Close();
-				if (sr != null)
-					sr.Close();
-			}
-		}
-
-		/// <summary>
-		/// URLに対してPOSTします
-		/// </summary>
-		/// <param name="url"></param>
-		/// <param name="postData"></param>
-		/// <param name="cookies"></param>
-		/// <param name="defaultTimeout"></param>
-		/// <returns></returns>
-		static public string PostData(string url, string postData, CookieContainer cookies, int defaultTimeout)
-		{
-
-			HttpWebResponse webRes = null;
-			StreamReader sr = null;
-
-			try {
-
-				byte[] postDataBytes = System.Text.Encoding.UTF8.GetBytes(postData);
-
-				HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(url);
-				webReq.Method = "POST";
-				webReq.Referer = ApiSettings.Default.PostOwnerCommentReferer;
-				webReq.ContentType = "application/x-www-form-urlencoded";
-				webReq.UserAgent = ApiSettings.Default.PostOwnerCommentUserAgent;
-
-				webReq.ContentLength = postDataBytes.Length;
-				webReq.Timeout = defaultTimeout;
-				webReq.CookieContainer = cookies;
-
-				Stream reqStream = webReq.GetRequestStream();
-				reqStream.Write(postDataBytes, 0, postDataBytes.Length);
-				reqStream.Close();
-
-				webRes = (HttpWebResponse)webReq.GetResponse();
-				sr = new StreamReader(webRes.GetResponseStream());
-				return sr.ReadToEnd();
-
-			} catch (WebException ex) {
-				Logger.Default.LogException(ex);
-			} finally {
-
-				if (sr != null)
-					sr.Close();
-				if (webRes != null)
-					webRes.Close();
-
-			}
-
-			return null;
-		}
-
-		/// <summary>
-		/// XMLやHTML上でエスケープされた文字を復元する
-		/// </summary>
-		/// <param name="src"></param>
-		/// <returns></returns>
-		public static string Unsanitizing(string src)
-		{
-			src = src.Replace("&amp;", "&");
-			src = src.Replace("&lt;", "<");
-			src = src.Replace("&gt;", ">");
-			src = src.Replace("&quot;", "\"");
-			src = src.Replace("&#39;", "'");
-
-			return src;
-		}
-
-		/// <summary>
 		/// XMLやHTML用に文字をエスケープする
 		/// </summary>
 		/// <param name="src"></param>
@@ -350,7 +243,7 @@ namespace Hal.OpenCommentViewer
 		public static string GetLiveIdFromUrl(string url)
 		{
 
-			System.Text.RegularExpressions.Match match = System.Text.RegularExpressions.Regex.Match(url, ApiSettings.Default.LiveIdRegPattern);
+			System.Text.RegularExpressions.Match match = System.Text.RegularExpressions.Regex.Match(url, NicoApiSharp.ApiSettings.Default.LiveIdRegPattern);
 
 			if (match.Success) {
 				return match.Groups["id"].Value;
@@ -362,42 +255,5 @@ namespace Hal.OpenCommentViewer
 
 		#endregion
 
-		#region XML操作
-
-		public static string SelectString(System.Xml.XmlNode node, string xpath)
-		{
-			System.Diagnostics.Debug.Assert(node != null, "Utility SelectString node is null!");
-			System.Xml.XmlNode tnode = node.SelectSingleNode(xpath);
-			if (tnode != null) {
-				if (tnode.NodeType == System.Xml.XmlNodeType.Element) {
-					return tnode.InnerText;
-				} else if (tnode.NodeType == System.Xml.XmlNodeType.Attribute) {
-					return tnode.Value;
-				}
-			}
-
-			return null;
-		}
-
-		public static int SelectInt(System.Xml.XmlNode node, string xpath, int defaultValue)
-		{
-			string data = SelectString(node, xpath);
-
-			if (data != null) {
-				int result;
-				if (int.TryParse(data, out result)) {
-					return result;
-				}
-			}
-
-			return defaultValue;
-		}
-
-		public static DateTime SelectDateTime(System.Xml.XmlNode node, string xpath)
-		{
-			int unixTime = SelectInt(node, xpath, 0);
-			return Utility.UnixTimeToDateTime(unixTime);
-		}
-		#endregion
 	}
 }

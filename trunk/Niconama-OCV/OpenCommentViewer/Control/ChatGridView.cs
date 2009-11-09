@@ -173,6 +173,11 @@ namespace Hal.OpenCommentViewer.Control
 			}
 		}
 
+		void columnExtention_ChangeValue(object sender, EventArgs e)
+		{
+			throw new Exception("The method or operation is not implemented.");
+		}
+
 		/// <summary>
 		/// カラムを追加する
 		/// </summary>
@@ -190,6 +195,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// </summary>
 		public void Clear()
 		{
+
 			dataGridView1.RowCount = 0;
 			_chats.Clear();
 			_widthList.Clear();
@@ -230,6 +236,31 @@ namespace Hal.OpenCommentViewer.Control
 			}
 
 			return false;
+		}
+
+		/// <summary>
+		/// セルの値を再計算します
+		/// </summary>
+		public void UpdateCellValues() {
+			if (dataGridView1.RowCount != 0) {
+				dataGridView1.SuspendLayout();
+				int c = dataGridView1.RowCount;
+				int d = dataGridView1.FirstDisplayedScrollingRowIndex;
+				dataGridView1.RowCount = 0;
+
+				if (c != -1) {
+					dataGridView1.RowCount = c;
+				}
+
+				if (d != -1) {
+					dataGridView1.FirstDisplayedScrollingRowIndex = d;
+				}
+
+				dataGridView1.ResumeLayout();
+			}
+			//dataGridView1.Refresh();
+			//dataGridView1.Update();
+			//dataGridView1.RowCount = dataGridView1.RowCount;
 		}
 
 		/// <summary>
@@ -340,7 +371,6 @@ namespace Hal.OpenCommentViewer.Control
 		/// <summary>
 		/// メッセージカラムの幅が変わった場合、折り返しの発生でビューのレイアウトが崩れてしまうので
 		/// ビューを再構築する
-		/// （ビュー再構築のやり方が間違っているかもしれません。）
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -349,22 +379,7 @@ namespace Hal.OpenCommentViewer.Control
 			if (e.Column.Index == 1) {
 				_messageColumnWidth = dataGridView1.Columns[1].Width;
 
-				if (dataGridView1.RowCount != 0) {
-					dataGridView1.SuspendLayout();
-					int c = dataGridView1.RowCount;
-					int d = dataGridView1.FirstDisplayedScrollingRowIndex;
-					dataGridView1.RowCount = 0;
-
-					if (c != -1) {
-						dataGridView1.RowCount = c;
-					}
-
-					if (d != -1) {
-						dataGridView1.FirstDisplayedScrollingRowIndex = d;
-					}
-
-					dataGridView1.ResumeLayout();
-				}
+				UpdateCellValues();
 			}
 		}
 	}

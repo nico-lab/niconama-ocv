@@ -84,6 +84,19 @@ namespace Hal.NicoApiSharp.Live
 
 		}
 
+		/// <summary>
+		/// 放送ページから放送タイトルなどを含む情報を取得する
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <returns></returns>
+		public static LiveDescription GetInstance(string liveId) {
+			if (LoginManager.DefaultCookies != null) {
+				return GetInstance(liveId, LoginManager.DefaultCookies);
+			}
+
+			return null;
+		}
+
 		#region IDescription メンバ
 
 		/// <summary>
