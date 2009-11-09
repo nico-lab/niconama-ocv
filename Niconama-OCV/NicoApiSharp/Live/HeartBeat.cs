@@ -35,6 +35,19 @@ namespace Hal.NicoApiSharp.Live
 
 		}
 
+		/// <summary>
+		/// サーバーからハートビートを取得する
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <returns></returns>
+		public static HeartBeat GetInstance(string liveId) {
+			if (LoginManager.DefaultCookies != null) {
+				return GetInstance(liveId, LoginManager.DefaultCookies);
+			}
+
+			return null;
+		}
+
 		#region ILiveCountStatus メンバ
 
 		/// <summary>

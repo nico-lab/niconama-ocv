@@ -81,5 +81,10 @@ namespace Hal.OpenCommentViewer.Control
 		/// <param name="no"></param>
 		/// <returns></returns>
 		bool SelectChat(int no);
+
+		/// <summary>
+		/// セルの値を再計算します
+		/// </summary>
+		void UpdateCellValues();
 	}
 }

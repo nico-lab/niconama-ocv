@@ -42,7 +42,6 @@ namespace Hal.OpenCommentViewer.Control
 
 		string _reservedId = null;
 		NicoApiSharp.Live.ChatReceiver _chatReceiver;
-		System.Net.CookieContainer _cookies;
 		NgChecker _ngChecker;
 
 		protected List<Hal.NCSPlugin.IPlugin> _plugins = null;
@@ -53,7 +52,6 @@ namespace Hal.OpenCommentViewer.Control
 		public Core()
 		{
 			_chats = new List<OcvChat>();
-			_cookies = new System.Net.CookieContainer();
 			_chatReceiver = new NicoApiSharp.Live.ChatReceiver();
 			_chatReceiver.ConnectServer += new EventHandler<NicoApiSharp.Live.ChatReceiver.ConnectServerEventArgs>(_chatReceiver_ConnectServer);
 			_chatReceiver.ReceiveChat += new EventHandler<NicoApiSharp.Live.ChatReceiver.ChatReceiveEventArgs>(_chatReceiver_ReceiveChat);
@@ -119,6 +117,8 @@ namespace Hal.OpenCommentViewer.Control
 			AddPlugin(new Tool.Exporter());
 
 			AddPlugin(new Tool.Importer());
+
+			//AddPlugin(new Hal.NameManagePlugin.NameManager());
 		}
 
 		/// <summary>
@@ -180,14 +180,14 @@ namespace Hal.OpenCommentViewer.Control
 				return false;
 			}
 
-			NicoApiSharp.Live.PlayerStatus playerStatus = NicoApiSharp.Live.PlayerStatus.GetInstance(liveId, _cookies);
+			NicoApiSharp.Live.PlayerStatus playerStatus = NicoApiSharp.Live.PlayerStatus.GetInstance(liveId);
 
 			if (playerStatus != null) {
 				if (!playerStatus.HasError) {
 					_liveBasicStatus = playerStatus;
 					_liveWatcherStatus = playerStatus;
 					_messageServerStatus = playerStatus;
-					_liveDescription = NicoApiSharp.Live.LiveDescription.GetInstance(liveId, _cookies);
+					_liveDescription = NicoApiSharp.Live.LiveDescription.GetInstance(liveId);
 					_seetType = _liveBasicStatus.RoomLabel != "立ち見席" ? SeetType.Arena : SeetType.Standing;
 
 					return ConnectServer(_accountInfomation, _liveDescription, _messageServerStatus);
@@ -222,7 +222,7 @@ namespace Hal.OpenCommentViewer.Control
 			UserSettings.Default.LastAccessLiveId = liveDescription.LiveId;
 			UserSettings.Default.Save();
 
-			NicoApiSharp.Live.Chat[] chats = NicoApiSharp.Live.ChatReceiver.ReceiveAllLog(messageServerStatus, _cookies, accountInfomation.UserId);
+			NicoApiSharp.Live.Chat[] chats = NicoApiSharp.Live.ChatReceiver.ReceiveAllLog(messageServerStatus,  accountInfomation.UserId);
 			foreach (NicoApiSharp.Live.Chat chat in chats) {
 				_chats.Add(new OcvChat(chat));
 			}
@@ -299,7 +299,7 @@ namespace Hal.OpenCommentViewer.Control
 				_messageServerStatus = messageServerStatus;
 
 
-				NicoApiSharp.Live.Chat[] chats = NicoApiSharp.Live.ChatReceiver.ReceiveAllLog(_messageServerStatus, _cookies, _accountInfomation.UserId);
+				NicoApiSharp.Live.Chat[] chats = NicoApiSharp.Live.ChatReceiver.ReceiveAllLog(_messageServerStatus, _accountInfomation.UserId);
 				foreach (NicoApiSharp.Live.Chat chat in chats) {
 					_chats.Add(new OcvChat(chat));
 				}
@@ -356,29 +356,16 @@ namespace Hal.OpenCommentViewer.Control
 		/// <param name="browserType"></param>
 		/// <param name="cookieFilePath">クッキーが保存されているファイル、nullの場合既定のファイルを対称にする</param>
 		/// <returns></returns>
-		public virtual bool Login(Cookie.CookieGetter.BROWSER_TYPE browserType, string cookieFilePath)
+		public virtual bool Login(Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE browserType, string cookieFilePath)
 		{
-			string[] userSessions = Cookie.CookieGetter.GetCookies("nicovideo.jp", "user_session", browserType, cookieFilePath);
 
-			if (userSessions == null) {
-				_mainview.ShowFatalMessage("指定されたブラウザからクッキーを取得できませんでした。");
-				Logger.Default.LogMessage(string.Format("Login not found: type-{0}", browserType.ToString()));
-				return false;
-			}
-			
-			Logger.Default.LogMessage(string.Format("Login: type-{0}, cookies-{1}", browserType.ToString(), userSessions.Length));
+			NicoApiSharp.AccountInfomation accountInfomation = NicoApiSharp.LoginManager.Login(browserType, cookieFilePath);
 
-			foreach (string session in userSessions) {
-				
-				System.Net.Cookie cuid = new System.Net.Cookie("user_session", session, "/", ".nicovideo.jp");
-				_cookies.Add(cuid);
-
-				_accountInfomation = NicoApiSharp.AccountInfomation.GetMyAccountInfomation(_cookies);
+			if(accountInfomation != null){
+				_accountInfomation = accountInfomation;
 				if (_accountInfomation != null) {
 					_mainview.ShowStatusMessage(string.Format("ログイン成功 : ユーザー名【{0}】", _accountInfomation.UserName));
 					return true;
-				} else {
-					
 				}
 			}
 			
@@ -391,13 +378,7 @@ namespace Hal.OpenCommentViewer.Control
 		// デバッグ用
 		public virtual void CallTestMethod()
 		{
-			string x = "あいうえおカキクケオあひあーばｌｋｊｓｆで";
-			StringBuilder sb = new StringBuilder();
-			foreach (char c in x) {
-				sb.Append(Utility.ToHankaku(c));
-			}
-
-			ShowStatusMessage(sb.ToString());
+			
 		}
 
 		#endregion
@@ -411,7 +392,11 @@ namespace Hal.OpenCommentViewer.Control
 
 			// プラグインを破棄
 			foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
-				plugin.Dispose();
+
+				// IMainviewのDispose中に呼び出される可能性があるのでIMainViewのDisposeだけは呼び出さない
+				if (!(plugin is IMainView)) {
+					plugin.Dispose();
+				}
 			}
 
 			_plugins.Clear();
@@ -439,13 +424,7 @@ namespace Hal.OpenCommentViewer.Control
 		{
 			_mainview.ShowStatusMessage("メッセージサーバーに接続しました");
 
-			DateTime n = DateTime.Now;
-
 			_ngChecker.Check(_chats);
-
-			TimeSpan s = DateTime.Now - n;
-
-			_mainview.ShowStatusMessage(s.TotalMilliseconds.ToString());
 
 			// プラグインに通知
 			foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
@@ -682,7 +661,7 @@ namespace Hal.OpenCommentViewer.Control
 		{
 			if (this.CanPostOwnerComment) {
 				if (_liveBasicStatus != null && !string.IsNullOrEmpty(message) && command != null) {
-					return NicoApiSharp.Live.OwnerCommentPoster.Post(_liveBasicStatus.LiveId, message, command, _cookies);
+					return NicoApiSharp.Live.OwnerCommentPoster.Post(_liveBasicStatus.LiveId, message, command);
 				}
 			}
 
@@ -693,7 +672,7 @@ namespace Hal.OpenCommentViewer.Control
 		public bool AddNG(Hal.NCSPlugin.NGType type, string source)
 		{
 			if (this.IsConnected && this.IsOwner && _liveBasicStatus != null) {
-				return NicoApiSharp.Live.NgClient.AddNg(_liveBasicStatus.LiveId, type, source, _cookies);
+				return NicoApiSharp.Live.NgClient.AddNg(_liveBasicStatus.LiveId, type, source);
 			}
 
 			return false;
@@ -702,7 +681,7 @@ namespace Hal.OpenCommentViewer.Control
 		public bool DeleteNG(Hal.NCSPlugin.NGType type, string source)
 		{
 			if (this.IsConnected && this.IsOwner && _liveBasicStatus != null) {
-				return NicoApiSharp.Live.NgClient.DeleteNg(_liveBasicStatus.LiveId, type, source, _cookies);
+				return NicoApiSharp.Live.NgClient.DeleteNg(_liveBasicStatus.LiveId, type, source);
 			}
 
 			return false;
@@ -724,7 +703,7 @@ namespace Hal.OpenCommentViewer.Control
 		public Hal.NCSPlugin.INgClient[] GetNgClients()
 		{
 			if (this.LiveId != null) {
-				return NicoApiSharp.Live.NgClient.GetNgClients(this.LiveId, _cookies);
+				return NicoApiSharp.Live.NgClient.GetNgClients(this.LiveId);
 			}
 
 			return null;
@@ -742,12 +721,27 @@ namespace Hal.OpenCommentViewer.Control
 
 		public void ShowStatusMessage(string message)
 		{
-			_mainview.ShowStatusMessage(message);
+
+			if (_mainview != null) {
+				if (_form.InvokeRequired) {
+					_form.BeginInvoke(new Action<string>(_mainview.ShowStatusMessage), message);
+				} else {
+					_mainview.ShowStatusMessage(message);
+				}
+			}
+
+			
 		}
 
 		public void ShowFaitalMessage(string message)
 		{
-			_mainview.ShowFatalMessage(message);
+			if (_mainview != null) {
+				if (_form.InvokeRequired) {
+					_form.BeginInvoke(new Action<string>(_mainview.ShowFatalMessage), message);
+				} else {
+					_mainview.ShowFatalMessage(message);
+				}
+			}
 		}
 
 		public bool StartMockLive(string liveId, string liveName, DateTime liveStart) {
@@ -777,7 +771,14 @@ namespace Hal.OpenCommentViewer.Control
 
 		public bool InsertPluginChat(Hal.NCSPlugin.IChat chat)
 		{
-			NotifyReceiveChat(chat);
+			if (_mainview != null) {
+				if (_form.InvokeRequired) {
+					_form.BeginInvoke(new Action<Hal.NCSPlugin.IChat>(NotifyReceiveChat), chat);
+				} else {
+					NotifyReceiveChat(chat);
+				}
+			}
+
 			return true;
 		}
 
@@ -842,6 +843,16 @@ namespace Hal.OpenCommentViewer.Control
 			System.Diagnostics.Debug.Assert(_mainview != null, "フォームの初期化が完了していません。");
 
 			_mainview.ExtendMenuStrip(category, menuItem, openingCallback);
+		}
+
+		public void UpdateCellValues() {
+			if (_mainview != null) {
+				if (_form.InvokeRequired) {
+					_form.BeginInvoke(new System.Windows.Forms.MethodInvoker(_mainview.UpdateCellValues));
+				} else {
+					_mainview.UpdateCellValues();
+				}
+			}
 		}
 
 		#endregion

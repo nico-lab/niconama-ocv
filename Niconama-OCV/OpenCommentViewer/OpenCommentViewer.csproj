@@ -63,13 +63,6 @@
     <Compile Include="Control\ChatGridView.Designer.cs">
       <DependentUpon>ChatGridView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Cookie\ChromeCookieGetter.cs" />
-    <Compile Include="Cookie\CookieGetter.cs" />
-    <Compile Include="Cookie\FirefoxCookieGetter.cs" />
-    <Compile Include="Cookie\ICookieGetter.cs" />
-    <Compile Include="Cookie\IEComponentCookieGetter.cs" />
-    <Compile Include="Cookie\IESafeModeCookieGetter.cs" />
-    <Compile Include="Cookie\SqliteCookieGetter.cs" />
     <Compile Include="CustomControl\BufferedDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -130,7 +123,6 @@
     <Compile Include="Control\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApiSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NCSPlugin\NCSPlugin.csproj">

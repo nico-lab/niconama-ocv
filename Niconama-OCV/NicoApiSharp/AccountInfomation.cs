@@ -15,7 +15,7 @@ namespace Hal.NicoApiSharp
 		/// ログインした人のアカウント情報を取得します
 		/// </summary>
 		/// <param name="cookies"></param>
-		/// <returns></returns>
+		/// <returns>ログインが完了していない場合はＮｕｌｌを返します</returns>
 		public static AccountInfomation GetMyAccountInfomation(System.Net.CookieContainer cookies)
 		{
 			string page = null;
@@ -48,11 +48,23 @@ namespace Hal.NicoApiSharp
 		}
 
 		/// <summary>
+		/// ログインした人のアカウント情報を取得します
+		/// </summary>
+		/// <returns>ログインが完了していない場合はＮｕｌｌを返します</returns>
+		public static AccountInfomation GetMyAccountInfomation() {
+			if (LoginManager.DefaultCookies != null) {
+				return GetMyAccountInfomation(LoginManager.DefaultCookies);
+			}
+
+			return null;
+		}
+
+		/// <summary>
 		/// 指定したIDのユーザーアカウントを取得します
 		/// </summary>
 		/// <param name="userId"></param>
 		/// <param name="cookies"></param>
-		/// <returns></returns>
+		/// <returns>取得に失敗した場合はNullを返します</returns>
 		public static AccountInfomation GetUserAccountInfomation(string userId, System.Net.CookieContainer cookies)
 		{
 			string page = null;
@@ -83,6 +95,19 @@ namespace Hal.NicoApiSharp
 
 			return null;
 
+		}
+
+		/// <summary>
+		/// 指定したIDのユーザーアカウントを取得します
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <returns>取得に失敗した場合はNullを返します</returns>
+		public static AccountInfomation GetUserAccountInfomation(string userId) {
+			if (LoginManager.DefaultCookies != null) {
+				return GetUserAccountInfomation(userId, LoginManager.DefaultCookies);
+			}
+
+			return null;
 		}
 
 		private int _userId;

@@ -29,6 +29,21 @@ namespace Hal.NicoApiSharp.Live
 		}
 
 		/// <summary>
+		/// NGを追加する
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <param name="type"></param>
+		/// <param name="source"></param>
+		/// <returns></returns>
+		public static bool AddNg(string liveId, NCSPlugin.NGType type, string source) {
+			if (LoginManager.DefaultCookies != null) {
+				return AddNg(liveId, type, source, LoginManager.DefaultCookies);
+			}
+
+			return false;
+		}
+
+		/// <summary>
 		/// NGを削除する
 		/// </summary>
 		/// <param name="liveId"></param>
@@ -40,6 +55,22 @@ namespace Hal.NicoApiSharp.Live
 		{
 			string res = SendNgCommand(liveId, "del", type.ToString(), source, cookies);
 			return (res != null && res.Contains("status=\"ok\""));
+		}
+
+		/// <summary>
+		/// NGを削除する
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <param name="type"></param>
+		/// <param name="source"></param>
+		/// <returns></returns>
+		public static bool DeleteNg(string liveId, NCSPlugin.NGType type, string source)
+		{
+			if (LoginManager.DefaultCookies != null) {
+				return DeleteNg(liveId, type, source, LoginManager.DefaultCookies);
+			}
+
+			return false;
 		}
 
 		/// <summary>
@@ -83,6 +114,20 @@ namespace Hal.NicoApiSharp.Live
 			return clients.ToArray();
 
 		}
+
+		/// <summary>
+		/// NG一覧を取得する。失敗したときはnullを返す
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <returns></returns>
+		public static Hal.NCSPlugin.INgClient[] GetNgClients(string liveId) {
+			if (LoginManager.DefaultCookies != null) {
+				return GetNgClients(liveId, LoginManager.DefaultCookies);
+			}
+
+			return null;
+		}
+
 
 		private static string SendNgCommand(string liveId, string mode, string type, string source, System.Net.CookieContainer cookies)
 		{

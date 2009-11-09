@@ -71,7 +71,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// <param name="browserType"></param>
 		/// <param name="cookieFilePath">クッキーが保存されているファイル、nullの場合既定のファイルを対称にする</param>
 		/// <returns></returns>
-		bool Login(Cookie.CookieGetter.BROWSER_TYPE browserType, string cookieFilePath);
+		bool Login(Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE browserType, string cookieFilePath);
 
 		/// <summary>
 		/// デバッグ用

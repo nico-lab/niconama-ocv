@@ -59,5 +59,6 @@ namespace Hal.OpenCommentViewer.Control
 		}
 
 		#endregion
+
 	}
 }

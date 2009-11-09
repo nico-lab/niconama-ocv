@@ -35,6 +35,19 @@ namespace Hal.NicoApiSharp.Live
 			return null;
 		}
 
+		/// <summary>
+		/// Waybackkeyをサーバーから取得します
+		/// </summary>
+		/// <param name="thread"></param>
+		/// <returns></returns>
+		public static Waybackkey GetInstance(int thread) {
+			if (LoginManager.DefaultCookies != null) {
+				return GetInstance(thread, LoginManager.DefaultCookies);
+			}
+
+			return null;
+		}
+
 		private string _value = null;
 
 		/// <summary>

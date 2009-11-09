@@ -7,7 +7,7 @@ namespace Hal.NCSPlugin
 
 	/// <summary>
 	/// プラグインホストのインターフェース
-	/// version 2
+	/// version 3
 	/// </summary>
 	public interface IPluginHost
 	{
@@ -301,6 +301,13 @@ namespace Hal.NCSPlugin
 		/// <param name="menuItem"></param>
 		/// <param name="openingCallback">コンテクストメニューが開かれた際に実行されるコールバック関数</param> 
 		void AddMenuStripItem(string category, System.Windows.Forms.ToolStripMenuItem menuItem, EventHandler openingCallback);
+
+		/// <summary>
+		/// カラムエクステンションやセルフォーマッターなどで値が変更され、ビュー全体を更新する必要があるときに呼び出します
+		/// 必要があれば実装
+		/// インターフェースバージョン3
+		/// </summary>
+		void UpdateCellValues();
 
 		#endregion
 

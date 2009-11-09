@@ -161,6 +161,10 @@ namespace Hal.OpenCommentViewer.Control
 			return chatGridView1.SelectChat(no);
 		}
 
+		public void UpdateCellValues() { 
+			chatGridView1.UpdateCellValues();
+		}
+
 		#endregion
 		
 		private void StartLive()
@@ -279,7 +283,7 @@ statusStrip1.Visible = !statusStrip1.Visible;
 		private void copyIdAsURLToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			string id = Utility.GetLiveIdFromUrl(idBox.Text);
-			Utility.SetTxetToClipboard(string.Format(ApiSettings.Default.LiveWatchUrlFormat, id));
+			Utility.SetTxetToClipboard(string.Format(NicoApiSharp.ApiSettings.Default.LiveWatchUrlFormat, id));
 		}
 
 		private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -350,6 +354,7 @@ statusStrip1.Visible = !statusStrip1.Visible;
 			commentCopyToolStripMenuItem.Enabled = enable;
 			idCopyToolStripMenuItem.Enabled = enable;
 		}
+
 
 		
 

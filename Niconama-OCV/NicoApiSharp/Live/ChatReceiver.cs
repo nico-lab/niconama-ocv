@@ -88,7 +88,7 @@ namespace Hal.NicoApiSharp.Live
 		/// <param name="when">取得開始時間</param>
 		/// <param name="resFrom"></param>
 		/// <returns></returns>
-		public static Chat[] ReceiveLog(IMessageServerStatus data, System.Net.CookieContainer cookies, int userId, DateTime when, int resFrom)
+		internal static Chat[] ReceiveLog(IMessageServerStatus data, System.Net.CookieContainer cookies, int userId, DateTime when, int resFrom)
 		{
 
 			List<Chat> results = new List<Chat>(1000);
@@ -216,6 +216,20 @@ namespace Hal.NicoApiSharp.Live
 			}
 
 			return results.ToArray();
+		}
+
+		/// <summary>
+		/// 放送の過去ログをすべて取得する
+		/// </summary>
+		/// <param name="data"></param>
+		/// <param name="userId"></param>
+		/// <returns></returns>
+		public static Chat[] ReceiveAllLog(IMessageServerStatus data, int userId) {
+			if (LoginManager.DefaultCookies != null) {
+				return ReceiveAllLog(data, LoginManager.DefaultCookies, userId);
+			}
+
+			return null;
 		}
 
 		#endregion

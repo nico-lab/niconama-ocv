@@ -38,6 +38,20 @@ namespace Hal.NicoApiSharp.Live
 			return null;
 		}
 
+		/// <summary>
+		/// 放送にアクセスするための情報を取得する
+		/// 情報はXMLDocumentとして保持され、適時読みだす
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <returns></returns>
+		public static PlayerStatus GetInstance(string liveId) {
+			if (LoginManager.DefaultCookies != null) {
+				return GetInstance(liveId, LoginManager.DefaultCookies);
+			}
+
+			return null;
+		}
+
 		DateTime _localGetTime;
 
 		private PlayerStatus()
