@@ -197,13 +197,20 @@ namespace Hal.NicoApiSharp.Live
 		/// <returns></returns>
 		public static Chat[] ReceiveAllLog(IMessageServerStatus data, System.Net.CookieContainer cookies, int userId)
 		{
-			List<Chat> results = new List<Chat>();
+			Chat[] results = null;
 			DateTime when = DateTime.Now;
 
 			while (true) {
 				Chat[] chats = ReceiveLog(data, cookies, userId, when, -1000);
+				if (0 < chats.Length && results == null) {
+					results = new Chat[chats[chats.Length - 1].No];
+				}
+
+				for (int i = 0; i < chats.Length; i++) {
+					results[chats[0].No + i - 1] = chats[i];
+				}
+
 				if (chats.Length != 0) {
-					results.InsertRange(0, chats);
 					if (1 < chats[0].No) {
 						when = chats[0].Date;
 					} else {
@@ -215,7 +222,7 @@ namespace Hal.NicoApiSharp.Live
 
 			}
 
-			return results.ToArray();
+			return results;
 		}
 
 		/// <summary>
