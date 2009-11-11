@@ -120,7 +120,7 @@ namespace Hal.OpenCommentViewer
 		{
 			get
 			{
-				return System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), System.Windows.Forms.Application.ProductName);
+				return System.Windows.Forms.Application.CommonAppDataPath;
 			}
 		}
 

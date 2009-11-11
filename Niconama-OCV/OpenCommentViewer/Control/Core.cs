@@ -138,7 +138,9 @@ namespace Hal.OpenCommentViewer.Control
 						pins.Run();
 					};
 
-					AddMenuStripItem("プラグイン(&P)", item);
+					AddMenuStripItem("プラグイン(&P)", item, delegate(object sender, EventArgs e) {
+						item.Text = pins.Name;
+					});
 
 
 				} catch (Exception ex) {
