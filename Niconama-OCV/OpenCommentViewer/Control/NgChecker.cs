@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-using Hal.NCSPlugin;
+using Hal.NicoApiSharp.Live;
 
 using Regex = System.Text.RegularExpressions.Regex;
 using Match = System.Text.RegularExpressions.Match;
@@ -19,12 +19,11 @@ namespace Hal.OpenCommentViewer.Control
 	class NgChecker
 	{
 
-		List<INgClient> _clients = new List<INgClient>();
-		//StringBuilder _normalFilterPattern = null;
-		//StringBuilder _unityFilterPattern = null;
-		//Regex _normalFilter = null;
-		//Regex _unifyFilter = null;
-		List<Regex> _regs = new List<Regex>();
+		List<NgClient> _clients = new List<NgClient>();
+		StringBuilder _normalFilterPattern = null;
+		StringBuilder _unityFilterPattern = null;
+		Regex _normalFilter = null;
+		Regex _unifyFilter = null;
 		System.Collections.Specialized.StringCollection _idCollections = null;
 		System.Collections.Specialized.StringCollection _commandCollections = null;
 
@@ -35,12 +34,13 @@ namespace Hal.OpenCommentViewer.Control
 		public void Initialize(ICore core)
 		{
 			this.ClearFilter();
+			if (!string.IsNullOrEmpty(core.LiveId)) {
+				NgClient[] clients = NgClient.GetNgClients(core.LiveId);
+				if (clients != null && clients.Length != 0) {
 
-			Hal.NCSPlugin.INgClient[] clients = core.GetNgClients();
-			if (clients != null && clients.Length != 0) {
-				
-				BuildRegex(clients);
+					BuildRegex(clients);
 
+				}
 			}
 		}
 
@@ -49,11 +49,10 @@ namespace Hal.OpenCommentViewer.Control
 		/// </summary>
 		private void ClearFilter()
 		{
-			//_normalFilterPattern = new StringBuilder();
-			//_unityFilterPattern = new StringBuilder();
-			//_normalFilter = null;
-			//_unifyFilter = null;
-			_regs.Clear();
+			_normalFilterPattern = new StringBuilder();
+			_unityFilterPattern = new StringBuilder();
+			_normalFilter = null;
+			_unifyFilter = null;
 			_idCollections = new System.Collections.Specialized.StringCollection();
 			_commandCollections = new System.Collections.Specialized.StringCollection();
 			_clients.Clear();
@@ -74,12 +73,21 @@ namespace Hal.OpenCommentViewer.Control
 			} else if (!chat.IsOwnerComment) {
 				lock (this) {
 
-					foreach (Regex reg in _regs) {
-						string com = chat.Message.ToUpper();
-						Match m = reg.Match(com);
+					if (_normalFilter != null) {
+						Match m = _normalFilter.Match(chat.Message);
 
 						if (m.Success) {
-							chat.NgType = NGType.Word;
+							chat.NgType = Hal.NCSPlugin.NGType.Word;
+							chat.NgSource = m.Value;
+							return;
+						}
+					}
+
+					if (_unifyFilter != null) {
+						string com = normaliza(chat.Message);
+						Match m = _unifyFilter.Match(com);
+						if (m.Success) {
+							chat.NgType = Hal.NCSPlugin.NGType.Word;
 							chat.NgSource = m.Value;
 							return;
 						}
@@ -87,7 +95,7 @@ namespace Hal.OpenCommentViewer.Control
 
 					if (_idCollections.Count != 0 && !string.IsNullOrEmpty(chat.UserId)) {
 						if (_idCollections.Contains(chat.UserId)) {
-							chat.NgType = NGType.Id;
+							chat.NgType = Hal.NCSPlugin.NGType.Id;
 							chat.NgSource = chat.UserId;
 							return;
 						}
@@ -97,7 +105,7 @@ namespace Hal.OpenCommentViewer.Control
 						if (!string.IsNullOrEmpty(chat.Mail) && chat.Mail != "184") {
 							foreach (string cc in chat.Mail.Split(' ')) {
 								if (_commandCollections.Contains(cc)) {
-									chat.NgType = NGType.Command;
+									chat.NgType = Hal.NCSPlugin.NGType.Command;
 									chat.NgSource = cc;
 									return;
 								}
@@ -158,7 +166,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// NGを追加する
 		/// </summary>
 		/// <param name="ng"></param>
-		private void AddNg(INgClient client)
+		private void AddNg(Hal.NicoApiSharp.Live.NgClient client)
 		{
 			_clients.Add(client);
 
@@ -167,11 +175,15 @@ namespace Hal.OpenCommentViewer.Control
 
 					// NGの属性に沿って該当する正規表現を生成する
 					if (client.UseCaseUnify) {
-						_regs.Add(new Regex(MakeUnifyPattern(client.Source.ToUpper())));
-					} else if (client.IsRegex) {
-						_regs.Add(new Regex(string.Format("({0})", client.Source)));
-					} else {
-						_regs.Add(new Regex(Regex.Escape(client.Source.ToUpper())));
+						AddPattern(_unityFilterPattern, normaliza(client.Source));
+						_unifyFilter = new Regex(_unityFilterPattern.ToString());
+					} else{
+						if (client.IsRegex) {
+							AddPattern(_normalFilterPattern, string.Format("({0})", client.Source));
+						} else {
+							AddPattern(_normalFilterPattern, Regex.Escape(client.Source));
+						}
+						_normalFilter = new Regex(_normalFilterPattern.ToString());
 					}
 
 					break;
@@ -199,7 +211,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// NGを削除する
 		/// </summary>
 		/// <param name="ng"></param>
-		private void DelNg(INgClient ng)
+		private void DelNg(Hal.NicoApiSharp.Live.NgClient ng)
 		{
 			if (_clients.Contains(ng)) {
 				_clients.Remove(ng);
@@ -212,21 +224,21 @@ namespace Hal.OpenCommentViewer.Control
 		/// <summary>
 		/// NGフィルターを構築する
 		/// </summary>
-		private void BuildRegex(Hal.NCSPlugin.INgClient[] clients)
+		private void BuildRegex(Hal.NicoApiSharp.Live.NgClient[] clients)
 		{
 			ClearFilter();
 			_clients.AddRange(clients);
-			foreach (INgClient client in _clients) {
+			foreach (NgClient client in _clients) {
 				switch (client.Type) {
 					case NGType.Word:
 
 						// NGの属性に沿って該当する正規表現を生成する
 						if (client.UseCaseUnify) {
-							_regs.Add(new Regex(MakeUnifyPattern(client.Source.ToUpper())));
+							AddPattern(_unityFilterPattern, normaliza(client.Source));
 						} else if (client.IsRegex) {
-							_regs.Add(new Regex(string.Format("({0})", client.Source)));
+							AddPattern(_normalFilterPattern, string.Format("({0})", client.Source));
 						} else {
-							_regs.Add(new Regex(Regex.Escape(client.Source.ToUpper())));
+							AddPattern(_normalFilterPattern, Regex.Escape(client.Source));
 						}
 
 						break;
@@ -238,6 +250,18 @@ namespace Hal.OpenCommentViewer.Control
 						break;
 				}
 
+			}
+
+			if (_normalFilterPattern.Length != 0) {
+				_normalFilter = new Regex(_normalFilterPattern.ToString(), System.Text.RegularExpressions.RegexOptions.Compiled);
+			} else {
+				_normalFilter = null;
+			}
+
+			if (_unityFilterPattern.Length != 0) {
+				_unifyFilter = new Regex(_unityFilterPattern.ToString(), System.Text.RegularExpressions.RegexOptions.Compiled);
+			} else {
+				_unifyFilter = null;
 			}
 
 		}
@@ -263,6 +287,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// <returns></returns>
 		private string MakeUnifyPattern(string str)
 		{
+
 			StringBuilder sb = new StringBuilder();
 			str = str.Replace(" ", "");
 			str = System.Text.RegularExpressions.Regex.Escape(str);
@@ -270,35 +295,63 @@ namespace Hal.OpenCommentViewer.Control
 			for (int i = 0; i < str.Length; i++) {
 
 				char c = str[i];
-				if (Utility.IsZenkakuJapanese(c)) {
+				if (Utility.IsZenkakuJapanese(c) | Utility.IsHankakuJapanese(c)) {
+					
 					// ひらがな、カタカナ、半角カタカナのどれでも引っかかるパターンを作る
-					// ただし、濁点がある場合はパフォーマンスを優先して一部仕様外の動作を許容している
-					// (（）を使ってグループを作るとパフォーマンスが悪化する気がしたので)
+
+					//半角の場合はまず全角にする
+					if (Utility.IsHankakuJapanese(c)) { 
+						string x = c.ToString();
+
+						//ｶﾞなどはガ一文字に直す
+						if(i + 1 != str.Length ){
+							char next = str[i+1];
+							if (next.Equals('ﾞ') || next.Equals('ﾟ')) {
+								i++;
+								x += next;
+								x = x.Normalize(NormalizationForm.FormKC);
+							}
+						}
+						c = x[0];
+					}
+
 					char h = Utility.ToHiragana(c);
 					char k = Utility.ToKatakana(c);
 					string n = Utility.ToHankaku(k);
 					if (n.Length == 1) {
-						sb.AppendFormat("[{0}{1}{2}]\\s*", h, k, n);
+						sb.AppendFormat("[{0}{1}{2}]", h, k, n);
 					} else {
-						sb.AppendFormat("([{0}{1}]|{2})\\s", h, k, n);
+						sb.AppendFormat("([{0}{1}]|{2})", h, k, n);
 					}
 
 				} else if (Utility.IsZenkakuCase(c)) {
 					// ひらがなカタカナ以外の全角文字（数字や全角英字）から半角文字でも引っかかるパターンを生成する
 					string n = Utility.ToHankaku(c).ToUpper();
-					sb.AppendFormat("[{0}{1}]\\s", c, n);
+					sb.AppendFormat("[{0}{1}]", c, n);
 				} else if (Utility.IsHankakuCase(c)) {
 					// 半角文字から全角文字でも引っかかるパターンを生成する
 					string n = Utility.ToZenkaku(c).ToString().ToUpper();
-					sb.AppendFormat("[{0}{1}]\\s", c, n);
+					sb.AppendFormat("[{0}{1}]", c, n);
 				} else {
-					sb.Append(c + "\\s");
+					sb.Append(c);
 				}
 			}
 
 			return sb.ToString();
 		}
 
+		private string normaliza(string text)
+		{
+			text = System.Text.RegularExpressions.Regex.Replace(text, @"[ 　\t\r\n]", "").ToUpper();
+			StringBuilder sb = new StringBuilder(text.Normalize(NormalizationForm.FormKC));
+			for (int i = 0; i < sb.Length; i++) {
+				if (Utility.IsZenkakuJapanese(sb[i])) {
+					sb[i] = Utility.ToKatakana(sb[i]);
+				}
+			}
+
+			return sb.ToString();
+		}
 
 
 		#region IDisposable メンバ
