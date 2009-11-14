@@ -108,7 +108,12 @@ namespace Hal.NicoApiSharp.Live
 			int.TryParse(xdoc.SelectSingleNode("response_ngword/count").InnerText, out count);
 			List<NgClient> clients = new List<NgClient>(count);
 			foreach (XmlNode node in xdoc.SelectNodes("response_ngword/ngclient")) {
-				clients.Add(new NgClient(node));
+				try {
+					NgClient n = new NgClient(node);
+					clients.Add(n);
+				} catch(Exception ex) {
+					Logger.Default.LogException(ex);
+				}
 			}
 
 			return clients.ToArray();
