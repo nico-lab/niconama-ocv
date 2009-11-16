@@ -5,11 +5,36 @@ using System.Xml;
 
 namespace Hal.NicoApiSharp.Live
 {
+	/// <summary>
+	/// NGの種類
+	/// </summary>
+	public enum NGType
+	{
+		/// <summary>
+		/// NGなし
+		/// </summary>
+		None,
+
+		/// <summary>
+		/// 単語
+		/// </summary>
+		Word,
+
+		/// <summary>
+		/// ユーザー
+		/// </summary>
+		Id,
+
+		/// <summary>
+		/// コマンド
+		/// </summary>
+		Command
+	}
 
 	/// <summary>
 	/// NGを格納するクラス
 	/// </summary>
-	public class NgClient : Hal.NCSPlugin.INgClient
+	public class NgClient
 	{
 
 		#region Static Methods
@@ -22,7 +47,7 @@ namespace Hal.NicoApiSharp.Live
 		/// <param name="source"></param>
 		/// <param name="cookies"></param>
 		/// <returns></returns>
-		public static bool AddNg(string liveId, NCSPlugin.NGType type, string source, System.Net.CookieContainer cookies)
+		public static bool AddNg(string liveId, NGType type, string source, System.Net.CookieContainer cookies)
 		{
 			string res = SendNgCommand(liveId, "add", type.ToString(), source, cookies);
 			return (res != null && res.Contains("status=\"ok\""));
@@ -35,7 +60,7 @@ namespace Hal.NicoApiSharp.Live
 		/// <param name="type"></param>
 		/// <param name="source"></param>
 		/// <returns></returns>
-		public static bool AddNg(string liveId, NCSPlugin.NGType type, string source) {
+		public static bool AddNg(string liveId, NGType type, string source) {
 			if (LoginManager.DefaultCookies != null) {
 				return AddNg(liveId, type, source, LoginManager.DefaultCookies);
 			}
@@ -51,7 +76,7 @@ namespace Hal.NicoApiSharp.Live
 		/// <param name="source"></param>
 		/// <param name="cookies"></param>
 		/// <returns></returns>
-		public static bool DeleteNg(string liveId, NCSPlugin.NGType type, string source, System.Net.CookieContainer cookies)
+		public static bool DeleteNg(string liveId, NGType type, string source, System.Net.CookieContainer cookies)
 		{
 			string res = SendNgCommand(liveId, "del", type.ToString(), source, cookies);
 			return (res != null && res.Contains("status=\"ok\""));
@@ -64,7 +89,7 @@ namespace Hal.NicoApiSharp.Live
 		/// <param name="type"></param>
 		/// <param name="source"></param>
 		/// <returns></returns>
-		public static bool DeleteNg(string liveId, NCSPlugin.NGType type, string source)
+		public static bool DeleteNg(string liveId, NGType type, string source)
 		{
 			if (LoginManager.DefaultCookies != null) {
 				return DeleteNg(liveId, type, source, LoginManager.DefaultCookies);
@@ -79,7 +104,7 @@ namespace Hal.NicoApiSharp.Live
 		/// <param name="liveId"></param>
 		/// <param name="cookies"></param>
 		/// <returns>NG一覧　失敗時はnull</returns>
-		public static Hal.NCSPlugin.INgClient[] GetNgClients(string liveId, System.Net.CookieContainer cookies)
+		public static NgClient[] GetNgClients(string liveId, System.Net.CookieContainer cookies)
 		{
 			string res = SendNgCommand(liveId, "get", "", "", cookies);
 
@@ -125,7 +150,7 @@ namespace Hal.NicoApiSharp.Live
 		/// </summary>
 		/// <param name="liveId"></param>
 		/// <returns></returns>
-		public static Hal.NCSPlugin.INgClient[] GetNgClients(string liveId) {
+		public static NgClient[] GetNgClients(string liveId) {
 			if (LoginManager.DefaultCookies != null) {
 				return GetNgClients(liveId, LoginManager.DefaultCookies);
 			}
@@ -160,7 +185,7 @@ namespace Hal.NicoApiSharp.Live
 			IsRegex = 4
 		}
 
-		NCSPlugin.NGType _type;
+		NGType _type;
 		string _source;
 		DateTime _regTime;
 		NGOption _options;
@@ -176,7 +201,7 @@ namespace Hal.NicoApiSharp.Live
 		/// <param name="type"></param>
 		/// <param name="source"></param>
 		/// <param name="regTime"></param>
-		public NgClient(NCSPlugin.NGType type, string source, DateTime regTime)
+		public NgClient(NGType type, string source, DateTime regTime)
 		{
 			_type = type;
 			_source = source;
@@ -189,13 +214,13 @@ namespace Hal.NicoApiSharp.Live
 			_regTime = Utility.UnixTimeToDateTime(int.Parse(node["register_time"].InnerText));
 			switch (node["type"].InnerText) {
 				case "word":
-					_type = NCSPlugin.NGType.Word;
+					_type = NGType.Word;
 					break;
 				case "id":
-					_type = NCSPlugin.NGType.Id;
+					_type = NGType.Id;
 					break;
 				case "command":
-					_type = NCSPlugin.NGType.Command;
+					_type = NGType.Command;
 					break;
 			}
 
@@ -219,7 +244,7 @@ namespace Hal.NicoApiSharp.Live
 		/// <summary>
 		/// NGの種類
 		/// </summary>
-		public NCSPlugin.NGType Type
+		public NGType Type
 		{
 			get { return _type; }
 		}

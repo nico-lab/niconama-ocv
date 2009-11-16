@@ -46,7 +46,6 @@
     <Compile Include="IChat.cs" />
     <Compile Include="IColumnExtention.cs" />
     <Compile Include="IFilterdChat.cs" />
-    <Compile Include="INgClient.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="IPluginHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -8,7 +8,7 @@ namespace Hal.NicoApiSharp.Live
 	/// <summary>
 	/// サーバーから受け取ったチャットを表すクラス
 	/// </summary>
-	public class Chat : IErrorData, Hal.NCSPlugin.IChat
+	public class Chat : IErrorData, IChat
 	{
 
 		/// <summary>
@@ -205,7 +205,7 @@ namespace Hal.NicoApiSharp.Live
 		/// 複製
 		/// </summary>
 		/// <param name="chat"></param>
-		public Chat(NCSPlugin.IChat chat)
+		public Chat(IChat chat)
 			: this()
 		{
 			this._anonymity = chat.Anonymity;
@@ -329,7 +329,7 @@ namespace Hal.NicoApiSharp.Live
 				return false;
 			}
 
-			NCSPlugin.IChat that = obj as NCSPlugin.IChat;
+			IChat that = obj as IChat;
 			if (that == null) {
 				return false;
 			}
