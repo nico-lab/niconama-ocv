@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("NCSPlugin")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("halxxxx")]
 [assembly: AssemblyProduct("NCSPlugin")]
 [assembly: AssemblyCopyright("Copyright (C)  2009")]
 [assembly: AssemblyTrademark("")]

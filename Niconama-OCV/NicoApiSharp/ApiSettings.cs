@@ -26,6 +26,12 @@ namespace Hal.NicoApiSharp
 		public string GetPlayerStatusUrlFormat = "http://watch.live.nicovideo.jp/api/getplayerstatus?v={0}";
 
 		/// <summary>
+		/// API：GetPlayerStatusにアクセスするためのアドレスフォーマット
+		/// {0} = 放送ID
+		/// </summary>
+		public string GetPublishStatusUrlFormat = "http://watch.live.nicovideo.jp/api/getpublishstatus?v={0}";
+
+		/// <summary>
 		/// 放送ページのURLフォーマット
 		/// {0} = 放送ID
 		/// </summary>
@@ -75,6 +81,11 @@ namespace Hal.NicoApiSharp
 		/// </summary>
 		public string MyAccountCheckUrl = "http://www.nicovideo.jp/my/channel";
 
+		/// <summary>
+		/// ログイン用のURL
+		/// </summary>
+		public string LoginUrl = "https://secure.nicovideo.jp/secure/login?site=niconico";
+
 		#endregion
 
 		#region Socket
@@ -118,6 +129,13 @@ namespace Hal.NicoApiSharp
 		/// {1} = コマンド
 		/// </summary>
 		public string PostOwnerCommentDataFormat = "body={0}&mail={1}&is184=true";
+
+		/// <summary>
+		/// 放送主コメントデータフォーマット
+		/// {0} = コメント
+		/// {1} = コマンド
+		/// </summary>
+		public string PostOwnerCommentWithNameDataFormat = "body={0}&mail={1}&name={2}&is184=true";
 
 		/// <summary>
 		/// 放送主コメント送信時のリファラー

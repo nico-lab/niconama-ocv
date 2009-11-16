@@ -70,7 +70,7 @@ namespace Hal.OpenCommentViewer.Control
 
 		public void OnComment(Hal.NCSPlugin.IChat chat)
 		{
-			chatGridView1.Add((NicoApiSharp.Live.Chat)chat);
+			chatGridView1.Add(chat);
 
 		}
 

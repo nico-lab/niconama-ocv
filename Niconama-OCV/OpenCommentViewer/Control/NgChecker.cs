@@ -280,66 +280,6 @@ namespace Hal.OpenCommentViewer.Control
 			sb.Append(pattern);
 		}
 
-		/// <summary>
-		/// UseCaseUnity属性が付いたNGの正規表現パターンを生成する
-		/// </summary>
-		/// <param name="str"></param>
-		/// <returns></returns>
-		private string MakeUnifyPattern(string str)
-		{
-
-			StringBuilder sb = new StringBuilder();
-			str = str.Replace(" ", "");
-			str = System.Text.RegularExpressions.Regex.Escape(str);
-
-			for (int i = 0; i < str.Length; i++) {
-
-				char c = str[i];
-				if (Utility.IsZenkakuJapanese(c) | Utility.IsHankakuJapanese(c)) {
-					
-					// ひらがな、カタカナ、半角カタカナのどれでも引っかかるパターンを作る
-
-					//半角の場合はまず全角にする
-					if (Utility.IsHankakuJapanese(c)) { 
-						string x = c.ToString();
-
-						//ｶﾞなどはガ一文字に直す
-						if(i + 1 != str.Length ){
-							char next = str[i+1];
-							if (next.Equals('ﾞ') || next.Equals('ﾟ')) {
-								i++;
-								x += next;
-								x = x.Normalize(NormalizationForm.FormKC);
-							}
-						}
-						c = x[0];
-					}
-
-					char h = Utility.ToHiragana(c);
-					char k = Utility.ToKatakana(c);
-					string n = Utility.ToHankaku(k);
-					if (n.Length == 1) {
-						sb.AppendFormat("[{0}{1}{2}]", h, k, n);
-					} else {
-						sb.AppendFormat("([{0}{1}]|{2})", h, k, n);
-					}
-
-				} else if (Utility.IsZenkakuCase(c)) {
-					// ひらがなカタカナ以外の全角文字（数字や全角英字）から半角文字でも引っかかるパターンを生成する
-					string n = Utility.ToHankaku(c).ToUpper();
-					sb.AppendFormat("[{0}{1}]", c, n);
-				} else if (Utility.IsHankakuCase(c)) {
-					// 半角文字から全角文字でも引っかかるパターンを生成する
-					string n = Utility.ToZenkaku(c).ToString().ToUpper();
-					sb.AppendFormat("[{0}{1}]", c, n);
-				} else {
-					sb.Append(c);
-				}
-			}
-
-			return sb.ToString();
-		}
-
 		private string normaliza(string text)
 		{
 			text = System.Text.RegularExpressions.Regex.Replace(text, @"[ 　\t\r\n]", "").ToUpper();

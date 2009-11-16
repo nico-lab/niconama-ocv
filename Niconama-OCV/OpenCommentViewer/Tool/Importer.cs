@@ -31,7 +31,7 @@ namespace Hal.OpenCommentViewer.Tool
 					
 					// ファイル内のコメントをホストに登録する
 					foreach (System.Xml.XmlNode node in xdoc.SelectNodes("packet/chat")) {
-						NicoApiSharp.Live.Chat chat = new Hal.NicoApiSharp.Live.Chat(node);
+						Hal.OpenCommentViewer.Control.OcvChat chat = new Hal.OpenCommentViewer.Control.OcvChat(node);
 						_host.InsertPluginChat(chat);
 					}
 					_host.ShowStatusMessage("インポートに成功しました。");

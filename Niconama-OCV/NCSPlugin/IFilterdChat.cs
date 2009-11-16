@@ -6,6 +6,32 @@ namespace Hal.NCSPlugin
 {
 
 	/// <summary>
+	/// NGの種類
+	/// </summary>
+	public enum NGType
+	{
+		/// <summary>
+		/// NGなし
+		/// </summary>
+		None,
+
+		/// <summary>
+		/// 単語
+		/// </summary>
+		Word,
+
+		/// <summary>
+		/// ユーザー
+		/// </summary>
+		Id,
+
+		/// <summary>
+		/// コマンド
+		/// </summary>
+		Command
+	}
+
+	/// <summary>
 	/// NGのチェック結果をあらわすインターフェース
 	/// NG判定を行うビューアはIChatインターフェースと一緒にこのインターフェースも実装して、キャストできるようにしておく。
 	/// ビューアがNG判定を持たない場合は実装する必要は無い
@@ -21,5 +47,15 @@ namespace Hal.NCSPlugin
 		/// NGの原因
 		/// </summary>
 		string NgSource { get; }
+
+		/// <summary>
+		/// コメントのどの位置からNGが始まっているか取得します
+		/// </summary>
+		int NgStart { get; }
+
+		/// <summary>
+		/// NGの長さ
+		/// </summary>
+		int NgLength { get; }
 	}
 }

@@ -43,7 +43,7 @@ namespace Hal.OpenCommentViewer.Control
 		string _reservedId = null;
 		NicoApiSharp.Live.ChatReceiver _chatReceiver;
 		NgChecker _ngChecker;
-
+		NicoApiSharp.Live.OwnerCommentPoster _ownerCommentPoster;
 		protected List<Hal.NCSPlugin.IPlugin> _plugins = null;
 
 		/// <summary>
@@ -53,15 +53,15 @@ namespace Hal.OpenCommentViewer.Control
 		{
 			_chats = new List<OcvChat>();
 			_chatReceiver = new NicoApiSharp.Live.ChatReceiver();
-			_chatReceiver.ConnectServer += new EventHandler<NicoApiSharp.Live.ChatReceiver.ConnectServerEventArgs>(_chatReceiver_ConnectServer);
-			_chatReceiver.ReceiveChat += new EventHandler<NicoApiSharp.Live.ChatReceiver.ChatReceiveEventArgs>(_chatReceiver_ReceiveChat);
-			_chatReceiver.DisconnectServer += new EventHandler(_chatReceiver_DisconnectServer);
+			_chatReceiver.ConnectServer += new EventHandler<NicoApiSharp.Live.ChatReceiver.ConnectServerEventArgs>(OnStartLive);
+			_chatReceiver.ReceiveChat += new EventHandler<NicoApiSharp.Live.ChatReceiver.ChatReceiveEventArgs>(OnReceivedChat);
+			_chatReceiver.DisconnectServer += new EventHandler(OnDisconnectServer);
+			_ownerCommentPoster = new Hal.NicoApiSharp.Live.OwnerCommentPoster();
 
 			_ngChecker = new NgChecker();
 			_ngChecker.Initialize(this);
 
 			_plugins = new List<Hal.NCSPlugin.IPlugin>();
-
 
 		}
 
@@ -117,8 +117,6 @@ namespace Hal.OpenCommentViewer.Control
 			AddPlugin(new Tool.Exporter());
 
 			AddPlugin(new Tool.Importer());
-
-			//AddPlugin(new Hal.NameManagePlugin.NameManager());
 		}
 
 		/// <summary>
@@ -225,13 +223,17 @@ namespace Hal.OpenCommentViewer.Control
 			UserSettings.Default.Save();
 
 			NicoApiSharp.Live.Chat[] chats = NicoApiSharp.Live.ChatReceiver.ReceiveAllLog(messageServerStatus,  accountInfomation.UserId);
-			foreach (NicoApiSharp.Live.Chat chat in chats) {
-				_chats.Add(new OcvChat(chat));
+			if (chats != null) {
+				foreach (NicoApiSharp.Live.Chat chat in chats) {
+					_chats.Add(new OcvChat(chat));
+				}
+
+				_chatReceiver.Connect(messageServerStatus, chats.Length + 1);
+				return true;
+			} else {
+				_chatReceiver.Connect(messageServerStatus, -1000);
+				return true;
 			}
-
-			_chatReceiver.Connect(messageServerStatus, chats.Length + 1);
-			return true;
-
 		}
 
 		#region ICore メンバ
@@ -380,6 +382,10 @@ namespace Hal.OpenCommentViewer.Control
 		// デバッグ用
 		public virtual void CallTestMethod()
 		{
+			for (int i = 0; i < 10; i++) {
+				_ownerCommentPoster.PostAsync(this.LiveId, "test" + i.ToString(), "red", "★運営偽号");
+			}
+
 			
 		}
 
@@ -403,18 +409,7 @@ namespace Hal.OpenCommentViewer.Control
 
 			_plugins.Clear();
 			_plugins = null;
-		}
-
-		private void _chatReceiver_ConnectServer(object sender, NicoApiSharp.Live.ChatReceiver.ConnectServerEventArgs e)
-		{
-			if (_mainview != null) {
-				if (_form.InvokeRequired) {
-					_form.BeginInvoke(new EventHandler<NicoApiSharp.Live.ChatReceiver.ConnectServerEventArgs>(OnStartLive), new object[] { sender, e });
-				} else {
-					OnStartLive(sender, e);
-				}
-			}
-
+			_ownerCommentPoster.Dispose();
 		}
 
 		/// <summary>
@@ -424,35 +419,28 @@ namespace Hal.OpenCommentViewer.Control
 		/// <param name="e"></param>
 		protected virtual void OnStartLive(object sender, NicoApiSharp.Live.ChatReceiver.ConnectServerEventArgs e)
 		{
-			_mainview.ShowStatusMessage("メッセージサーバーに接続しました");
-
-			_ngChecker.Check(_chats);
-
-			// プラグインに通知
-			foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
-				plugin.OnLiveStart(this.LiveId, this.ServerStartTime, _chats.Count);
-			}
-
-			// デバッグ用にチケットをすべて保存する
-			LiveTicket log = GetLiveTicket();
-			if (log != null) {
-				string fileName = log.LiveId + (_seetType == SeetType.Arena ? "Arena" : "Standing") + ".xml";
-				string path = System.IO.Path.Combine(ApplicationSettings.Default.LiveTicketsFolder, fileName);
-				Utility.Serialize(path, log, typeof(LiveTicket));
-			}
-		}
-
-		private void _chatReceiver_ReceiveChat(object sender, NicoApiSharp.Live.ChatReceiver.ChatReceiveEventArgs e)
-		{
 			if (_mainview != null) {
-				if (_form.InvokeRequired) {
-					_form.BeginInvoke(new EventHandler<NicoApiSharp.Live.ChatReceiver.ChatReceiveEventArgs>(OnReceivedChat), new object[] { sender, e });
-				} else {
-					OnReceivedChat(sender, e);
+				_mainview.ShowStatusMessage("メッセージサーバーに接続しました");
+
+				DateTime start = DateTime.Now;
+
+				_ngChecker.Check(_chats);
+				TimeSpan spa = DateTime.Now - start;
+				_mainview.ShowStatusMessage(spa.TotalMilliseconds.ToString());
+
+				// プラグインに通知
+				foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
+					plugin.OnLiveStart(this.LiveId, this.ServerStartTime, _chats.Count);
+				}
+
+				// デバッグ用にチケットをすべて保存する
+				LiveTicket log = GetLiveTicket();
+				if (log != null) {
+					string fileName = log.LiveId + (_seetType == SeetType.Arena ? "Arena" : "Standing") + ".xml";
+					string path = System.IO.Path.Combine(ApplicationSettings.Default.LiveTicketsFolder, fileName);
+					Utility.Serialize(path, log, typeof(LiveTicket));
 				}
 			}
-
-
 		}
 
 		/// <summary>
@@ -463,36 +451,25 @@ namespace Hal.OpenCommentViewer.Control
 		/// <param name="e"></param>
 		protected virtual void OnReceivedChat(object sender, NicoApiSharp.Live.ChatReceiver.ChatReceiveEventArgs e)
 		{
-			NotifyReceiveChat(e.Chat);
+			if (_mainview != null) {
+				OcvChat ochat = new OcvChat(e.Chat);
+				NotifyReceiveChat(ochat);
+			}
 		}
 
 		/// <summary>
 		/// チャットを受け取ったことを各システムに通知する
 		/// </summary>
 		/// <param name="chat"></param>
-		private void NotifyReceiveChat(NCSPlugin.IChat chat)
+		private void NotifyReceiveChat(OcvChat chat)
 		{
-			OcvChat ochat = new OcvChat(chat);
-			_chats.Add(ochat);
-			_ngChecker.Check(ochat);
+			_chats.Add(chat);
+			_ngChecker.Check(chat);
 
 			//プラグインに通知
 			foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
-				plugin.OnComment(ochat);
+				plugin.OnComment(chat);
 			}
-		}
-
-
-		private void _chatReceiver_DisconnectServer(object sender, EventArgs e)
-		{
-			if (_mainview != null) {
-				if (_form.InvokeRequired) {
-					_form.BeginInvoke(new EventHandler(OnDisconnectServer), new object[] { sender, e });
-				} else {
-					OnDisconnectServer(sender, e);
-				}
-			}
-
 		}
 
 		/// <summary>
@@ -503,9 +480,11 @@ namespace Hal.OpenCommentViewer.Control
 		/// <param name="e"></param>
 		protected virtual void OnDisconnectServer(object sender, EventArgs e)
 		{
-			_mainview.ShowStatusMessage("メッセージサーバーから切断しました");
-			foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
-				plugin.OnLiveStop();
+			if (_mainview != null) {
+				_mainview.ShowStatusMessage("メッセージサーバーから切断しました");
+				foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
+					plugin.OnLiveStop();
+				}
 			}
 		}
 
@@ -539,7 +518,7 @@ namespace Hal.OpenCommentViewer.Control
 			get { return this._liveWatcherStatus != null && this._liveWatcherStatus.IsPremium; }
 		}
 
-		NicoApiSharp.Live.Chat[] __chatsCache = null;
+		Hal.NCSPlugin.IChat[] __chatsCache = null;
 		public Hal.NCSPlugin.IChat[] Chats
 		{
 			get
@@ -663,7 +642,8 @@ namespace Hal.OpenCommentViewer.Control
 		{
 			if (this.CanPostOwnerComment) {
 				if (_liveBasicStatus != null && !string.IsNullOrEmpty(message) && command != null) {
-					return NicoApiSharp.Live.OwnerCommentPoster.Post(_liveBasicStatus.LiveId, message, command);
+					_ownerCommentPoster.PostAsync(_liveBasicStatus.LiveId, message, command);
+					return true;
 				}
 			}
 
@@ -671,22 +651,17 @@ namespace Hal.OpenCommentViewer.Control
 
 		}
 
-		public bool AddNG(Hal.NCSPlugin.NGType type, string source)
+		public bool PostOwnerComment(string message, string command, string name)
 		{
-			if (this.IsConnected && this.IsOwner && _liveBasicStatus != null) {
-				return NicoApiSharp.Live.NgClient.AddNg(_liveBasicStatus.LiveId, type, source);
+			if (this.CanPostOwnerComment) {
+				if (_liveBasicStatus != null && !string.IsNullOrEmpty(message) && command != null) {
+					_ownerCommentPoster.PostAsync(_liveBasicStatus.LiveId, message, command, name);
+					return true;
+				}
 			}
 
 			return false;
-		}
 
-		public bool DeleteNG(Hal.NCSPlugin.NGType type, string source)
-		{
-			if (this.IsConnected && this.IsOwner && _liveBasicStatus != null) {
-				return NicoApiSharp.Live.NgClient.DeleteNg(_liveBasicStatus.LiveId, type, source);
-			}
-
-			return false;
 		}
 
 		public bool ConnectLive(string liveId)
@@ -700,15 +675,6 @@ namespace Hal.OpenCommentViewer.Control
 			if (this.IsConnected) {
 				_chatReceiver.Disconnect();
 			}
-		}
-
-		public Hal.NCSPlugin.INgClient[] GetNgClients()
-		{
-			if (this.LiveId != null) {
-				return NicoApiSharp.Live.NgClient.GetNgClients(this.LiveId);
-			}
-
-			return null;
 		}
 
 		public Hal.NCSPlugin.IChat GetSelectedChat()
@@ -774,10 +740,11 @@ namespace Hal.OpenCommentViewer.Control
 		public bool InsertPluginChat(Hal.NCSPlugin.IChat chat)
 		{
 			if (_mainview != null) {
+				OcvChat ochat = new OcvChat(chat);
 				if (_form.InvokeRequired) {
-					_form.BeginInvoke(new Action<Hal.NCSPlugin.IChat>(NotifyReceiveChat), chat);
+					_form.BeginInvoke(new Action<OcvChat>(NotifyReceiveChat), ochat);
 				} else {
-					NotifyReceiveChat(chat);
+					NotifyReceiveChat(ochat);
 				}
 			}
 

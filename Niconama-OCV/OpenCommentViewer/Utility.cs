@@ -155,6 +155,10 @@ namespace Hal.OpenCommentViewer
 			return (char)0x3040 <= c && (char)c <= 0x30ff;
 		}
 
+		public static bool IsHankakuJapanese(char c) {
+			return (0xFF66 <= c && c <= 0xFF9F);
+		}
+
 		public static bool IsHiragana(char c)
 		{
 			return (char)0x3040 <= c && (char)c <= 0x309f;
@@ -200,8 +204,10 @@ namespace Hal.OpenCommentViewer
 			"ﾊ","ﾊﾞ","ﾊﾟ","ﾋ","ﾋﾞ","ﾋﾟ","ﾌ","ﾌﾞ","ﾌﾟ","ﾍ","ﾍﾞ","ﾍﾟ","ﾎ","ﾎﾞ","ﾎﾟ",
 			"ﾏ","ﾐ","ﾑ","ﾒ","ﾓ",
 			"ｬ","ﾔ","ｭ","ﾕ","ｮ","ﾖ",
+			"ﾗ", "ﾘ", "ﾙ", "ﾚ", "ﾛ",
 			"ﾜ","ﾜ","ｳｨ","ｳ","ｦ","ﾝ","ｳﾞ","ｶ","ｹ"
 		};
+
 		
 
 		public static string ToHankaku(char c)

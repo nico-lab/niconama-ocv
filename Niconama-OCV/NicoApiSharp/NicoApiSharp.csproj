@@ -46,6 +46,9 @@
     <Compile Include="Cookie\ICookieGetter.cs" />
     <Compile Include="Cookie\IEComponentCookieGetter.cs" />
     <Compile Include="Cookie\IESafeModeCookieGetter.cs" />
+    <Compile Include="Live\FreeExtend.cs" />
+    <Compile Include="Live\IChat.cs" />
+    <Compile Include="Live\PublishStatus.cs" />
     <Compile Include="LoginManager.cs" />
     <Compile Include="Cookie\SqliteCookieGetter.cs" />
     <Compile Include="ExXMLDocument.cs" />
@@ -77,17 +80,14 @@
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NCSPlugin\NCSPlugin.csproj">
-      <Project>{9CC20246-79AA-43B0-9736-CA65EDB1C334}</Project>
-      <Name>NCSPlugin</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Video\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

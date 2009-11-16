@@ -125,26 +125,17 @@ namespace Hal.NCSPlugin
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="command"></param>
-		/// <returns></returns>
+		/// <returns>送信キューに追加できたか</returns>
 		bool PostOwnerComment(string message, string command);
 
 		/// <summary>
-		/// Ngを追加します。
-		/// ビューアがNG機能を持たない場合は常にFalseを返す
+		/// 運営者コメントを投稿します。
 		/// </summary>
-		/// <param name="type">NGのタイプ。単語、ユーザー、コマンド</param>
-		/// <param name="source">追加対象となるワード</param>
-		/// <returns>成否判定</returns>
-		bool AddNG(NGType type, string source);
-
-		/// <summary>
-		/// Ngを削除します
-		/// ビューアがNG機能を持たない場合は常にFalseを返す
-		/// </summary>
-		/// <param name="type">NGのタイプ。単語、ユーザー、コマンド</param>
-		/// <param name="source">削除対象となるワード</param>
-		/// <returns>成否判定</returns>
-		bool DeleteNG(NGType type, string source);
+		/// <param name="message"></param>
+		/// <param name="command"></param>
+		/// <param name="name"></param>
+		/// <returns>送信キューに追加できたか</returns>
+		bool PostOwnerComment(string message, string command, string name);
 
 		/// <summary>
 		/// 放送に接続します。
@@ -180,12 +171,6 @@ namespace Hal.NCSPlugin
 		/// <returns>成功したかどうか(未実装の場合はfalseを返す)</returns>
 		bool InsertPluginChat(IChat chat);
 
-		/// <summary>
-		/// NG一覧を取得します。
-		/// ビューアがNG機能を持たない場合は常にNullを返す
-		/// </summary>
-		/// <returns></returns>
-		INgClient[] GetNgClients();
 
 		/// <summary>
 		/// ビューで選択中のチャットを取得します。

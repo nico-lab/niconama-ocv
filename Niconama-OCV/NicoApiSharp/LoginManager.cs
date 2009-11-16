@@ -17,7 +17,7 @@ namespace Hal.NicoApiSharp
 		/// </summary>
 		/// <param name="browserType"></param>
 		/// <param name="cookieFilePath">クッキーが保存されているファイル、nullの場合既定のファイルを対称にする</param>
-		/// <returns></returns>
+		/// <returns>失敗した場合はnullが返される</returns>
 		public static AccountInfomation Login(CookieGetter.BROWSER_TYPE browserType, string cookieFilePath)
 		{
 			string[] userSessions = CookieGetter.GetCookies("nicovideo.jp", "user_session", browserType, cookieFilePath);
@@ -44,6 +44,27 @@ namespace Hal.NicoApiSharp
 
 			return null;
 
+		}
+
+		/// <summary>
+		/// メールアドレスとパスワードを使用して直接ログインする
+		/// </summary>
+		/// <param name="mail"></param>
+		/// <param name="pass"></param>
+		/// <returns>失敗した場合はnullが返される</returns>
+		public static AccountInfomation Login(string mail, string pass) {
+			System.Net.CookieContainer cookies = new System.Net.CookieContainer();
+			string postData = String.Format("mail={0}&password={1}", mail, pass);
+
+			Utility.PostData(ApiSettings.Default.LoginUrl, postData, cookies, 1000);
+
+			AccountInfomation accountInfomation = NicoApiSharp.AccountInfomation.GetMyAccountInfomation(cookies);
+			if (accountInfomation != null) {
+				DefaultCookies = cookies;
+				return accountInfomation;
+			}
+
+			return null;
 		}
 	}
 }

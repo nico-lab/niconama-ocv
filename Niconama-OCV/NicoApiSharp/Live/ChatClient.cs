@@ -15,6 +15,9 @@ namespace Hal.NicoApiSharp.Live
 	/// </summary>
 	public class ChatClient
 	{
+
+		#region [イベント]
+
 		/// <summary>
 		/// コメント取得が開始されたときに発生するイベント
 		/// </summary>
@@ -29,7 +32,11 @@ namespace Hal.NicoApiSharp.Live
 		/// サーバーから切断したときに発生するイベント
 		/// </summary>
 		public event EventHandler DisconnectServer;
-		
+
+		#endregion [イベント]
+
+		#region [変数]
+
 		/// <summary>
 		/// スレッド情報
 		/// </summary>
@@ -40,7 +47,32 @@ namespace Hal.NicoApiSharp.Live
 		private System.Threading.ManualResetEvent _cancelEvent;
 
 		private TcpClient _tcpClient;
-		
+		protected System.ComponentModel.AsyncOperation _asyncOperation = null;
+
+		#endregion [変数]
+
+
+		#region [処理]
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		public ChatClient()
+		{
+			_cancelEvent = new System.Threading.ManualResetEvent(true);
+			_asyncOperation = null;
+		}
+
+		/// <summary>
+		/// サーバーに接続中かどうかを取得します
+		/// </summary>
+		public bool IsConnected
+		{
+			get
+			{
+				return _tcpClient != null && _tcpClient.Connected;
+			}
+		}
 
 		/// <summary>
 		/// 通信が中断状態にあるかどうかを取得・設定する
@@ -68,25 +100,6 @@ namespace Hal.NicoApiSharp.Live
 			}
 		}
 
-		/// <summary>
-		/// サーバーに接続中かどうかを取得します
-		/// </summary>
-		public bool IsConnected
-		{
-			get
-			{
-				return _tcpClient != null && _tcpClient.Connected;
-			}
-		}
-
-		/// <summary>
-		/// コンストラクタ
-		/// </summary>
-		public ChatClient()
-		{
-			_cancelEvent = new System.Threading.ManualResetEvent(true);
-		}
-
 		#region 非同期受信
 
 		/// <summary>
@@ -97,7 +110,6 @@ namespace Hal.NicoApiSharp.Live
 		/// <returns>成功・失敗</returns>
 		public bool Connect(IMessageServerStatus data, int resFrom)
 		{
-
 			this.Initialize();
 
 			lock (this) {
@@ -109,7 +121,7 @@ namespace Hal.NicoApiSharp.Live
 
 						_tcpClient = new TcpClient();
 						_tcpClient.SendTimeout = 1000;
-						_tcpClient.ReceiveTimeout = 100;
+						_tcpClient.ReceiveTimeout = 1000;
 
 						AsyncCallback ac = (AsyncCallback)delegate(IAsyncResult ar)
 						{
@@ -129,9 +141,6 @@ namespace Hal.NicoApiSharp.Live
 							throw new Exception("コメント受信：サーバーコネクションタイムアウト");
 						}
 					}
-
-
-
 
 					string msg = String.Format(ApiSettings.Default.ThreadStartMessageFormat, data.Thread, resFrom);
 					SendMessge(msg);
@@ -193,6 +202,8 @@ namespace Hal.NicoApiSharp.Live
 			if (this.IsConnected) {
 				Disconnect();
 			}
+
+			_asyncOperation = System.ComponentModel.AsyncOperationManager.CreateOperation(null);
 
 		}
 
@@ -260,8 +271,6 @@ namespace Hal.NicoApiSharp.Live
 			if (this.IsConnected) {
 				Disconnect();
 			}
-
-
 
 		}
 
@@ -349,16 +358,7 @@ namespace Hal.NicoApiSharp.Live
 
 		#endregion
 
-		/// <summary>
-		/// 接続に失敗したことを通知します。
-		/// </summary>
-		/// <param name="ex"></param>
-		protected virtual void OnConnectionError(Exception ex)
-		{
-			if (this.ConnectionError != null) {
-				this.ConnectionError(this, new ConnectionErrorEventArgs(ex));
-			}
-		}
+		
 
 		/// <summary>
 		/// メッセージサーバーに接続したことを通知します。
@@ -367,8 +367,18 @@ namespace Hal.NicoApiSharp.Live
 		protected virtual void OnConnectServer(ThreadHeader threadHeader)
 		{
 			if (this.ConnectServer != null) {
-				this.ConnectServer(this, new ConnectServerEventArgs(threadHeader));
+				if (_asyncOperation != null) {
+					_asyncOperation.Post(postConnectServerEvent, new ConnectServerEventArgs(threadHeader));
+				} else {
+					postConnectServerEvent(new ConnectServerEventArgs(threadHeader));
+				}
+				
 			}
+		}
+		
+		private void postConnectServerEvent(object obj) {
+			System.Diagnostics.Debug.Assert(obj is ConnectServerEventArgs, "objはConnectServerEventArgsである必要があります。");
+			this.ConnectServer(this, (ConnectServerEventArgs)obj);
 		}
 
 		/// <summary>
@@ -377,12 +387,40 @@ namespace Hal.NicoApiSharp.Live
 		protected virtual void OnDisconnectServer()
 		{
 			if (this.DisconnectServer != null) {
-				this.DisconnectServer(this, EventArgs.Empty);
+				if (_asyncOperation != null) {
+					_asyncOperation.PostOperationCompleted(postDisconnectEvent, EventArgs.Empty);
+				} else {
+					postDisconnectEvent(EventArgs.Empty);
+				}
 			}
 		}
 
+		private void postDisconnectEvent(object obj) {
+			this.DisconnectServer(this, EventArgs.Empty);
+		}
+
 		/// <summary>
-		/// コメントを受信した際に発生するイベントの引数
+		/// 接続に失敗したことを通知します。
+		/// </summary>
+		/// <param name="ex"></param>
+		protected virtual void OnConnectionError(Exception ex)
+		{
+			if (this.ConnectionError != null) {
+				if (_asyncOperation != null) {
+					_asyncOperation.Post(postConnectionErrorEvent, new ConnectionErrorEventArgs(ex));
+				} else {
+					postConnectionErrorEvent(new ConnectionErrorEventArgs(ex));
+				}
+			}
+		}
+
+		private void postConnectionErrorEvent(object obj) {
+			System.Diagnostics.Debug.Assert(obj is ConnectionErrorEventArgs, "objはConnectionErrorEventArgsである必要があります。");
+			this.ConnectionError(this, (ConnectionErrorEventArgs)obj);
+		}
+
+		/// <summary>
+		/// サーバーに接続した際に発生するイベントの引数
 		/// </summary>
 		public class ConnectServerEventArgs : EventArgs
 		{
@@ -457,6 +495,11 @@ namespace Hal.NicoApiSharp.Live
 				WorkingStream = ns;
 			}
 		}
+
+		#endregion [処理]
+
+
+		
 
 	}
 }

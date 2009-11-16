@@ -102,7 +102,7 @@ namespace Hal.NicoApiSharp.Live
 
 						tcpClient = new TcpClient();
 						tcpClient.SendTimeout = 1000;
-						tcpClient.ReceiveTimeout = 100;
+						tcpClient.ReceiveTimeout = 1000;
 
 						AsyncCallback ac = (AsyncCallback)delegate(IAsyncResult ar)
 						{
@@ -169,8 +169,11 @@ namespace Hal.NicoApiSharp.Live
 								ThreadHeader th = new ThreadHeader(block);
 								last = th.LastRes;
 
+								// コメントがない状態ではエラーが発生するのでBreakする
+								if (last == 0) {
+									break;
+								}
 							}
-
 						}
 					}
 				}
@@ -249,10 +252,18 @@ namespace Hal.NicoApiSharp.Live
 		protected virtual void OnReceiveChat(Chat chat)
 		{
 			if (this.ReceiveChat != null) {
-				this.ReceiveChat(this, new ChatReceiveEventArgs(chat));
+				if (_asyncOperation != null) { 
+					_asyncOperation.Post(postReceiveChatEvent, new ChatReceiveEventArgs(chat));
+				}else{
+					postReceiveChatEvent(new ChatReceiveEventArgs(chat));
+				}
 			}
 		}
 
+		private void postReceiveChatEvent(object obj) {
+			System.Diagnostics.Debug.Assert(obj is ChatReceiveEventArgs, "objはChatReceiveEventArgsである必要があります。");
+			this.ReceiveChat(this, (ChatReceiveEventArgs)obj);
+		}
 
 		/// <summary>
 		/// メッセージサーバーに接続したことを通知します。
