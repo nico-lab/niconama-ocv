@@ -19,6 +19,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NicoApiSharp", "NicoApiShar
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NameManagePlugin", "NameManagePlugin\NameManagePlugin.csproj", "{91B164F7-5A8C-4454-A022-1346439787D2}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -63,6 +69,16 @@ Global
 		{62A5F9B6-5A2B-41E1-BC7D-D8F93C8D624A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{62A5F9B6-5A2B-41E1-BC7D-D8F93C8D624A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{62A5F9B6-5A2B-41E1-BC7D-D8F93C8D624A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{91B164F7-5A8C-4454-A022-1346439787D2}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{91B164F7-5A8C-4454-A022-1346439787D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91B164F7-5A8C-4454-A022-1346439787D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91B164F7-5A8C-4454-A022-1346439787D2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{91B164F7-5A8C-4454-A022-1346439787D2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{91B164F7-5A8C-4454-A022-1346439787D2}.Release|.NET.ActiveCfg = Release|Any CPU
+		{91B164F7-5A8C-4454-A022-1346439787D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91B164F7-5A8C-4454-A022-1346439787D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91B164F7-5A8C-4454-A022-1346439787D2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{91B164F7-5A8C-4454-A022-1346439787D2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

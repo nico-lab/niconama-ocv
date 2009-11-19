@@ -422,11 +422,11 @@ namespace Hal.OpenCommentViewer.Control
 			if (_mainview != null) {
 				_mainview.ShowStatusMessage("メッセージサーバーに接続しました");
 
-				DateTime start = DateTime.Now;
+				//DateTime start = DateTime.Now;
 
 				_ngChecker.Check(_chats);
-				TimeSpan spa = DateTime.Now - start;
-				_mainview.ShowStatusMessage(spa.TotalMilliseconds.ToString());
+				//TimeSpan spa = DateTime.Now - start;
+				//_mainview.ShowStatusMessage(spa.TotalMilliseconds.ToString());
 
 				// プラグインに通知
 				foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
