@@ -75,13 +75,12 @@ namespace Hal.NicoApiSharp
 			if (File.Exists(filePath)) {
 				try {
 
-					if (System.IO.File.Exists(filePath)) {
-						System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(type);
+					System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(type);
 
-						using (System.IO.FileStream fs = new System.IO.FileStream(filePath, System.IO.FileMode.Open)) {
-							return serializer.Deserialize(fs);
-						}
+					using (System.IO.FileStream fs = new System.IO.FileStream(filePath, System.IO.FileMode.Open)) {
+						return serializer.Deserialize(fs);
 					}
+			
 
 				} catch (Exception ex) {
 					Logger.Default.LogException(ex);
