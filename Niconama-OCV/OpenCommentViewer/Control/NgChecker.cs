@@ -283,13 +283,14 @@ namespace Hal.OpenCommentViewer.Control
 		private string normaliza(string text)
 		{
 			text = System.Text.RegularExpressions.Regex.Replace(text, @"[ 　\t\r\n]", "").ToUpper();
-			StringBuilder sb = new StringBuilder(text.Normalize(NormalizationForm.FormKC));
+			text = text.Normalize(NormalizationForm.FormKC);
+			text = Regex.Escape(text);
+			StringBuilder sb = new StringBuilder(text);
 			for (int i = 0; i < sb.Length; i++) {
 				if (Utility.IsZenkakuJapanese(sb[i])) {
 					sb[i] = Utility.ToKatakana(sb[i]);
 				}
 			}
-
 			return sb.ToString();
 		}
 
