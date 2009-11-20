@@ -50,7 +50,7 @@ namespace Hal.NicoApiSharp.Cookie
 			try {
 
 				// FireFox3.5以上からDBがロックされるようになったのでコピーしてこれを回避する
-				string tempdbpath = System.IO.Path.GetFullPath(TEMP_SQLITE_FILE_NAME);
+				string tempdbpath = TEMP_SQLITE_FILE_NAME;
 				System.IO.File.Copy(_path, tempdbpath);
 				string query = string.Format(QUERY_FORMAT, url, key);
 

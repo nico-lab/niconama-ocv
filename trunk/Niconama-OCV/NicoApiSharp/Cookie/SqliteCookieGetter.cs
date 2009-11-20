@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Data.SQLite;
 
 namespace Hal.NicoApiSharp.Cookie
 {
@@ -28,28 +28,43 @@ namespace Hal.NicoApiSharp.Cookie
 			string dpstr;
 			try {
 
-				if (Environment.OSVersion.ToString().Contains("Windows")) {
-					dpstr = "System.Data.SQLite";
-				} else {
-					dpstr = "Mono.Data.Sqlite";
-				}
+				//if (Environment.OSVersion.ToString().Contains("Windows")) {
+				//    dpstr = "System.Data.SQLite";
+				//    Logger.Default.LogMessage("Start Windowsmode");
+				//} else {
+				//    dpstr = "Mono.Data.Sqlite";
+				//    Logger.Default.LogMessage("Start monomode");
 
-				// DBプロバイダファクトリ作成
-				System.Data.Common.DbProviderFactory dpf = System.Data.Common.DbProviderFactories.GetFactory(dpstr);
+				//}
 
-				// 1.DBコネクションオブジェクト作成
-				using (System.Data.Common.DbConnection dbcon = dpf.CreateConnection()) {
-					dbcon.ConnectionString = string.Format(CONNECTIONSTRING_FORMAT, path);
-					dbcon.Open();
+				//// DBプロバイダファクトリ作成
+				//System.Data.Common.DbProviderFactory dpf = System.Data.Common.DbProviderFactories.GetFactory(dpstr);
 
-					System.Data.Common.DbCommand command = dpf.CreateCommand();
-					command.Connection = dbcon;
+				//// 1.DBコネクションオブジェクト作成
+				//using (System.Data.Common.DbConnection dbcon = dpf.CreateConnection()) {
+				//    dbcon.ConnectionString = string.Format(CONNECTIONSTRING_FORMAT, path);
+				//    dbcon.Open();
+
+				//    System.Data.Common.DbCommand command = dpf.CreateCommand();
+				//    command.Connection = dbcon;
+				//    command.CommandText = query;
+
+				//    string res = command.ExecuteScalar() as string;
+				//    dbcon.Close();
+				//    return new string[] { res };
+
+				//}
+
+				using (SQLiteConnection sqlConnection = new SQLiteConnection(string.Format(CONNECTIONSTRING_FORMAT, path))) {
+					sqlConnection.Open();
+
+					SQLiteCommand command = sqlConnection.CreateCommand();
+					command.Connection = sqlConnection;
 					command.CommandText = query;
 
 					string res = command.ExecuteScalar() as string;
-					dbcon.Close();
+					sqlConnection.Close();
 					return new string[] { res };
-
 				}
 
 			} catch (Exception ex) {

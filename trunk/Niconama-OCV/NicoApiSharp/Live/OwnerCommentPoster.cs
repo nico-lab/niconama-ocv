@@ -21,9 +21,9 @@ namespace Hal.NicoApiSharp.Live
 		public OwnerCommentPoster() {
 			_queue = new Queue<PostData>();
 			_thread = new System.Threading.Thread(ThreadLoop);
+			_manualResetEvent = new System.Threading.ManualResetEvent(true);
 			_thread.IsBackground = true;
 			_thread.Start();
-			_manualResetEvent = new System.Threading.ManualResetEvent(true);
 		}
 
 		private void AddTask(PostData postData)
