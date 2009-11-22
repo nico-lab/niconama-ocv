@@ -14,8 +14,10 @@ namespace Hal.NicoApiSharp.Cookie
 	{
 
 		const string CONNECTIONSTRING_FORMAT = "Data Source={0}";
-		public abstract string[] GetCookieValues(string url, string key);
-
+		public abstract System.Net.Cookie[] GetCookies(Uri url, string key);
+		public abstract System.Net.Cookie[] GetCookies(Uri url, string key, string path);
+		//public abstract System.Net.CookieContainer[] GetCookies(Uri url);
+		//public abstract System.Net.CookieContainer[] GetCookies(Uri url, string path);
 
 		/// <summary>
 		/// 指定されたpathにあるSqliteDatabaseに対してQueryを実行して値を取得する
@@ -23,9 +25,9 @@ namespace Hal.NicoApiSharp.Cookie
 		/// <param name="path"></param>
 		/// <param name="query"></param>
 		/// <returns></returns>
-		protected string[] getDatabaseValues(string path, string query)
+		protected object[] getDatabaseValues(string path, string query)
 		{
-			string dpstr;
+			//string dpstr;
 			try {
 
 				//if (Environment.OSVersion.ToString().Contains("Windows")) {
@@ -61,10 +63,15 @@ namespace Hal.NicoApiSharp.Cookie
 					SQLiteCommand command = sqlConnection.CreateCommand();
 					command.Connection = sqlConnection;
 					command.CommandText = query;
-
-					string res = command.ExecuteScalar() as string;
+					SQLiteDataReader sdr = command.ExecuteReader();
+					List<object> result = new List<object>();
+					if (sdr.Read()) {
+						for (int i = 0; i < sdr.FieldCount; i++) {
+							result.Add(sdr[i]);
+						}
+					}
 					sqlConnection.Close();
-					return new string[] { res };
+					return result.ToArray();
 				}
 
 			} catch (Exception ex) {
