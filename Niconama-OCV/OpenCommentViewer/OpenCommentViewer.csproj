@@ -69,7 +69,6 @@
     <Compile Include="CustomControl\ToolStripSpringtextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Logger.cs" />
     <Compile Include="Plugin\IPluginInfo.cs" />
     <Compile Include="Plugin\PluginInfo.cs" />
     <Compile Include="Program.cs" />

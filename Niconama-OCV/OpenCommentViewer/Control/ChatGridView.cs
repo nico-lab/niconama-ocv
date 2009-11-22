@@ -64,7 +64,7 @@ namespace Hal.OpenCommentViewer.Control
 							col.DisplayIndex = cs.DisplayIndex;
 						}
 					} catch (Exception ex) {
-						Logger.Default.LogException(ex);
+						NicoApiSharp.Logger.Default.LogException(ex);
 					}
 				}
 			}
@@ -305,8 +305,8 @@ namespace Hal.OpenCommentViewer.Control
 				try {
 					e.Value = _columnExtention[index].OnCellValueNeeded(chat);
 				} catch (Exception ex) {
-					Logger.Default.LogErrorMessage("Column extention error on " + dataGridView1.Columns[e.ColumnIndex].Name);
-					Logger.Default.LogException(ex);
+					NicoApiSharp.Logger.Default.LogErrorMessage("Column extention error on " + dataGridView1.Columns[e.ColumnIndex].Name);
+					NicoApiSharp.Logger.Default.LogException(ex);
 					e.Value = "Error";
 				}
 			}

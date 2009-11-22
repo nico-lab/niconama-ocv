@@ -37,7 +37,7 @@ namespace Hal.OpenCommentViewer.Tool
 					_host.ShowStatusMessage("インポートに成功しました。");
 
 				}catch(Exception ex){
-					Logger.Default.LogException(ex);
+					NicoApiSharp.Logger.Default.LogException(ex);
 					_host.ShowStatusMessage("インポートに失敗しました。");
 
 				}
