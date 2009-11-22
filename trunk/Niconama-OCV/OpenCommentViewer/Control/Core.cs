@@ -143,8 +143,8 @@ namespace Hal.OpenCommentViewer.Control
 
 				} catch (Exception ex) {
 					_mainview.ShowFatalMessage(pinfo.ClassName + "の登録に失敗しました。");
-					Logger.Default.LogErrorMessage(pinfo.ClassName + "の登録に失敗しました。");
-					Logger.Default.LogException(ex);
+					NicoApiSharp.Logger.Default.LogErrorMessage(pinfo.ClassName + "の登録に失敗しました。");
+					NicoApiSharp.Logger.Default.LogException(ex);
 				}
 			}
 

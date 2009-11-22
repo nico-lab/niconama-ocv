@@ -34,7 +34,7 @@ namespace Hal.OpenCommentViewer.Tool
 							_host.ShowStatusMessage("エクスポートに成功しました。");
 
 						} catch (Exception ex) {
-							Logger.Default.LogException(ex);
+							NicoApiSharp.Logger.Default.LogException(ex);
 							_host.ShowFaitalMessage("エクスポートに失敗しました。詳しい情報はログファイルを参照してください");
 						}
 					}

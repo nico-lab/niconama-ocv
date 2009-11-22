@@ -33,7 +33,7 @@ namespace Hal.OpenCommentViewer
 				return true;
 
 			} catch (Exception ex) {
-				Logger.Default.LogException(ex);
+				NicoApiSharp.Logger.Default.LogException(ex);
 			}
 
 			return false;
@@ -56,7 +56,7 @@ namespace Hal.OpenCommentViewer
 					return fs.ToString();
 				}
 			} catch (Exception ex) {
-				Logger.Default.LogException(ex);
+				NicoApiSharp.Logger.Default.LogException(ex);
 			}
 
 			return null;
@@ -84,7 +84,7 @@ namespace Hal.OpenCommentViewer
 					}
 
 				} catch (Exception ex) {
-					Logger.Default.LogException(ex);
+					NicoApiSharp.Logger.Default.LogException(ex);
 				}
 
 			}
@@ -142,7 +142,7 @@ namespace Hal.OpenCommentViewer
 				}
 				
 			} catch (Exception ex){
-				Logger.Default.LogException(ex);
+				NicoApiSharp.Logger.Default.LogException(ex);
 				System.Windows.Forms.MessageBox.Show("クリップボードへの貼り付けに失敗しました。このエラーが頻繁に発生する場合は作者まで連絡してください。", "コピーが失敗しました。",
 					System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation);
 			}

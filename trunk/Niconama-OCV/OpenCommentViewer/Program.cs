@@ -33,8 +33,8 @@ namespace Hal.OpenCommentViewer
 			}
 
 			Application.Run(m);
-			if (Logger.Default.HasErrorLog) {
-				Logger.Default.Save("log.txt");
+			if (NicoApiSharp.Logger.Default.HasErrorLog) {
+				NicoApiSharp.Logger.Default.Save("log.txt");
 			}
 		}
 
@@ -45,9 +45,8 @@ namespace Hal.OpenCommentViewer
 		/// <param name="e"></param>
 		static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
 		{
-			Logger.Default.LogException(e.Exception);
-			Logger.Default.Save("ThreadException.txt");
-			Application.Exit();
+			NicoApiSharp.Logger.Default.LogException(e.Exception);
+			NicoApiSharp.Logger.Default.Save("ThreadException.txt");
 		}
 
 		/// <summary>
@@ -59,10 +58,9 @@ namespace Hal.OpenCommentViewer
 		{
 			Exception ex = e.ExceptionObject as Exception;
 			if (ex != null) {
-				Logger.Default.LogException(ex);
-				Logger.Default.Save("UnhandledException.txt");
+				NicoApiSharp.Logger.Default.LogException(ex);
+				NicoApiSharp.Logger.Default.Save("UnhandledException.txt");
 			}
-			Application.Exit();
 		}
 	}
 }
