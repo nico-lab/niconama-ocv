@@ -16,8 +16,8 @@ namespace Hal.NicoApiSharp.Cookie
 		const string CONNECTIONSTRING_FORMAT = "Data Source={0}";
 		public abstract System.Net.Cookie[] GetCookies(Uri url, string key);
 		public abstract System.Net.Cookie[] GetCookies(Uri url, string key, string path);
-		//public abstract System.Net.CookieContainer[] GetCookies(Uri url);
-		//public abstract System.Net.CookieContainer[] GetCookies(Uri url, string path);
+		public abstract System.Net.CookieCollection[] GetCookieCollection(Uri url);
+		public abstract System.Net.CookieCollection[] GetCookieCollection(Uri url, string path);
 
 		/// <summary>
 		/// 指定されたpathにあるSqliteDatabaseに対してQueryを実行して値を取得する

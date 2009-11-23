@@ -16,7 +16,7 @@ namespace Hal.NicoApiSharp.Cookie
 		/// </summary>
 		/// <param name="url"></param>
 		/// <param name="key"></param>
-		/// <returns>1件も取得できなかった場合はnullを返す</returns>
+		/// <returns></returns>
 		System.Net.Cookie[] GetCookies(Uri url, string key);
 
 		/// <summary>
@@ -24,24 +24,24 @@ namespace Hal.NicoApiSharp.Cookie
 		/// </summary>
 		/// <param name="url"></param>
 		/// <param name="key"></param>
-		/// <param name="path">1件も取得できなかった場合はnullを返す</param>
+		/// <param name="path"></param>
 		/// <returns></returns>
 		System.Net.Cookie[] GetCookies(Uri url, string key, string path);
 
 		/// <summary>
-		/// 
+		/// urlに関連付けられたクッキーを取得します。
 		/// </summary>
 		/// <param name="url"></param>
 		/// <returns></returns>
-		//System.Net.CookieContainer[] GetCookies(Uri url);
+		System.Net.CookieCollection[] GetCookieCollection(Uri url);
 
 		/// <summary>
-		/// 
+		/// urlに関連付けられたクッキーを取得します。
 		/// </summary>
 		/// <param name="url"></param>
 		/// <param name="path"></param>
 		/// <returns></returns>
-		//System.Net.CookieContainer[] GetCookies(Uri url, string path);
+		System.Net.CookieCollection[] GetCookieCollection(Uri url, string path);
 
 	}
 }
