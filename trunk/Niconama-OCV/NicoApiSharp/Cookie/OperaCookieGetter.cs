@@ -207,5 +207,20 @@ namespace Hal.NicoApiSharp.Cookie
 			}
 			return n;
 		}
+
+		#region ICookieGetter ÉÅÉìÉo
+
+
+		public System.Net.CookieCollection[] GetCookieCollection(Uri url)
+		{
+			throw new Exception("The method or operation is not implemented.");
+		}
+
+		public System.Net.CookieCollection[] GetCookieCollection(Uri url, string path)
+		{
+			throw new Exception("The method or operation is not implemented.");
+		}
+
+		#endregion
 	}
 }

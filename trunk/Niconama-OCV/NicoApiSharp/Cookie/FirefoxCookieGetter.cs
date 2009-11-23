@@ -158,5 +158,15 @@ namespace Hal.NicoApiSharp.Cookie
 		}
 
 
+
+		public override System.Net.CookieCollection[] GetCookieCollection(Uri url)
+		{
+			throw new Exception("The method or operation is not implemented.");
+		}
+
+		public override System.Net.CookieCollection[] GetCookieCollection(Uri url, string path)
+		{
+			throw new Exception("The method or operation is not implemented.");
+		}
 	}
 }
