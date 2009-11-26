@@ -179,9 +179,18 @@ namespace Hal.OpenCommentViewer.Control
 			}
 		}
 
+		bool __startLock = false;
 		private void startButton_Click(object sender, EventArgs e)
 		{
-			StartLive();
+			if (!__startLock) {
+				__startLock = true;
+				this.Cursor = Cursors.WaitCursor;
+
+				StartLive();
+
+				this.Cursor = Cursors.Default;
+				__startLock = false;
+			}
 		}
 
 		
