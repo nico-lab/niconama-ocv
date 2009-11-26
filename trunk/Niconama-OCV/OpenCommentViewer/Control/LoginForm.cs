@@ -29,7 +29,7 @@ namespace Hal.OpenCommentViewer.Control
 				case Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.IEComponent:
 					radioButton1.Checked = true;
 					break;
-				case Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.IESafeMode:
+				case Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Opera:
 					radioButton2.Checked = true;
 					break;
 				case Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Firefox:
@@ -53,7 +53,7 @@ namespace Hal.OpenCommentViewer.Control
 			if (radioButton1.Checked) {
 				UserSettings.Default.BrowserType = Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.IEComponent;
 			} else if (radioButton2.Checked) {
-				UserSettings.Default.BrowserType = Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.IESafeMode;
+				UserSettings.Default.BrowserType = Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Opera;
 			} else if (radioButton3.Checked) {
 				UserSettings.Default.BrowserType = Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Firefox;
 			} else if (radioButton4.Checked) {

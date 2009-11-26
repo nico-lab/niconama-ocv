@@ -107,8 +107,11 @@ namespace Hal.OpenCommentViewer.Control
 			// VPOSを数値で表示するカラムを追加する
 			_mainview.RegisterColumnExtention(new VposColumnExtention());
 
+			NgColumnExtention ngc = new NgColumnExtention();
+
 			// NGソースを表示するカラムを追加する
-			_mainview.RegisterColumnExtention(new NgColumnExtention());
+			_mainview.RegisterCellFormattingCallback(ngc.OnCellFormatting);
+			_mainview.RegisterColumnExtention(ngc);
 
 			// 主コメをオレンジ色にするフォーマッターを追加する
 			_mainview.RegisterCellFormattingCallback(ColoringOwnerComment);

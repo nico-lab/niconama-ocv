@@ -56,7 +56,7 @@ namespace Hal.OpenCommentViewer
 		{
 			get
 			{
-				string path = _PluginsFolder.Replace("%APPDATA%", this.ApplicationDataFolder);
+				string path = NicoApiSharp.Utility.ReplacePathSymbols(_PluginsFolder);
 
 				if (!System.IO.Directory.Exists(path)) {
 					System.IO.Directory.CreateDirectory(path);
@@ -79,7 +79,7 @@ namespace Hal.OpenCommentViewer
 		{
 			get
 			{
-				string path = _PluginsDataFolder.Replace("%APPDATA%", this.ApplicationDataFolder);
+				string path = NicoApiSharp.Utility.ReplacePathSymbols(_PluginsDataFolder);
 
 				if (!System.IO.Directory.Exists(path)) {
 					System.IO.Directory.CreateDirectory(path);
@@ -102,8 +102,7 @@ namespace Hal.OpenCommentViewer
 		{
 			get
 			{
-				string path = _LiveTicketsFolder.Replace("%APPDATA%", this.ApplicationDataFolder);
-
+				string path = NicoApiSharp.Utility.ReplacePathSymbols(_LiveTicketsFolder); 
 				if (!System.IO.Directory.Exists(path)) {
 					System.IO.Directory.CreateDirectory(path);
 				}
@@ -111,20 +110,6 @@ namespace Hal.OpenCommentViewer
 				return path;
 			}
 		}
-
-		/// <summary>
-		/// アプリケーションデータフォルダー
-		/// </summary>
-		[System.Xml.Serialization.XmlIgnoreAttribute()]
-		public string ApplicationDataFolder
-		{
-			get
-			{
-				return System.Windows.Forms.Application.CommonAppDataPath;
-			}
-		}
-
-
 
 		#region シリアライズ
 

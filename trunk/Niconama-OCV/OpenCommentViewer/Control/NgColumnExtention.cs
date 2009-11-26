@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Hal.OpenCommentViewer.Control
 {
-	class NgColumnExtention : Hal.NCSPlugin.IColumnExtention
+	class NgColumnExtention : Hal.NCSPlugin.IColumnExtention, Hal.NCSPlugin.ICellFormatter
 	{
 		DataGridViewColumn _column = null;
 
@@ -60,5 +60,25 @@ namespace Hal.OpenCommentViewer.Control
 
 		#endregion
 
+
+		#region ICellFormatter メンバ
+
+		public void OnCellFormatting(Hal.NCSPlugin.IChat chat, DataGridViewCellFormattingEventArgs e)
+		{
+			if (e.ColumnIndex == 1) {
+				NCSPlugin.IFilterdChat f = chat as NCSPlugin.IFilterdChat;
+				if (f != null) {
+					if (f.NgType == NCSPlugin.NGType.Word) {
+						e.CellStyle.ForeColor = System.Drawing.Color.Crimson;
+					} else if (f.NgType == NCSPlugin.NGType.Id) {
+						e.CellStyle.ForeColor = System.Drawing.Color.Blue;
+					} else if (f.NgType == NCSPlugin.NGType.Command) {
+						e.CellStyle.ForeColor = System.Drawing.Color.Green;
+					}
+				}
+			}
+		}
+
+		#endregion
 	}
 }
