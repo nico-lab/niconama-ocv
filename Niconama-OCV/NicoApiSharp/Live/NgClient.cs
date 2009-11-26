@@ -211,7 +211,9 @@ namespace Hal.NicoApiSharp.Live
 		private void Parse(XmlNode node)
 		{
 			_source = Utility.Unsanitizing(node["source"].InnerText);
-			_regTime = Utility.UnixTimeToDateTime(int.Parse(node["register_time"].InnerText));
+			if (node["register_time"] != null && !string.IsNullOrEmpty(node["register_time"].InnerText)) {
+				_regTime = Utility.UnixTimeToDateTime(int.Parse(node["register_time"].InnerText));
+			}
 			switch (node["type"].InnerText) {
 				case "word":
 					_type = NGType.Word;

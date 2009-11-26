@@ -10,14 +10,10 @@ namespace Hal.NicoApiSharp.Cookie
 	/// <summary>
 	/// SQLiteを利用してクッキーを保存しているブラウザからクッキーを取得する
 	/// </summary>
-	abstract class SqliteCookieGetter : ICookieGetter
+	static class SqliteManager
 	{
 
 		const string CONNECTIONSTRING_FORMAT = "Data Source={0}";
-		public abstract System.Net.Cookie[] GetCookies(Uri url, string key);
-		public abstract System.Net.Cookie[] GetCookies(Uri url, string key, string path);
-		public abstract System.Net.CookieCollection[] GetCookieCollection(Uri url);
-		public abstract System.Net.CookieCollection[] GetCookieCollection(Uri url, string path);
 
 		/// <summary>
 		/// 指定されたpathにあるSqliteDatabaseに対してQueryを実行して値を取得する
@@ -25,7 +21,7 @@ namespace Hal.NicoApiSharp.Cookie
 		/// <param name="path"></param>
 		/// <param name="query"></param>
 		/// <returns></returns>
-		protected object[] getDatabaseValues(string path, string query)
+		internal static object[] getDatabaseValue(string path, string query)
 		{
 			//string dpstr;
 			try {
@@ -70,6 +66,47 @@ namespace Hal.NicoApiSharp.Cookie
 							result.Add(sdr[i]);
 						}
 					}
+					sqlConnection.Close();
+					return result.ToArray();
+				}
+
+			} catch (Exception ex) {
+				Logger.Default.LogException(ex);
+			}
+
+			return null;
+
+		}
+
+		/// <summary>
+		/// 指定されたpathにあるSqliteDatabaseに対してQueryを実行して値を取得する
+		/// </summary>
+		/// <param name="path"></param>
+		/// <param name="query"></param>
+		/// <returns></returns>
+		internal static object[][] GetDatabaseValues(string path, string query)
+		{
+			try {
+
+				using (SQLiteConnection sqlConnection = new SQLiteConnection(string.Format(CONNECTIONSTRING_FORMAT, path))) {
+					sqlConnection.Open();
+
+					SQLiteCommand command = sqlConnection.CreateCommand();
+					command.Connection = sqlConnection;
+					command.CommandText = query;
+					SQLiteDataReader sdr = command.ExecuteReader();
+					List<object[]> result = new List<object[]>();
+					
+					while (sdr.Read()) {
+						List<object> items = new List<object>();
+						
+						for (int i = 0; i < sdr.FieldCount; i++) {
+							items.Add(sdr[i]);
+						}
+
+						result.Add(items.ToArray());
+					}
+
 					sqlConnection.Close();
 					return result.ToArray();
 				}

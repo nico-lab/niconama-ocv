@@ -47,21 +47,15 @@ namespace Hal.NicoApiSharp.Live
 		private System.Threading.ManualResetEvent _cancelEvent;
 
 		private TcpClient _tcpClient;
+
+		/// <summary>
+		/// 生成元のスレッドと同期を取るためのAsyncOperation
+		/// </summary>
 		protected System.ComponentModel.AsyncOperation _asyncOperation = null;
 
 		#endregion [変数]
 
-
-		#region [処理]
-
-		/// <summary>
-		/// コンストラクタ
-		/// </summary>
-		public ChatClient()
-		{
-			_cancelEvent = new System.Threading.ManualResetEvent(true);
-			_asyncOperation = null;
-		}
+		#region [プロパティ]
 
 		/// <summary>
 		/// サーバーに接続中かどうかを取得します
@@ -100,6 +94,20 @@ namespace Hal.NicoApiSharp.Live
 			}
 		}
 
+		#endregion [プロパティ]
+
+		#region [処理]
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		public ChatClient()
+		{
+			_cancelEvent = new System.Threading.ManualResetEvent(true);
+			_asyncOperation = null;
+		}
+
+		
 		#region 非同期受信
 
 		/// <summary>
@@ -419,6 +427,11 @@ namespace Hal.NicoApiSharp.Live
 			this.ConnectionError(this, (ConnectionErrorEventArgs)obj);
 		}
 
+		
+
+		#endregion [処理]
+
+		#region [宣言]
 		/// <summary>
 		/// サーバーに接続した際に発生するイベントの引数
 		/// </summary>
@@ -495,10 +508,7 @@ namespace Hal.NicoApiSharp.Live
 				WorkingStream = ns;
 			}
 		}
-
-		#endregion [処理]
-
-
+		#endregion
 		
 
 	}

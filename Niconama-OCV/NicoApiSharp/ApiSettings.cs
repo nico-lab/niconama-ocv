@@ -213,6 +213,60 @@ namespace Hal.NicoApiSharp
 
 		#endregion
 
+		#region Cookie
+
+		/// <summary>
+		/// IEのクッキーが保存されているフォルダのパス
+		/// </summary>
+		public string IECookieFolderPath = "%COOKIES%";
+
+		/// <summary>
+		/// GoogleChromeのクッキーが保存されているファイルのパス
+		/// </summary>
+		public string GoogleChromeDatabasePath = "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\cookies";
+
+		/// <summary>
+		/// GoogleChromeからクッキーを取得するためのクエリーのフォーマット
+		/// </summary>
+		public string GoogleChromeKeyQueryFormat = "SELECT value, name, host_key, path, expires_utc FROM cookies where host_key LIKE '%{0}' AND name=='{1}'";
+
+		/// <summary>
+		/// Firefoxのデータが格納されているフォルダー
+		/// </summary>
+		public string FirefoxDataFolder = "%APPDATA%Mozilla\\Firefox\\";
+
+		/// <summary>
+		/// Firefoxのプロファイルが保存されているディレクトリ
+		/// </summary>
+		public string FirefoxProfieFolders = "%APPDATA%\\Mozilla\\Firefox\\Profiles";
+
+		/// <summary>
+		/// Firefoxのプロファイル設定ファイルの名前
+		/// </summary>
+		public string FirefoxProfilesIniFileName = "profiles.ini";
+
+		/// <summary>
+		/// Firefoxのクッキーが保存されているファイルの名前
+		/// </summary>
+		public string FirefoxDatabaseName = "cookies.sqlite";
+
+		/// <summary>
+		/// Firefoxのデータベースロック回避のための退避用ファイル名
+		/// </summary>
+		public string FirefoxTempSqliteFileName = "temp_firefox_cookies.sqlite";
+
+		/// <summary>
+		/// Firefoxからクッキーを取得するためのクエリーのフォーマット
+		/// </summary>
+		public string FirefoxQueryFormat = "SELECT value, name, host, path, expiry FROM moz_cookies WHERE host LIKE '%{0}' AND name LIKE '{1}'";
+
+		/// <summary>
+		/// Operaのクッキーが保存されているファイルへのPath
+		/// </summary>
+		public string OperaCookieFilePath = "%APPDATA%\\Opera\\Opera\\cookies4.dat";
+
+		#endregion
+
 
 		/// <summary>
 		/// 放送主の座席番号
