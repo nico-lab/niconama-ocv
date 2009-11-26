@@ -8,7 +8,7 @@ namespace Hal.NicoApiSharp.Cookie
 	/// <summary>
 	/// Firefoxからクッキーを取得する
 	/// </summary>
-	class FirefoxCookieGetter : SqliteCookieGetter
+	class FirefoxCookieGetter : ICookieGetter
 	{
 
 		/// <summary>
@@ -16,27 +16,19 @@ namespace Hal.NicoApiSharp.Cookie
 		/// </summary>
 		/// <param name="url"></param>
 		/// <param name="key"></param>
-		/// <returns>1件も取得できなかった場合はnullを返す</returns>
-		public override System.Net.Cookie[] GetCookies(Uri url, string key)
+		/// <returns></returns>
+		public System.Net.Cookie[] GetCookies(Uri url, string key)
 		{
 
 			//すべてのプロフィールから取得する
 			List<System.Net.Cookie> cookies = new List<System.Net.Cookie>();
 			foreach (string dir in GetProfileDirs()) {
 				string path = System.IO.Path.Combine(dir, ApiSettings.Default.FirefoxDatabaseName);
-				Logger.Default.LogMessage("Firefox取得 " + path);
-				System.Net.Cookie cookie = GetCookie(url, key, path);
-				if (cookie != null) {
-					Logger.Default.LogMessage("Firefox取得成功");
-					cookies.Add(cookie);
-				}
-			}
-
-			if (cookies.Count != 0) {
-				return cookies.ToArray();
+				System.Net.Cookie[] c = GetCookies(url, key, path);
+				cookies.AddRange(c);
 			}
 			
-			return null;
+			return cookies.ToArray();
 		}
 
 		/// <summary>
@@ -46,52 +38,34 @@ namespace Hal.NicoApiSharp.Cookie
 		/// <param name="key"></param>
 		/// <param name="path"></param>
 		/// <returns></returns>
-		public override System.Net.Cookie[] GetCookies(Uri url, string key, string path)
+		public System.Net.Cookie[] GetCookies(Uri url, string key, string path)
 		{
 			if (path != null && !System.IO.File.Exists(path)) {
 				Logger.Default.LogErrorMessage("クッキー取得：存在しないパス - " + path);
-				return null;
+				return new System.Net.Cookie[0];
 			}
 
-			if (path != null) {
-				//指定されたパスからクッキーを取得する
-				Logger.Default.LogMessage("Firefoxパス指定取得 " + path);
-				System.Net.Cookie cookie = GetCookie(url, key, path);
-				if (cookie != null) {
-					Logger.Default.LogMessage("Firefox取得成功");
-					return new System.Net.Cookie[] { cookie };
-				}
-			}
-
-			return null;
-		}
-
-		private System.Net.Cookie GetCookie(Uri url, string key, string path)
-		{
-			
+			Logger.Default.LogMessage("Firefoxパス指定取得 " + path);
 			string tempdbpath = ApiSettings.Default.FirefoxTempSqliteFileName;
+			List<System.Net.Cookie> list = new List<System.Net.Cookie>();
 			try {
 
 				// FireFox3.5以上からDBがロックされるようになったのでコピーしてこれを回避する
-				System.IO.File.Copy(path, tempdbpath);
-				string query = string.Format(ApiSettings.Default.FirefoxQueryFormat, url, key);
-
-				// SqliteCookieGetterに処理を投げる
-				object[] data = base.getDatabaseValues(tempdbpath, query);
-				if (data != null && data.Length == 5) {
-					System.Net.Cookie cookie = new System.Net.Cookie();
-					cookie.Value = data[0] as string;
-					cookie.Name = data[1] as string;
-					cookie.Domain = data[2] as string;
-					cookie.Path = data[3] as string;
-					try {
-						long exp = (long)data[4];
-						cookie.Expires = Utility.UnixTimeToDateTime((int)exp);
-					} catch {
-						Logger.Default.LogMessage("firefoxのexpires変換に失敗しました");
-					}
-					return cookie;
+				if (System.IO.File.Exists(tempdbpath)) {
+					System.IO.File.Delete(tempdbpath);
 				}
+
+				System.IO.File.Copy(path, tempdbpath);
+				string query = MakeUrlKeyQueryString(url, key);
+
+				object[][] datas = SqliteManager.GetDatabaseValues(tempdbpath, query);
+				
+				foreach (object[] data in datas) {
+					System.Net.Cookie cookie = DataToCookie(data);
+					list.Add(cookie);
+				}
+
+				Logger.Default.LogMessage("Firefox取得成功");
 			} catch (Exception ex) {
 				Logger.Default.LogException(ex);
 			} finally {
@@ -100,7 +74,7 @@ namespace Hal.NicoApiSharp.Cookie
 				}
 			}
 
-			return null;
+			return list.ToArray();
 		}
 
 		/// <summary>
@@ -159,14 +133,132 @@ namespace Hal.NicoApiSharp.Cookie
 
 
 
-		public override System.Net.CookieCollection[] GetCookieCollection(Uri url)
+		public System.Net.CookieCollection[] GetCookieCollection(Uri url)
 		{
-			throw new Exception("The method or operation is not implemented.");
+			List<System.Net.CookieCollection> collectionList = new List<System.Net.CookieCollection>();
+
+			foreach (string dir in GetProfileDirs()) {
+				string path = System.IO.Path.Combine(dir, ApiSettings.Default.FirefoxDatabaseName);
+				collectionList.AddRange(GetCookieCollection(url, path));
+			}
+
+			return collectionList.ToArray();
 		}
 
-		public override System.Net.CookieCollection[] GetCookieCollection(Uri url, string path)
+		public System.Net.CookieCollection[] GetCookieCollection(Uri url, string path)
 		{
-			throw new Exception("The method or operation is not implemented.");
+			string tempdbpath = ApiSettings.Default.FirefoxTempSqliteFileName;
+
+			if (path != null && !System.IO.File.Exists(path)) {
+				Logger.Default.LogErrorMessage("クッキー取得：存在しないパス - " + path);
+				return new System.Net.CookieCollection[0];
+			}
+
+			try {
+
+
+				// FireFox3.5以上からDBがロックされるようになったのでコピーしてこれを回避する
+				System.IO.File.Copy(path, tempdbpath);
+				string query = MakeQueryString(url);
+
+				// SqliteCookieGetterに処理を投げる
+				object[][] datas = SqliteManager.GetDatabaseValues(tempdbpath, query);
+				System.Net.CookieCollection collection = new System.Net.CookieCollection();
+				foreach (object[] data in datas) {
+					System.Net.Cookie cookie = DataToCookie(data);
+					collection.Add(cookie);
+				}
+
+				return new System.Net.CookieCollection[] { collection };
+			
+			} catch (Exception ex) {
+				Logger.Default.LogException(ex);
+			} finally {
+				if (System.IO.File.Exists(tempdbpath)) {
+					System.IO.File.Delete(tempdbpath);
+				}
+			}
+
+
+			return new System.Net.CookieCollection[0];
+		}
+
+		private System.Net.Cookie DataToCookie(object[] data)
+		{
+			System.Net.Cookie cookie = new System.Net.Cookie();
+			cookie.Value = data[0] as string;
+			cookie.Name = data[1] as string;
+			cookie.Domain = data[2] as string;
+			cookie.Path = data[3] as string;
+
+			try {
+				long exp = (long)data[4];
+				cookie.Expires = Utility.UnixTimeToDateTime((int)exp);
+			} catch {
+				Logger.Default.LogMessage("firefoxのexpires変換に失敗しました");
+			}
+			
+			return cookie;
+		}
+
+		private string MakeQueryString(Uri url)
+		{
+			Stack<string> hostStack = new Stack<string>(url.Host.Split('.'));
+			StringBuilder hostBuilder = new StringBuilder('.' + hostStack.Pop());
+			string[] pathes = url.Segments;
+
+			StringBuilder sb = new StringBuilder();
+			sb.Append("SELECT value, name, host, path, expiry FROM moz_cookies WHERE");
+			bool needOr = false;
+			while (hostStack.Count != 0) {
+				if (needOr) {
+					sb.Append(" OR");
+				}
+				
+				if (hostStack.Count != 1) {
+					hostBuilder.Insert(0, '.' + hostStack.Pop());
+					sb.AppendFormat(" host = \"{0}\"", hostBuilder.ToString());
+				} else {
+					hostBuilder.Insert(0, '%' + hostStack.Pop());
+					sb.AppendFormat(" host LIKE \"{0}\"", hostBuilder.ToString());
+				}
+								
+				needOr = true;
+			}
+
+			return sb.ToString();
+		}
+
+		private string MakeUrlKeyQueryString(Uri url, string key)
+		{
+			Stack<string> hostStack = new Stack<string>(url.Host.Split('.'));
+			StringBuilder hostBuilder = new StringBuilder('.' + hostStack.Pop());
+			string[] pathes = url.Segments;
+
+			StringBuilder sb = new StringBuilder();
+			sb.Append("SELECT value, name, host, path, expiry FROM moz_cookies WHERE name = \"");
+			sb.Append(key);
+			sb.Append("\" AND (");
+			bool needOr = false;
+			while (hostStack.Count != 0) {
+				if (needOr) {
+					sb.Append(" OR");
+				}
+
+				if (hostStack.Count != 1) {
+					hostBuilder.Insert(0, '.' + hostStack.Pop());
+					sb.AppendFormat(" host = \"{0}\"", hostBuilder.ToString());
+				} else {
+					hostBuilder.Insert(0, '%' + hostStack.Pop());
+					sb.AppendFormat(" host LIKE \"{0}\"", hostBuilder.ToString());
+				}
+
+				needOr = true;
+			}
+
+			sb.Append(')');
+			return sb.ToString();
+
 		}
 	}
 }

@@ -49,12 +49,13 @@
     <Compile Include="Cookie\FirefoxCookieGetter.cs" />
     <Compile Include="Cookie\ICookieGetter.cs" />
     <Compile Include="Cookie\IEComponentCookieGetter.cs" />
-    <Compile Include="Cookie\IESafeModeCookieGetter.cs" />
+    <Compile Include="Cookie\OperaCookieGetter.cs" />
+    <Compile Include="Cookie\SafariCookieGetter.cs" />
     <Compile Include="Live\FreeExtend.cs" />
     <Compile Include="Live\IChat.cs" />
     <Compile Include="Live\PublishStatus.cs" />
     <Compile Include="LoginManager.cs" />
-    <Compile Include="Cookie\SqliteCookieGetter.cs" />
+    <Compile Include="Cookie\SqliteManager.cs" />
     <Compile Include="ExXMLDocument.cs" />
     <Compile Include="Live\Chat.cs" />
     <Compile Include="Live\ChatClient.cs" />

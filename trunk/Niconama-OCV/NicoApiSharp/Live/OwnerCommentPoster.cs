@@ -18,6 +18,9 @@ namespace Hal.NicoApiSharp.Live
 		Queue<PostData> _queue;
 		bool _cancel = false;
 
+		/// <summary>
+		/// コンストラクタ（非同期的に主米を送信する必要がある際に使用する）
+		/// </summary>
 		public OwnerCommentPoster() {
 			_queue = new Queue<PostData>();
 			_thread = new System.Threading.Thread(ThreadLoop);
@@ -57,21 +60,49 @@ namespace Hal.NicoApiSharp.Live
 			}
 		}
 
+		/// <summary>
+		/// 非同期的に運営コメントを投稿する
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <param name="message"></param>
+		/// <param name="command"></param>
+		/// <param name="name"></param>
+		/// <param name="cookies"></param>
 		public void PostAsync(string liveId, string message, string command, string name, CookieContainer cookies)
 		{ 
 			AddTask(new PostData(liveId, message, command, name, cookies));
 		}
 
+		/// <summary>
+		/// 非同期的に運営コメントを投稿する
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <param name="message"></param>
+		/// <param name="command"></param>
+		/// <param name="name"></param>
 		public void PostAsync(string liveId, string message, string command, string name)
 		{
 			AddTask(new PostData(liveId, message, command, name, null));
 		}
 
+		/// <summary>
+		/// 非同期的に運営コメントを投稿する
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <param name="message"></param>
+		/// <param name="command"></param>
+		/// <param name="cookies"></param>
 		public void PostAsync(string liveId, string message, string command, CookieContainer cookies)
 		{
 			AddTask(new PostData(liveId, message, command, null, cookies));
 		}
 
+		/// <summary>
+		/// 非同期的に運営コメントを投稿する
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <param name="message"></param>
+		/// <param name="command"></param>
 		public void PostAsync(string liveId, string message, string command)
 		{
 			AddTask(new PostData(liveId, message, command, null, null));
@@ -80,12 +111,14 @@ namespace Hal.NicoApiSharp.Live
 
 		#region IDisposable メンバ
 
+		/// <summary>
+		/// 現在のタスクを中断し、たまっているタスクを破棄する
+		/// </summary>
 		public void Dispose()
 		{
 			_cancel = true;
 			_manualResetEvent.Set();
 			if (_thread.IsAlive) {
-				_thread.Abort();
 				_thread.Join();
 			}
 			_manualResetEvent.Close();

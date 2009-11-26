@@ -20,30 +20,49 @@ namespace Hal.NicoApiSharp
 		/// <returns>é∏îsÇµÇΩèÍçáÇÕnullÇ™ï‘Ç≥ÇÍÇÈ</returns>
 		public static AccountInfomation Login(CookieGetter.BROWSER_TYPE browserType, string cookieFilePath)
 		{
-			string[] userSessions = CookieGetter.GetCookies("nicovideo.jp", "user_session", browserType, cookieFilePath);
+			ICookieGetter cookieGetter = CookieGetter.GetInstance(browserType);
+			System.Net.Cookie[] cookies;
 
-			if (userSessions == null) {
+			if(!string.IsNullOrEmpty(cookieFilePath)){
+				cookies = cookieGetter.GetCookies(new Uri("http://www.nicovideo.jp/"), "user_session", cookieFilePath);
+			}else{
+				cookies = cookieGetter.GetCookies(new Uri("http://www.nicovideo.jp/"), "user_session");
+			}
+
+			if (cookies == null || cookies.Length == 0) {
 				Logger.Default.LogMessage(string.Format("Login not found: type-{0}", browserType.ToString()));
 				return null;
 			}
 
-			Logger.Default.LogMessage(string.Format("Login: type-{0}, cookies-{1}", browserType.ToString(), userSessions.Length));
+			List<System.Net.Cookie> cookieList = new List<System.Net.Cookie>(cookies);
+			cookieList.Sort(CompareCookieExpires);
 
-			foreach (string session in userSessions) {
+			Logger.Default.LogMessage(string.Format("Found Cookies: type-{0}, cookies-{1}", browserType.ToString(), cookieList.Count));
+			foreach (System.Net.Cookie cookie in cookieList) {
+				
+		
+				System.Net.CookieContainer container = new System.Net.CookieContainer();
+				container.Add(cookie);
 
-				System.Net.Cookie cuid = new System.Net.Cookie("user_session", session, "/", ".nicovideo.jp");
-				System.Net.CookieContainer cookies = new System.Net.CookieContainer();
-				cookies.Add(cuid);
-
-				AccountInfomation accountInfomation = NicoApiSharp.AccountInfomation.GetMyAccountInfomation(cookies);
+				AccountInfomation accountInfomation = NicoApiSharp.AccountInfomation.GetMyAccountInfomation(container);
 				if (accountInfomation != null) {
-					DefaultCookies = cookies;
+					DefaultCookies = container;
 					return accountInfomation;
 				} 
 			}
 
 			return null;
 
+		}
+
+		private static int CompareCookieExpires(System.Net.Cookie a, System.Net.Cookie b) { 
+			if (a == null) {
+				return -1;
+			}
+			if (b == null) {
+				return 1;
+			}
+			return -a.Expires.CompareTo(b.Expires);
 		}
 
 		/// <summary>

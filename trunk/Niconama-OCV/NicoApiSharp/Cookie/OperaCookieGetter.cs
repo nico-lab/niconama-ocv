@@ -9,7 +9,7 @@ namespace Hal.NicoApiSharp.Cookie
 	{
 		const byte MSB = 0x80;
 
-		private struct header
+		private struct Header
 		{
 			public int file_version_number;
 			public int app_version_number;
@@ -17,7 +17,7 @@ namespace Hal.NicoApiSharp.Cookie
 			public int length_length;
 		}
 
-		private struct record
+		private struct Record
 		{
 			// application specific tag to identify content type
 			public int tag_id;
@@ -45,11 +45,10 @@ namespace Hal.NicoApiSharp.Cookie
 				using(FileStream reader = new FileStream(filePath, FileMode.Open, FileAccess.Read)){
 					// 指定したアドレスに読み込み位置を移動
 					reader.Seek(0, SeekOrigin.Begin);
-					header headerData = getHeader(reader);
-					record recordData;
+					Header headerData = getHeader(reader);
+					Record recordData;
 					Stack<string> domainStack = new Stack<string>();
 					Stack<string> pathStack = new Stack<string>();
-
 					
 					//version check
 					if ((headerData.file_version_number & 0xfffff000) == 0x00001000) {
@@ -70,12 +69,10 @@ namespace Hal.NicoApiSharp.Cookie
 					                }
 					                break;
 					            case 0x03:  // クッキー
-					                string curl = string.Join(".", domainStack.ToArray());
-					                if (pathStack.Count != 0) {
-					                    curl += '/' + string.Join("/", pathStack.ToArray());
-					                }
+					                string chost = string.Join(".", domainStack.ToArray());
+									string cpath = '/' + string.Join("/", pathStack.ToArray());
 
-					                if (curl.EndsWith(url.OriginalString)) {
+									if (url.Host.EndsWith(chost) && url.AbsolutePath.StartsWith(cpath)) {
 					                    System.Net.Cookie cookie = getCookieRecode(new System.IO.MemoryStream(recordData.bytepayload), headerData);
 					                    if (key.Equals(cookie.Name)) {
 											cookie.Domain = '.' + string.Join(".", domainStack.ToArray());
@@ -86,7 +83,9 @@ namespace Hal.NicoApiSharp.Cookie
 
 					                break;
 								case 0x04 + MSB: //ドメイン終了
-									domainStack.Pop();
+									if (0 < domainStack.Count) {
+										domainStack.Pop();
+									}
 									break;
 								case 0x05 + MSB: //パス終了
 									if (0 < pathStack.Count) {
@@ -110,9 +109,9 @@ namespace Hal.NicoApiSharp.Cookie
 			
 		}
 
-		private string getDomainRecode(System.IO.Stream stream, header headerData)
+		private string getDomainRecode(System.IO.Stream stream, Header headerData)
 		{
-			record recordData;
+			Record recordData;
 
 			while ( stream.Position < stream.Length ) {
 				recordData = getRecord(stream, headerData);
@@ -126,9 +125,9 @@ namespace Hal.NicoApiSharp.Cookie
 			return null;
 		}
 
-		private string getPageRecode(System.IO.Stream stream, header headerData)
+		private string getPageRecode(System.IO.Stream stream, Header headerData)
 		{
-			record recordData;
+			Record recordData;
 
 			while (stream.Position < stream.Length) {
 				recordData = getRecord(stream, headerData);
@@ -142,9 +141,9 @@ namespace Hal.NicoApiSharp.Cookie
 			return null;
 		}
 
-		private System.Net.Cookie getCookieRecode(System.IO.Stream stream, header headerData)
+		private System.Net.Cookie getCookieRecode(System.IO.Stream stream, Header headerData)
 		{
-			record recordData;
+			Record recordData;
 			System.Net.Cookie cookie = new System.Net.Cookie();
 
 			while (stream.Position < stream.Length) {
@@ -168,9 +167,9 @@ namespace Hal.NicoApiSharp.Cookie
 			return cookie;
 		}
 
-		private header getHeader(System.IO.Stream stream)
+		private Header getHeader(System.IO.Stream stream)
 		{
-			header headerData = new header();
+			Header headerData = new Header();
 
 			headerData.file_version_number = (int)getNumber(stream, 4);
 			headerData.app_version_number = (int)getNumber(stream, 4);
@@ -180,9 +179,9 @@ namespace Hal.NicoApiSharp.Cookie
 			return headerData;
 		}
 
-		private record getRecord(System.IO.Stream stream, header headerData)
+		private Record getRecord(System.IO.Stream stream, Header headerData)
 		{
-			record recordData = new record();
+			Record recordData = new Record();
 			int topData = stream.ReadByte();
 			stream.Seek(-1, SeekOrigin.Current);
 			recordData.tag_id = (int)getNumber(stream, headerData.idtag_length);

@@ -236,6 +236,18 @@ namespace Hal.NicoApiSharp
 			return (int)t.TotalSeconds;
 		}
 
+		/// <summary>
+		/// %APPDATA%などを実際のパスに変換する
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
+		public static string ReplacePathSymbols(string path) {
+			path = path.Replace("%APPDATA%", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+			path = path.Replace("%LOCALAPPDATA%", Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+			path = path.Replace("%COOKIES%", Environment.GetFolderPath(Environment.SpecialFolder.Cookies));
+			return path;
+		}
+
 		#region XML操作
 
 		/// <summary>
