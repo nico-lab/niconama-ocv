@@ -8,10 +8,10 @@ namespace Hal.OpenCommentViewer.Control
 	/// <summary>
 	/// コメントサーバーに再接続するためのデータを格納するためのクラス
 	/// </summary>
-	public class LiveTicket : NicoApiSharp.Live.ILiveBasicStatus, NicoApiSharp.Live.IMessageServerStatus, NicoApiSharp.Live.ILiveDescription
+	public class LiveTicket : NicoApiSharp.Streaming.IBasicStatus, NicoApiSharp.Streaming.IMessageServerStatus, NicoApiSharp.Streaming.IDescription
 	{
 
-		string _liveId;
+		string _id;
 		string _communityId;
 		DateTime _startTime;
 		DateTime _localStartTime;
@@ -19,9 +19,10 @@ namespace Hal.OpenCommentViewer.Control
 		string _address;
 		int _port;
 		int _thread;
-		string _liveName;
+		string _title;
 		string _communityName;
 		string _caster;
+		string _description;
 
 		/// <summary>
 		/// デフォルトコンストラクタ
@@ -37,9 +38,9 @@ namespace Hal.OpenCommentViewer.Control
 		/// <param name="basicStatus"></param>
 		/// <param name="messageStatus"></param>
 		/// <param name="liveDescription"></param>
-		public LiveTicket(NicoApiSharp.Live.ILiveBasicStatus basicStatus, NicoApiSharp.Live.IMessageServerStatus messageStatus, NicoApiSharp.Live.ILiveDescription liveDescription)
+		public LiveTicket(NicoApiSharp.Streaming.IBasicStatus basicStatus, NicoApiSharp.Streaming.IMessageServerStatus messageStatus, NicoApiSharp.Streaming.IDescription description)
 		{
-			this._liveId = basicStatus.LiveId;
+			this._id = basicStatus.Id;
 			this._communityId = basicStatus.CommunityId;
 			this._startTime = basicStatus.StartTime;
 			this._localStartTime = basicStatus.LocalStartTime;
@@ -47,9 +48,10 @@ namespace Hal.OpenCommentViewer.Control
 			this._address = messageStatus.Address;
 			this._port = messageStatus.Port;
 			this._thread = messageStatus.Thread;
-			this._liveName = liveDescription.LiveName;
-			this._communityName = liveDescription.CommunityName;
-			this._caster = liveDescription.Caster;
+			this._title = description.Title;
+			this._communityName = description.CommunityName;
+			this._caster = description.Caster;
+			this._description = description.Description;
 		}
 
 		#region ILiveBasicStatus メンバ
@@ -57,10 +59,10 @@ namespace Hal.OpenCommentViewer.Control
 		/// <summary>
 		/// 放送IDを取得、設定します
 		/// </summary>
-		public string LiveId
+		public string Id
 		{
-			get { return _liveId; }
-			set { _liveId = value; }
+			get { return _id; }
+			set { _id = value; }
 		}
 
 		/// <summary>
@@ -137,10 +139,10 @@ namespace Hal.OpenCommentViewer.Control
 		/// <summary>
 		/// 番組名を取得、設定します
 		/// </summary>
-		public string LiveName
+		public string Title
 		{
-			get { return _liveName; }
-			set { _liveName = value; }
+			get { return _title; }
+			set { _title = value; }
 		}
 
 		/// <summary>
@@ -159,6 +161,14 @@ namespace Hal.OpenCommentViewer.Control
 		{
 			get { return _caster; }
 			set { _caster = value; }
+		}
+
+		/// <summary>
+		/// 放送の詳細
+		/// </summary>
+		public string Description {
+			get { return _description; }
+			set { _description = value; }
 		}
 
 		#endregion

@@ -15,7 +15,7 @@ namespace Hal.OpenCommentViewer
 		/// <summary>
 		/// 最後に接続した放送ID
 		/// </summary>
-		public string LastAccessLiveId = "";
+		public string LastAccessId = "";
 		public List<ColumnStatus> ColumnStates = new List<ColumnStatus>();
 
 		public bool ShowAccountForm = true;

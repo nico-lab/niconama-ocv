@@ -66,12 +66,12 @@ namespace Hal.NCSPlugin
 		/// <summary>
 		/// 放送IDを取得します
 		/// </summary>
-		string LiveId { get;}
+		string Id { get;}
 
 		/// <summary>
 		/// 放送名を取得します
 		/// </summary>
-		string LiveName { get;}
+		string Title { get;}
 
 		/// <summary>
 		/// コミュニティIDを取得します
@@ -94,10 +94,6 @@ namespace Hal.NCSPlugin
 		DateTime ServerStartTime { get; }
 
 		#endregion
-
-
-		
-
 
 		#region 操作
 
@@ -179,9 +175,6 @@ namespace Hal.NCSPlugin
 		IChat GetSelectedChat();
 
 		#endregion
-
-		
-
 
 		#region フォーム操作
 

@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Xml;
 
-namespace Hal.NicoApiSharp.Live
+namespace Hal.NicoApiSharp.Streaming
 {
 
 	/// <summary>

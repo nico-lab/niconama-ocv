@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Hal.NicoApiSharp.Live
+namespace Hal.NicoApiSharp.Streaming.Live
 {
 
 	/// <summary>
 	/// 放送にアクセスするための情報を取得する
 	/// 情報はXMLDocumentとして保持され、適時読みだす
 	/// </summary>
-	public class PlayerStatus : ILiveBasicStatus, IMessageServerStatus, ILiveWatcherStatus, ILiveCountStatus, IErrorData
+	public class PlayerStatus : IBasicStatus, IMessageServerStatus, IWatcherStatus, ICountStatus, IErrorData
 	{
 
 		System.Xml.XmlNode _xnode = null;
@@ -89,7 +89,7 @@ namespace Hal.NicoApiSharp.Live
 		/// <summary>
 		/// 放送IDを取得する
 		/// </summary>
-		public string LiveId
+		public string Id
 		{
 			get { return Utility.SelectString(_xnode, "getplayerstatus/stream/id"); }
 		}

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Hal.NicoApiSharp.Live
+namespace Hal.NicoApiSharp.Streaming
 {
 
 	/// <summary>
 	/// 放送を視聴する人の情報
 	/// </summary>
-	public interface ILiveWatcherStatus : IAccountInfomation
+	public interface IWatcherStatus : IAccountInfomation
 	{
 		/// <summary>
 		/// 座席名を取得する

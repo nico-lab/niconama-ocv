@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
-using Hal.NicoApiSharp.Live;
+using Hal.NicoApiSharp.Streaming;
 
 using Regex = System.Text.RegularExpressions.Regex;
 using Match = System.Text.RegularExpressions.Match;
@@ -34,8 +33,8 @@ namespace Hal.OpenCommentViewer.Control
 		public void Initialize(ICore core)
 		{
 			this.ClearFilter();
-			if (!string.IsNullOrEmpty(core.LiveId)) {
-				NgClient[] clients = NgClient.GetNgClients(core.LiveId);
+			if (!string.IsNullOrEmpty(core.Id)) {
+				NgClient[] clients = NgClient.GetNgClients(core.Id);
 				if (clients != null && clients.Length != 0) {
 
 					BuildRegex(clients);
@@ -129,7 +128,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// 主米によるNG操作を実行する
 		/// </summary>
 		/// <param name="chat"></param>
-		private void OperateNgCommand(IChat chat)
+		private void OperateNgCommand(Hal.NicoApiSharp.IChat chat)
 		{
 
 			Match mat = Regex.Match(chat.Message, "^/ng(?<op>add|del) (?<type>[\\S]+) \"(?<src>[^\"]+)\"");
@@ -158,7 +157,7 @@ namespace Hal.OpenCommentViewer.Control
 		private void AddNg(NGType type, string src)
 		{
 
-			AddNg(new NicoApiSharp.Live.NgClient(type, src, DateTime.Now));
+			AddNg(new NgClient(type, src, DateTime.Now));
 
 		}
 
@@ -166,7 +165,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// NGを追加する
 		/// </summary>
 		/// <param name="ng"></param>
-		private void AddNg(Hal.NicoApiSharp.Live.NgClient client)
+		private void AddNg(NgClient client)
 		{
 			_clients.Add(client);
 
@@ -204,14 +203,14 @@ namespace Hal.OpenCommentViewer.Control
 		/// <param name="src"></param>
 		private void DelNg(NGType type, string src)
 		{
-			DelNg(new NicoApiSharp.Live.NgClient(type, src, DateTime.Now));
+			DelNg(new NgClient(type, src, DateTime.Now));
 		}
 
 		/// <summary>
 		/// NGを削除する
 		/// </summary>
 		/// <param name="ng"></param>
-		private void DelNg(Hal.NicoApiSharp.Live.NgClient ng)
+		private void DelNg(NgClient ng)
 		{
 			if (_clients.Contains(ng)) {
 				_clients.Remove(ng);
@@ -224,7 +223,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// <summary>
 		/// NGフィルターを構築する
 		/// </summary>
-		private void BuildRegex(Hal.NicoApiSharp.Live.NgClient[] clients)
+		private void BuildRegex(NgClient[] clients)
 		{
 			ClearFilter();
 			_clients.AddRange(clients);

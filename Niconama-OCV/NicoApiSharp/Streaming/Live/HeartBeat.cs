@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Hal.NicoApiSharp.Live
+namespace Hal.NicoApiSharp.Streaming.Live
 {
 	/// <summary>
 	/// ハートビートを取得する
 	/// </summary>
-	public class HeartBeat : ILiveCountStatus, IErrorData
+	public class HeartBeat : ICountStatus, IErrorData
 	{
 		System.Xml.XmlNode _xnode;
 

@@ -13,22 +13,22 @@ namespace Hal.OpenCommentViewer.Control
 		/// <summary>
 		/// 番組の基本情報
 		/// </summary>
-		protected NicoApiSharp.Live.ILiveBasicStatus _liveBasicStatus = null;
+		protected NicoApiSharp.Streaming.IBasicStatus _basicStatus = null;
 
 		/// <summary>
 		/// メッセージサーバー接続用の情報
 		/// </summary>
-		protected NicoApiSharp.Live.IMessageServerStatus _messageServerStatus = null;
+		protected NicoApiSharp.Streaming.IMessageServerStatus _messageServerStatus = null;
 
 		/// <summary>
 		/// 視聴者に関する情報
 		/// </summary>
-		protected NicoApiSharp.Live.ILiveWatcherStatus _liveWatcherStatus = null;
+		protected NicoApiSharp.Streaming.IWatcherStatus _watcherStatus = null;
 
 		/// <summary>
 		/// 放送の詳細情報
 		/// </summary>
-		protected NicoApiSharp.Live.ILiveDescription _liveDescription = null;
+		protected NicoApiSharp.Streaming.IDescription _description = null;
 
 		/// <summary>
 		/// アカウント情報
@@ -41,9 +41,9 @@ namespace Hal.OpenCommentViewer.Control
 		protected SeetType _seetType = SeetType.Arena;
 
 		string _reservedId = null;
-		NicoApiSharp.Live.ChatReceiver _chatReceiver;
+		NicoApiSharp.Streaming.ChatReceiver _chatReceiver;
 		NgChecker _ngChecker;
-		NicoApiSharp.Live.OwnerCommentPoster _ownerCommentPoster;
+		NicoApiSharp.Streaming.Live.OwnerCommentPoster _ownerCommentPoster;
 		protected List<Hal.NCSPlugin.IPlugin> _plugins = null;
 
 		/// <summary>
@@ -52,11 +52,11 @@ namespace Hal.OpenCommentViewer.Control
 		public Core()
 		{
 			_chats = new List<OcvChat>();
-			_chatReceiver = new NicoApiSharp.Live.ChatReceiver();
-			_chatReceiver.ConnectServer += new EventHandler<NicoApiSharp.Live.ChatReceiver.ConnectServerEventArgs>(OnStartLive);
-			_chatReceiver.ReceiveChat += new EventHandler<NicoApiSharp.Live.ChatReceiver.ChatReceiveEventArgs>(OnReceivedChat);
+			_chatReceiver = new NicoApiSharp.Streaming.ChatReceiver();
+			_chatReceiver.ConnectServer += new EventHandler<NicoApiSharp.Streaming.ChatReceiver.ConnectServerEventArgs>(OnStartLive);
+			_chatReceiver.ReceiveChat += new EventHandler<NicoApiSharp.Streaming.ChatReceiver.ChatReceiveEventArgs>(OnReceivedChat);
 			_chatReceiver.DisconnectServer += new EventHandler(OnDisconnectServer);
-			_ownerCommentPoster = new Hal.NicoApiSharp.Live.OwnerCommentPoster();
+			_ownerCommentPoster = new Hal.NicoApiSharp.Streaming.Live.OwnerCommentPoster();
 
 			_ngChecker = new NgChecker();
 			_ngChecker.Initialize(this);
@@ -183,17 +183,17 @@ namespace Hal.OpenCommentViewer.Control
 				return false;
 			}
 
-			NicoApiSharp.Live.PlayerStatus playerStatus = NicoApiSharp.Live.PlayerStatus.GetInstance(liveId);
+			NicoApiSharp.Streaming.Live.PlayerStatus playerStatus = NicoApiSharp.Streaming.Live.PlayerStatus.GetInstance(liveId);
 
 			if (playerStatus != null) {
 				if (!playerStatus.HasError) {
-					_liveBasicStatus = playerStatus;
-					_liveWatcherStatus = playerStatus;
+					_basicStatus = playerStatus;
+					_watcherStatus = playerStatus;
 					_messageServerStatus = playerStatus;
-					_liveDescription = NicoApiSharp.Live.LiveDescription.GetInstance(liveId);
-					_seetType = _liveBasicStatus.RoomLabel != "立ち見席" ? SeetType.Arena : SeetType.Standing;
+					_description = NicoApiSharp.Streaming.Live.LiveDescription.GetInstance(liveId);
+					_seetType = _basicStatus.RoomLabel != "立ち見席" ? SeetType.Arena : SeetType.Standing;
 
-					return ConnectServer(_accountInfomation, _liveDescription, _messageServerStatus);
+					return ConnectServer(_accountInfomation, _description, _messageServerStatus);
 				} else {
 					_mainview.ShowFatalMessage(playerStatus.ErrorMessage);
 				}
@@ -214,17 +214,17 @@ namespace Hal.OpenCommentViewer.Control
 				return false;
 			}
 
-			NicoApiSharp.Jk.GetFlv flvInfo = NicoApiSharp.Jk.GetFlv.GetInstance(jikkyoId);
+			NicoApiSharp.Streaming.Jikkyo.GetFlv flvInfo = NicoApiSharp.Streaming.Jikkyo.GetFlv.GetInstance(jikkyoId);
 
 			if (flvInfo != null) {
 				if (!flvInfo.HasError) {
-					_liveBasicStatus = flvInfo;
-					_liveWatcherStatus = null;
+					_basicStatus = flvInfo;
+					_watcherStatus = null;
 					_messageServerStatus = flvInfo;
-					_liveDescription = NicoApiSharp.Jk.JikkyoDescription.GetInstance(jikkyoId);
+					_description = NicoApiSharp.Streaming.Jikkyo.JikkyoDescription.GetInstance(jikkyoId);
 					_seetType = SeetType.Jikkyo;
 
-					return ConnectServer(_accountInfomation, _liveDescription, _messageServerStatus);
+					return ConnectServer(_accountInfomation, _description, _messageServerStatus);
 				} else {
 					_mainview.ShowFatalMessage(flvInfo.ErrorMessage);
 				}
@@ -240,7 +240,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// <param name="liveDescription">放送の詳細情報</param>
 		/// <param name="messageServerStatus">メッセージサーバにアクセスするための情報</param>
 		/// <returns>接続に成功したか</returns>
-		protected bool ConnectServer(NicoApiSharp.IAccountInfomation accountInfomation, NicoApiSharp.Live.ILiveDescription liveDescription, NicoApiSharp.Live.IMessageServerStatus messageServerStatus)
+		protected bool ConnectServer(NicoApiSharp.IAccountInfomation accountInfomation, NicoApiSharp.Streaming.IDescription description, NicoApiSharp.Streaming.IMessageServerStatus messageServerStatus)
 		{
 
 			if (accountInfomation == null) {
@@ -253,12 +253,12 @@ namespace Hal.OpenCommentViewer.Control
 			_chats.Clear();
 			_ngChecker.Initialize(this);
 
-			UserSettings.Default.LastAccessLiveId = liveDescription.LiveId;
+			UserSettings.Default.LastAccessId = description.Id;
 			UserSettings.Default.Save();
 
-			NicoApiSharp.Live.Chat[] chats = NicoApiSharp.Live.ChatReceiver.ReceiveAllLog(messageServerStatus,  accountInfomation.UserId);
+			NicoApiSharp.Chat[] chats = NicoApiSharp.Streaming.ChatReceiver.ReceiveAllLog(messageServerStatus,  accountInfomation.UserId);
 			if (chats != null) {
-				foreach (NicoApiSharp.Live.Chat chat in chats) {
+				foreach (NicoApiSharp.Chat chat in chats) {
 					_chats.Add(new OcvChat(chat));
 				}
 
@@ -318,7 +318,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// </summary>
 		/// <param name="messageServerStatus"></param>
 		/// <returns></returns>
-		public bool GetLogComment(NicoApiSharp.Live.IMessageServerStatus messageServerStatus)
+		public bool GetLogComment(NicoApiSharp.Streaming.IMessageServerStatus messageServerStatus)
 		{
 			if (messageServerStatus != null) {
 
@@ -335,8 +335,8 @@ namespace Hal.OpenCommentViewer.Control
 				_messageServerStatus = messageServerStatus;
 
 
-				NicoApiSharp.Live.Chat[] chats = NicoApiSharp.Live.ChatReceiver.ReceiveAllLog(_messageServerStatus, _accountInfomation.UserId);
-				foreach (NicoApiSharp.Live.Chat chat in chats) {
+				NicoApiSharp.Chat[] chats = NicoApiSharp.Streaming.ChatReceiver.ReceiveAllLog(_messageServerStatus, _accountInfomation.UserId);
+				foreach (NicoApiSharp.Chat chat in chats) {
 					_chats.Add(new OcvChat(chat));
 				}
 
@@ -359,9 +359,9 @@ namespace Hal.OpenCommentViewer.Control
 		public bool ConnectByLiveTicket(LiveTicket ticket)
 		{
 			if (ticket != null) {
-				_liveBasicStatus = ticket;
+				_basicStatus = ticket;
 				_messageServerStatus = ticket;
-				_liveDescription = ticket;
+				_description = ticket;
 				_seetType = ticket.RoomLabel != "立ち見席" ? SeetType.Arena : SeetType.Standing;
 
 				return ConnectServer(_accountInfomation, ticket, ticket);
@@ -378,8 +378,8 @@ namespace Hal.OpenCommentViewer.Control
 		/// <returns></returns>
 		public Control.LiveTicket GetLiveTicket()
 		{
-			if (_liveBasicStatus != null && _liveDescription != null && _messageServerStatus != null) {
-				return new LiveTicket(_liveBasicStatus, _messageServerStatus, _liveDescription);
+			if (_basicStatus != null && _description != null && _messageServerStatus != null) {
+				return new LiveTicket(_basicStatus, _messageServerStatus, _description);
 			}
 
 			return null;
@@ -415,7 +415,7 @@ namespace Hal.OpenCommentViewer.Control
 		public virtual void CallTestMethod()
 		{
 			for (int i = 0; i < 10; i++) {
-				_ownerCommentPoster.PostAsync(this.LiveId, "test" + i.ToString(), "red", "★運営偽号");
+				_ownerCommentPoster.PostAsync(this.Id, "test" + i.ToString(), "red", "★運営偽号");
 			}
 
 			
@@ -449,7 +449,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		protected virtual void OnStartLive(object sender, NicoApiSharp.Live.ChatReceiver.ConnectServerEventArgs e)
+		protected virtual void OnStartLive(object sender, NicoApiSharp.Streaming.ChatReceiver.ConnectServerEventArgs e)
 		{
 			if (_mainview != null) {
 				_mainview.ShowStatusMessage("メッセージサーバーに接続しました");
@@ -462,13 +462,13 @@ namespace Hal.OpenCommentViewer.Control
 
 				// プラグインに通知
 				foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
-					plugin.OnLiveStart(this.LiveId, this.ServerStartTime, _chats.Count);
+					plugin.OnLiveStart(this.Id, this.ServerStartTime, _chats.Count);
 				}
 
 				// デバッグ用にチケットをすべて保存する
 				LiveTicket log = GetLiveTicket();
 				if (log != null) {
-					string fileName = log.LiveId + (_seetType == SeetType.Arena ? "Arena" : "Standing") + ".xml";
+					string fileName = log.Id + (_seetType == SeetType.Arena ? "Arena" : "Standing") + ".xml";
 					string path = System.IO.Path.Combine(ApplicationSettings.Default.LiveTicketsFolder, fileName);
 					Utility.Serialize(path, log, typeof(LiveTicket));
 				}
@@ -481,7 +481,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		protected virtual void OnReceivedChat(object sender, NicoApiSharp.Live.ChatReceiver.ChatReceiveEventArgs e)
+		protected virtual void OnReceivedChat(object sender, NicoApiSharp.Streaming.ChatReceiver.ChatReceiveEventArgs e)
 		{
 			if (_mainview != null) {
 				OcvChat ochat = new OcvChat(e.Chat);
@@ -542,12 +542,12 @@ namespace Hal.OpenCommentViewer.Control
 
 		public bool IsOwner
 		{
-			get { return this._liveWatcherStatus != null && this._liveWatcherStatus.IsOwner; }
+			get { return this._watcherStatus != null && this._watcherStatus.IsOwner; }
 		}
 
 		public bool IsPremium
 		{
-			get { return this._liveWatcherStatus != null && this._liveWatcherStatus.IsPremium; }
+			get { return this._watcherStatus != null && this._watcherStatus.IsPremium; }
 		}
 
 		Hal.NCSPlugin.IChat[] __chatsCache = null;
@@ -563,24 +563,24 @@ namespace Hal.OpenCommentViewer.Control
 			}
 		}
 
-		public string LiveId
+		public string Id
 		{
 			get
 			{
-				if (_liveBasicStatus != null) {
-					return _liveBasicStatus.LiveId;
+				if (_basicStatus != null) {
+					return _basicStatus.Id;
 				} else {
 					return null;
 				}
 			}
 		}
 
-		public string LiveName
+		public string Title
 		{
 			get
 			{
-				if (_liveDescription != null) {
-					return _liveDescription.LiveName;
+				if (_description != null) {
+					return _description.Title;
 				} else {
 					return null;
 				}
@@ -591,8 +591,8 @@ namespace Hal.OpenCommentViewer.Control
 		{
 			get
 			{
-				if (_liveDescription != null) {
-					return _liveDescription.CommunityId;
+				if (_description != null) {
+					return _description.CommunityId;
 				} else {
 					return null;
 				}
@@ -603,8 +603,8 @@ namespace Hal.OpenCommentViewer.Control
 		{
 			get
 			{
-				if (_liveDescription != null) {
-					return _liveDescription.CommunityName;
+				if (_description != null) {
+					return _description.CommunityName;
 				} else {
 					return null;
 				}
@@ -615,8 +615,8 @@ namespace Hal.OpenCommentViewer.Control
 		{
 			get
 			{
-				if (_liveBasicStatus != null) {
-					return _liveBasicStatus.LocalStartTime;
+				if (_basicStatus != null) {
+					return _basicStatus.LocalStartTime;
 				} else {
 					return new DateTime();
 				}
@@ -627,8 +627,8 @@ namespace Hal.OpenCommentViewer.Control
 		{
 			get
 			{
-				if (_liveBasicStatus != null) {
-					return _liveBasicStatus.StartTime;
+				if (_basicStatus != null) {
+					return _basicStatus.StartTime;
 				} else {
 					return new DateTime();
 				}
@@ -673,8 +673,8 @@ namespace Hal.OpenCommentViewer.Control
 		public bool PostOwnerComment(string message, string command)
 		{
 			if (this.CanPostOwnerComment) {
-				if (_liveBasicStatus != null && !string.IsNullOrEmpty(message) && command != null) {
-					_ownerCommentPoster.PostAsync(_liveBasicStatus.LiveId, message, command);
+				if (_basicStatus != null && !string.IsNullOrEmpty(message) && command != null) {
+					_ownerCommentPoster.PostAsync(_basicStatus.Id, message, command);
 					return true;
 				}
 			}
@@ -686,8 +686,8 @@ namespace Hal.OpenCommentViewer.Control
 		public bool PostOwnerComment(string message, string command, string name)
 		{
 			if (this.CanPostOwnerComment) {
-				if (_liveBasicStatus != null && !string.IsNullOrEmpty(message) && command != null) {
-					_ownerCommentPoster.PostAsync(_liveBasicStatus.LiveId, message, command, name);
+				if (_basicStatus != null && !string.IsNullOrEmpty(message) && command != null) {
+					_ownerCommentPoster.PostAsync(_basicStatus.Id, message, command, name);
 					return true;
 				}
 			}
@@ -756,13 +756,13 @@ namespace Hal.OpenCommentViewer.Control
 
 		public bool StartMockLive(string liveId, string liveName, DateTime liveStart) {
 			LiveTicket lt = new LiveTicket();
-			lt.LiveId = liveId;
-			lt.LiveName = liveName;
+			lt.Id = liveId;
+			lt.Title = liveName;
 			lt.StartTime = liveStart;
 			lt.LocalStartTime = liveStart;
-			_liveBasicStatus = lt;
+			_basicStatus = lt;
 			_messageServerStatus = lt;
-			_liveDescription = lt;
+			_description = lt;
 			_seetType = SeetType.Arena;
 
 			_chatReceiver.Disconnect();
@@ -772,7 +772,7 @@ namespace Hal.OpenCommentViewer.Control
 
 			// プラグインに通知
 			foreach (Hal.NCSPlugin.IPlugin plugin in _plugins) {
-				plugin.OnLiveStart(this.LiveId, this.ServerStartTime, _chats.Count);
+				plugin.OnLiveStart(this.Id, this.ServerStartTime, _chats.Count);
 			}
 
 			return true;

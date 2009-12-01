@@ -2,32 +2,29 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Hal.NicoApiSharp.Live
+namespace Hal.NicoApiSharp.Streaming
 {
 
 	/// <summary>
-	/// コメントをポストするためのキーを取得するためのクラス
+	/// 過去ログ取得用のキー
 	/// </summary>
-	public class PostKey
+	public class Waybackkey
 	{
-
 		/// <summary>
-		/// サーバーからキーを取得します
+		/// Waybackkeyをサーバーから取得します
 		/// </summary>
 		/// <param name="thread"></param>
-		/// <param name="lastCommentNo"></param>
 		/// <param name="cookies"></param>
 		/// <returns></returns>
-		public static PostKey GetInstance(int thread, int lastCommentNo, System.Net.CookieContainer cookies)
+		public static Waybackkey GetInstance(int thread, System.Net.CookieContainer cookies)
 		{
 			try {
-				int blockNo = (lastCommentNo + 1) / 100;
-				string url = string.Format(ApiSettings.Default.GetPostKeyUrlFormat, thread, blockNo);
+				string url = string.Format(ApiSettings.Default.WaybackkeyUrlFormat, thread);
 				string res = Utility.GetResponseText(url, cookies, ApiSettings.Default.DefaultApiTimeout);
 				if (res != null) {
 					string[] p = res.Split('=');
 					if (p.Length == 2) {
-						PostKey w = new PostKey();
+						Waybackkey w = new Waybackkey();
 						w._value = p[1];
 						return w;
 					}
@@ -39,14 +36,13 @@ namespace Hal.NicoApiSharp.Live
 		}
 
 		/// <summary>
-		/// サーバーからキーを取得します
+		/// Waybackkeyをサーバーから取得します
 		/// </summary>
 		/// <param name="thread"></param>
-		/// <param name="lastCommentNo"></param>
 		/// <returns></returns>
-		public static PostKey GetInstance(int thread, int lastCommentNo) {
+		public static Waybackkey GetInstance(int thread) {
 			if (LoginManager.DefaultCookies != null) {
-				return GetInstance(thread, lastCommentNo, LoginManager.DefaultCookies);
+				return GetInstance(thread, LoginManager.DefaultCookies);
 			}
 
 			return null;
@@ -55,11 +51,12 @@ namespace Hal.NicoApiSharp.Live
 		private string _value = null;
 
 		/// <summary>
-		/// キーを取得します
+		/// Waybackkeyを取得します
 		/// </summary>
 		public string Value
 		{
 			get { return _value; }
 		}
+
 	}
 }

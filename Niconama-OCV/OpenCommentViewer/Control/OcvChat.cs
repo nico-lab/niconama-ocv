@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Hal.OpenCommentViewer.Control
 {
-	public class OcvChat : NicoApiSharp.Live.Chat, NCSPlugin.IChat, NCSPlugin.IFilterdChat
+	public class OcvChat : NicoApiSharp.Chat, NCSPlugin.IChat, NCSPlugin.IFilterdChat
 	{
 
 		private NCSPlugin.NGType _ngType = NCSPlugin.NGType.None;
@@ -14,7 +14,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// Hal.NicoApiSharp.Live.ChatからOcvChatを生成する
 		/// </summary>
 		/// <param name="chat"></param>
-		public OcvChat(Hal.NicoApiSharp.Live.IChat chat) : base(chat) { 
+		public OcvChat(Hal.NicoApiSharp.IChat chat) : base(chat) { 
 		
 		}
 
