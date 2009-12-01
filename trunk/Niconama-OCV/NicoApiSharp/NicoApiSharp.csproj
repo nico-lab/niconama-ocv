@@ -53,15 +53,11 @@
     <Compile Include="Cookie\SafariCookieGetter.cs" />
     <Compile Include="Cookie\SqlCookieGetter.cs" />
     <Compile Include="Cookie\SqliteManager.cs" />
-    <Compile Include="Live\FreeExtend.cs" />
-    <Compile Include="Live\IChat.cs" />
-    <Compile Include="Live\PublishStatus.cs" />
     <Compile Include="LoginManager.cs" />
     <Compile Include="ExXMLDocument.cs" />
     <Compile Include="Chat.cs" />
     <Compile Include="Streaming\ChatClient.cs" />
     <Compile Include="Streaming\ChatReceiver.cs" />
-    <Compile Include="Live\HeartBeat.cs" />
     <Compile Include="IAccountInfomation.cs" />
     <Compile Include="IErrorData.cs" />
     <Compile Include="Streaming\ILiveBasicStatus.cs" />
@@ -69,15 +65,8 @@
     <Compile Include="Streaming\ILiveDescription.cs" />
     <Compile Include="Streaming\ILiveWatcherStatus.cs" />
     <Compile Include="Streaming\IMessageServerStatus.cs" />
-    <Compile Include="Live\LiveDescription.cs" />
-    <Compile Include="Live\NgClient.cs" />
-    <Compile Include="Live\OwnerCommentPoster.cs" />
-    <Compile Include="Live\PlayerStatus.cs" />
-    <Compile Include="Live\PostKey.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Live\ThreadHeader.cs" />
-    <Compile Include="Live\Waybackkey.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
