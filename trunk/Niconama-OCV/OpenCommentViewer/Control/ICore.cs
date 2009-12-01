@@ -18,7 +18,12 @@ namespace Hal.OpenCommentViewer.Control
 		/// <summary>
 		/// 立ち見
 		/// </summary>
-		Standing
+		Standing,
+
+		/// <summary>
+		/// 実況
+		/// </summary>
+		Jikkyo
 	}
 
 	/// <summary>

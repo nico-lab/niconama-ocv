@@ -29,13 +29,13 @@ namespace Hal.OpenCommentViewer.Control
 				case Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.IEComponent:
 					radioButton1.Checked = true;
 					break;
-				case Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Opera:
+				case Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Opera10:
 					radioButton2.Checked = true;
 					break;
-				case Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Firefox:
+				case Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Firefox3:
 					radioButton3.Checked = true;
 					break;
-				case Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Chrome:
+				case Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Chrome3:
 					radioButton4.Checked = true;
 					break;
 			}
@@ -53,11 +53,11 @@ namespace Hal.OpenCommentViewer.Control
 			if (radioButton1.Checked) {
 				UserSettings.Default.BrowserType = Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.IEComponent;
 			} else if (radioButton2.Checked) {
-				UserSettings.Default.BrowserType = Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Opera;
+				UserSettings.Default.BrowserType = Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Opera10;
 			} else if (radioButton3.Checked) {
-				UserSettings.Default.BrowserType = Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Firefox;
+				UserSettings.Default.BrowserType = Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Firefox3;
 			} else if (radioButton4.Checked) {
-				UserSettings.Default.BrowserType = Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Chrome;
+				UserSettings.Default.BrowserType = Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE.Chrome3;
 			}
 
 			UserSettings.Default.ShowAccountForm = !checkBox1.Checked;
