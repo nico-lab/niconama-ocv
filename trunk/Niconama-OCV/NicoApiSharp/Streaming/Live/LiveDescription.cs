@@ -5,13 +5,13 @@ using System.Text;
 using Regex = System.Text.RegularExpressions.Regex;
 using Match = System.Text.RegularExpressions.Match;
 
-namespace Hal.NicoApiSharp.Live
+namespace Hal.NicoApiSharp.Streaming.Live
 {
 
 	/// <summary>
 	/// 放送の詳細をあらわすクラス
 	/// </summary>
-	public class LiveDescription : ILiveDescription, IErrorData
+	public class LiveDescription : IDescription, IErrorData
 	{
 
 		private enum ERROR_CODE
@@ -27,6 +27,7 @@ namespace Hal.NicoApiSharp.Live
 		private string _title;
 		private string _caster;
 		private string _communityName;
+		private string _description;
 
 		private ERROR_CODE _errorCode = ERROR_CODE.None;
 
@@ -57,13 +58,15 @@ namespace Hal.NicoApiSharp.Live
 					Match caster = Regex.Match(html, ApiSettings.Default.LiveCasterRegPattern);
 					Match comid = Regex.Match(html, ApiSettings.Default.LiveCommunityIdRegPattern);
 					Match comname = Regex.Match(html, ApiSettings.Default.LiveCommunityNameRegPattern);
+					Match desc = Regex.Match(html, ApiSettings.Default.LiveDescriptionRegPattern, System.Text.RegularExpressions.RegexOptions.Singleline);
 
-					if (title.Groups["t"].Success && caster.Groups["t"].Success && comname.Groups["t"].Success && comid.Groups["t"].Success) {
+					if (title.Groups["t"].Success && caster.Groups["t"].Success && comname.Groups["t"].Success && comid.Groups["t"].Success && desc.Groups["t"].Success) {
 
 						info._title = Utility.Unsanitizing(title.Groups["t"].Value);
 						info._caster = Utility.Unsanitizing(caster.Groups["t"].Value);
 						info._communityId = comid.Groups["t"].Value;
 						info._communityName = Utility.Unsanitizing(comname.Groups["t"].Value.Trim());
+						info._description = Utility.Unsanitizing(desc.Groups["t"].Value);
 
 					} else {
 						Logger.Default.LogErrorMessage("放送ページの解析に失敗しました。正規表現を修正する必要があります。");
@@ -102,7 +105,7 @@ namespace Hal.NicoApiSharp.Live
 		/// <summary>
 		/// 放送IDを取得します
 		/// </summary>
-		public string LiveId
+		public string Id
 		{
 			get { return _liveId; }
 		}
@@ -118,7 +121,7 @@ namespace Hal.NicoApiSharp.Live
 		/// <summary>
 		/// 番組名を取得します
 		/// </summary>
-		public string LiveName
+		public string Title
 		{
 			get { return _title; }
 		}
@@ -137,6 +140,14 @@ namespace Hal.NicoApiSharp.Live
 		public string Caster
 		{
 			get { return _caster; }
+		}
+
+		/// <summary>
+		/// 放送の詳細
+		/// </summary>
+		public string Description
+		{
+			get { return _description; }
 		}
 
 		#endregion

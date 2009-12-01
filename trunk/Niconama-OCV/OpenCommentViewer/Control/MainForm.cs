@@ -73,7 +73,7 @@ namespace Hal.OpenCommentViewer.Control
 			}
 
 			idBox.Text = string.Format("{0} - {1}", liveId, label);
-			this.Text = string.Format("{0}{1}", label, _core.LiveName);
+			this.Text = string.Format("{0}{1}", label, _core.Title);
 
 		}
 
@@ -222,7 +222,7 @@ namespace Hal.OpenCommentViewer.Control
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			idBox.Text = UserSettings.Default.LastAccessLiveId;
+			idBox.Text = UserSettings.Default.LastAccessId;
 			UserSettings.Default.MainformWindowState.Load(this);
 			chatGridView1.LoadSettings(UserSettings.Default);
 		}
@@ -239,7 +239,7 @@ namespace Hal.OpenCommentViewer.Control
 			Control.LiveTicket log = _core.GetLiveTicket();
 			if (log != null) {
 				saveFileDialog1.InitialDirectory = ApplicationSettings.Default.LiveTicketsFolder;
-				saveFileDialog1.FileName = log.LiveId + ".xml";
+				saveFileDialog1.FileName = log.Id + ".xml";
 				if (saveFileDialog1.ShowDialog() == DialogResult.OK) {
 					Utility.Serialize(saveFileDialog1.FileName, log, typeof(Control.LiveTicket));
 				}

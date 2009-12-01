@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Hal.NicoApiSharp.Live
+namespace Hal.NicoApiSharp.Streaming
 {
 	/// <summary>
 	/// 現在の総来場者数、コメント数をあらわすインターフェース
 	/// </summary>
-	public interface ILiveCountStatus
+	public interface ICountStatus
 	{
 		/// <summary>
 		/// 総来場者数

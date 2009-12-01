@@ -55,7 +55,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// </summary>
 		/// <param name="messageServerStatus"></param>
 		/// <returns></returns>
-		bool GetLogComment(NicoApiSharp.Live.IMessageServerStatus messageServerStatus);
+		bool GetLogComment(NicoApiSharp.Streaming.IMessageServerStatus messageServerStatus);
 
 		/// <summary>
 		/// 放送再接続用の情報を取得します

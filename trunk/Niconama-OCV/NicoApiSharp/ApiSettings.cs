@@ -10,7 +10,7 @@ namespace Hal.NicoApiSharp
 	[Serializable]
 	public class ApiSettings
 	{
-		const int SETTING_VERSION = 1;
+		const int SETTING_VERSION = 2;
 
 		/// <summary>
 		/// 設定値のバージョン（値を大きくすると、古いデータは更新される）
@@ -182,7 +182,13 @@ namespace Hal.NicoApiSharp
 		/// <summary>
 		/// 生放送ページからコミュニティIDを取得するための正規表現パターン
 		/// </summary>
-		public string LiveCommunityIdRegPattern = "href=\"http://com.nicovideo.jp/community/(?\'t\'co\\d+)\"";
+		public string LiveCommunityIdRegPattern = "href=\"http://(com|ch).nicovideo.jp/community/(?\'t\'co\\d+)\"";
+
+		/// <summary>
+		/// 生放送ページから放送の詳細を取得するための正規表現パターン
+		/// </summary>
+		public string LiveDescriptionRegPattern = "description:\\s+'(?'t'[^']*)'";
+
 
 		/// <summary>
 		/// URLから生放送IDを取得するための正規表現パターン
@@ -197,12 +203,18 @@ namespace Hal.NicoApiSharp
 		/// <summary>
 		/// 実況放送ページからコミュニティ名を取得するための正規表現パターン
 		/// </summary>
-		public string JikkyoCommunityNameRegPattern = "<a href=\"http://com.nicovideo.jp/community/co\\d+\">(?'t'[^<>]*)</a><br />";
+		public string JikkyoCommunityNameRegPattern = "<a href=\"http://(com|ch).nicovideo.jp/community/co\\d+\">(?'t'[^<>]*)</a><br />";
 
 		/// <summary>
 		/// 実況放送ページからコミュニティIDを取得するための正規表現パターン
 		/// </summary>
-		public string JikkyoCommunityIdRegPattern = "href=\"http://com.nicovideo.jp/community/(?\'t\'co\\d+)\"";
+		public string JikkyoCommunityIdRegPattern = "href=\"http://(com|ch).nicovideo.jp/community/(?\'t\'co\\d+)\"";
+
+		/// <summary>
+		/// 実況放送ページから放送の詳細を取得するための正規表現パターン
+		/// </summary>
+		public string JikkyoDescriptionRegPattern = "<div class=\"player_exposition\" id=\"player_exposition\">(?'t'[^<>]*)</div>";
+
 
 
 		/// <summary>

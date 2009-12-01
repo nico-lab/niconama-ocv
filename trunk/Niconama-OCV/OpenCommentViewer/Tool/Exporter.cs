@@ -21,7 +21,7 @@ namespace Hal.OpenCommentViewer.Tool
 				System.Windows.Forms.SaveFileDialog sf = new System.Windows.Forms.SaveFileDialog();
 				sf.DefaultExt = ".xml";
 				sf.Filter = "XMLファイル(*.xml)|*.xml";
-				sf.FileName = "export_" + _host.LiveId + ".xml";
+				sf.FileName = "export_" + _host.Id + ".xml";
 				if (sf.ShowDialog((System.Windows.Forms.IWin32Window)_host.Win32WindowOwner) == System.Windows.Forms.DialogResult.OK) {
 					string xml = buildNicoXML();
 					if (xml != null) {

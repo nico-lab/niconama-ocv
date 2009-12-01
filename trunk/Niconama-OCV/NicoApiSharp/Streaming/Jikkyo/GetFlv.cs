@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Hal.NicoApiSharp.Live;
+using Hal.NicoApiSharp.Streaming;
 
-namespace Hal.NicoApiSharp.Jk
+namespace Hal.NicoApiSharp.Streaming.Jikkyo
 {
-	public class GetFlv : ILiveBasicStatus, IMessageServerStatus, IErrorData
+	public class GetFlv : IBasicStatus, IMessageServerStatus, IErrorData
 	{
 		public static GetFlv GetInstance(string liveId, System.Net.CookieContainer cookies)
 		{
@@ -98,7 +98,7 @@ namespace Hal.NicoApiSharp.Jk
 
 		#region ILiveBasicStatus ÉÅÉìÉo
 
-		public string LiveId
+		public string Id
 		{
 			get { return _liveId; }
 		}

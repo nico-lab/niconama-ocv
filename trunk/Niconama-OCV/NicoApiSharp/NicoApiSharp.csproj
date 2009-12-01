@@ -60,10 +60,10 @@
     <Compile Include="Streaming\ChatReceiver.cs" />
     <Compile Include="IAccountInfomation.cs" />
     <Compile Include="IErrorData.cs" />
-    <Compile Include="Streaming\ILiveBasicStatus.cs" />
-    <Compile Include="Streaming\ILiveCountStatus.cs" />
-    <Compile Include="Streaming\ILiveDescription.cs" />
-    <Compile Include="Streaming\ILiveWatcherStatus.cs" />
+    <Compile Include="Streaming\IBasicStatus.cs" />
+    <Compile Include="Streaming\ICountStatus.cs" />
+    <Compile Include="Streaming\IDescription.cs" />
+    <Compile Include="Streaming\IWatcherStatus.cs" />
     <Compile Include="Streaming\IMessageServerStatus.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,15 +76,15 @@
     <Compile Include="Streaming\Jikkyo\JikkyoDescription.cs" />
     <Compile Include="Streaming\Live\FreeExtend.cs" />
     <Compile Include="Streaming\Live\HeartBeat.cs" />
-    <Compile Include="Streaming\Live\IChat.cs" />
+    <Compile Include="IChat.cs" />
     <Compile Include="Streaming\Live\LiveDescription.cs" />
-    <Compile Include="Streaming\Live\NgClient.cs" />
     <Compile Include="Streaming\Live\OwnerCommentPoster.cs" />
     <Compile Include="Streaming\Live\PlayerStatus.cs" />
-    <Compile Include="Streaming\Live\PostKey.cs" />
     <Compile Include="Streaming\Live\PublishStatus.cs" />
-    <Compile Include="Streaming\Live\ThreadHeader.cs" />
-    <Compile Include="Streaming\Live\Waybackkey.cs" />
+    <Compile Include="Streaming\NgClient.cs" />
+    <Compile Include="Streaming\PostKey.cs" />
+    <Compile Include="Streaming\ThreadHeader.cs" />
+    <Compile Include="Streaming\Waybackkey.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
