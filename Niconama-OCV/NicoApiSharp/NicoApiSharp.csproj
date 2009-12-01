@@ -44,21 +44,19 @@
   <ItemGroup>
     <Compile Include="AccountInfomation.cs" />
     <Compile Include="ApiSettings.cs" />
-    <Compile Include="Cookie\GoogleChromeCookieGetter.cs" />
     <Compile Include="Cookie\CookieGetter.cs" />
     <Compile Include="Cookie\FirefoxCookieGetter.cs" />
+    <Compile Include="Cookie\GoogleChromeCookieGetter.cs" />
     <Compile Include="Cookie\ICookieGetter.cs" />
     <Compile Include="Cookie\IEComponentCookieGetter.cs" />
     <Compile Include="Cookie\OperaCookieGetter.cs" />
     <Compile Include="Cookie\SafariCookieGetter.cs" />
     <Compile Include="Cookie\SqlCookieGetter.cs" />
-    <Compile Include="Jk\GetFlv.cs" />
-    <Compile Include="Jk\JikkyoDescription.cs" />
+    <Compile Include="Cookie\SqliteManager.cs" />
     <Compile Include="Live\FreeExtend.cs" />
     <Compile Include="Live\IChat.cs" />
     <Compile Include="Live\PublishStatus.cs" />
     <Compile Include="LoginManager.cs" />
-    <Compile Include="Cookie\SqliteManager.cs" />
     <Compile Include="ExXMLDocument.cs" />
     <Compile Include="Chat.cs" />
     <Compile Include="Streaming\ChatClient.cs" />
@@ -85,6 +83,19 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Streaming\Jikkyo\GetFlv.cs" />
+    <Compile Include="Streaming\Jikkyo\JikkyoDescription.cs" />
+    <Compile Include="Streaming\Live\FreeExtend.cs" />
+    <Compile Include="Streaming\Live\HeartBeat.cs" />
+    <Compile Include="Streaming\Live\IChat.cs" />
+    <Compile Include="Streaming\Live\LiveDescription.cs" />
+    <Compile Include="Streaming\Live\NgClient.cs" />
+    <Compile Include="Streaming\Live\OwnerCommentPoster.cs" />
+    <Compile Include="Streaming\Live\PlayerStatus.cs" />
+    <Compile Include="Streaming\Live\PostKey.cs" />
+    <Compile Include="Streaming\Live\PublishStatus.cs" />
+    <Compile Include="Streaming\Live\ThreadHeader.cs" />
+    <Compile Include="Streaming\Live\Waybackkey.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
