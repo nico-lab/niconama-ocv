@@ -140,9 +140,9 @@ namespace Hal.NCSPlugin
 		/// <summary>
 		/// 放送に接続します。
 		/// </summary>
-		/// <param name="liveId">対象の放送URL、または放送ID</param>
+		/// <param name="id">対象の放送URL、または放送ID</param>
 		/// <returns>接続できたか</returns>
-		bool ConnectLive(string liveId);
+		bool Connect(string id);
 
 		/// <summary>
 		/// サーバー通信を中断します。
