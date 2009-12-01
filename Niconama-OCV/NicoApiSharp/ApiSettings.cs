@@ -29,13 +29,26 @@ namespace Hal.NicoApiSharp
 		/// API：GetPlayerStatusにアクセスするためのアドレスフォーマット
 		/// {0} = 放送ID
 		/// </summary>
+		public string GetJikkyoFlvUrlFormat = "http://jk.nicovideo.jp/api/getflv?v={0}";
+
+
+		/// <summary>
+		/// API：GetPlayerStatusにアクセスするためのアドレスフォーマット
+		/// {0} = 放送ID
+		/// </summary>
 		public string GetPublishStatusUrlFormat = "http://watch.live.nicovideo.jp/api/getpublishstatus?v={0}";
 
 		/// <summary>
-		/// 放送ページのURLフォーマット
+		/// 生放送ページのURLフォーマット
 		/// {0} = 放送ID
 		/// </summary>
 		public string LiveWatchUrlFormat = "http://live.nicovideo.jp/watch/{0}";
+
+		/// <summary>
+		/// 実況放送ページのURLフォーマット
+		/// {0} = 放送ID
+		/// </summary>
+		public string JikkyoWatchUrlFormat = "http://jk.nicovideo.jp/watch/{0}";
 
 		/// <summary>
 		/// Ngコマンド送信用URLフォーマット
@@ -152,29 +165,50 @@ namespace Hal.NicoApiSharp
 		#region RegexPattern
 
 		/// <summary>
-		/// 放送ページから放送タイトルを取得するための正規表現パターン
+		/// 生放送ページから放送タイトルを取得するための正規表現パターン
 		/// </summary>
 		public string LiveTitleRegPattern = "<title>(?\'t\'[^<>]*) - ニコニコ生放送</title>";
 
 		/// <summary>
-		/// 放送ページから放送者名を取得するための正規表現パターン
+		/// 生放送ページから放送者名を取得するための正規表現パターン
 		/// </summary>
 		public string LiveCasterRegPattern = "放送者:<strong class=\"[^\"]*\">(<a href=\"http://www.nicovideo.jp/user/\\d+\" target=\"_blank\">)?(?'t'[^<>]*)";
 
 		/// <summary>
-		/// 放送ページからコミュニティ名を取得するための正規表現パターン
+		/// 生放送ページからコミュニティ名を取得するための正規表現パターン
 		/// </summary>
 		public string LiveCommunityNameRegPattern = "class=\\\"(community|channel)\\\" target=\\\"_blank\\\">(?\'t\'[^<>]*)</a>";
 
 		/// <summary>
-		/// 放送ページからコミュニティIDを取得するための正規表現パターン
+		/// 生放送ページからコミュニティIDを取得するための正規表現パターン
 		/// </summary>
-		public string LiveCommunityIdRegPattern = "href=\"http://ch.nicovideo.jp/community/(?\'t\'co\\d+)\"";
+		public string LiveCommunityIdRegPattern = "href=\"http://com.nicovideo.jp/community/(?\'t\'co\\d+)\"";
 
 		/// <summary>
-		/// URLからIDを取得するための正規表現パターン
+		/// URLから生放送IDを取得するための正規表現パターン
 		/// </summary>
-		public string LiveIdRegPattern = "^((http://live.nicovideo.jp/watch/)|(http://live.nicovideo.jp/console.swf?v=))?(?'id'lv\\d+)";
+		public string LiveIdRegPattern = "(?'id'lv\\d+)";
+
+		/// <summary>
+		/// 実況放送ページから放送タイトルを取得するための正規表現パターン
+		/// </summary>
+		public string JikkyoTitleRegPattern = "<title>(?\'t\'[^<>]*) - ニコニコ実況</title>";
+
+		/// <summary>
+		/// 実況放送ページからコミュニティ名を取得するための正規表現パターン
+		/// </summary>
+		public string JikkyoCommunityNameRegPattern = "<a href=\"http://com.nicovideo.jp/community/co\\d+\">(?'t'[^<>]*)</a><br />";
+
+		/// <summary>
+		/// 実況放送ページからコミュニティIDを取得するための正規表現パターン
+		/// </summary>
+		public string JikkyoCommunityIdRegPattern = "href=\"http://com.nicovideo.jp/community/(?\'t\'co\\d+)\"";
+
+
+		/// <summary>
+		/// URLから実況IDを取得するための正規表現パターン
+		/// </summary>
+		public string JikkyoIdRegPattern = "(?'id'jk\\d+)";
 
 		/// <summary>
 		/// FLV情報からアカウントインフォメーションを取得するための正規表現
@@ -221,49 +255,44 @@ namespace Hal.NicoApiSharp
 		public string IECookieFolderPath = "%COOKIES%";
 
 		/// <summary>
-		/// GoogleChromeのクッキーが保存されているファイルのパス
+		/// GoogleChrome3のクッキーが保存されているファイルのパス
 		/// </summary>
-		public string GoogleChromeDatabasePath = "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\cookies";
+		public string GoogleChrome3DatabasePath = "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\cookies";
+		
+		/// <summary>
+		/// Firefox3のデータが格納されているフォルダー
+		/// </summary>
+		public string Firefox3DataFolder = "%APPDATA%Mozilla\\Firefox\\";
 
 		/// <summary>
-		/// GoogleChromeからクッキーを取得するためのクエリーのフォーマット
+		/// Firefox3のプロファイルが保存されているディレクトリ
 		/// </summary>
-		public string GoogleChromeKeyQueryFormat = "SELECT value, name, host_key, path, expires_utc FROM cookies where host_key LIKE '%{0}' AND name=='{1}'";
+		public string Firefox3ProfieFolders = "%APPDATA%\\Mozilla\\Firefox\\Profiles";
 
 		/// <summary>
-		/// Firefoxのデータが格納されているフォルダー
+		/// Firefox3のプロファイル設定ファイルの名前
 		/// </summary>
-		public string FirefoxDataFolder = "%APPDATA%Mozilla\\Firefox\\";
+		public string Firefox3ProfilesIniFileName = "profiles.ini";
 
 		/// <summary>
-		/// Firefoxのプロファイルが保存されているディレクトリ
+		/// Firefox3のクッキーが保存されているファイルの名前
 		/// </summary>
-		public string FirefoxProfieFolders = "%APPDATA%\\Mozilla\\Firefox\\Profiles";
+		public string Firefox3DatabaseName = "cookies.sqlite";
 
 		/// <summary>
-		/// Firefoxのプロファイル設定ファイルの名前
+		/// Firefox3のデータベースロック回避のための退避用ファイル名
 		/// </summary>
-		public string FirefoxProfilesIniFileName = "profiles.ini";
+		public string Firefox3TempSqliteFileName = "temp_firefox_cookies.sqlite";
 
 		/// <summary>
-		/// Firefoxのクッキーが保存されているファイルの名前
+		/// Opera10のクッキーが保存されているファイルへのPath
 		/// </summary>
-		public string FirefoxDatabaseName = "cookies.sqlite";
+		public string Opera10CookieFilePath = "%APPDATA%\\Opera\\Opera\\cookies4.dat";
 
 		/// <summary>
-		/// Firefoxのデータベースロック回避のための退避用ファイル名
+		/// Safari4のクッキーが保存されているファイルへのPath
 		/// </summary>
-		public string FirefoxTempSqliteFileName = "temp_firefox_cookies.sqlite";
-
-		/// <summary>
-		/// Firefoxからクッキーを取得するためのクエリーのフォーマット
-		/// </summary>
-		public string FirefoxQueryFormat = "SELECT value, name, host, path, expiry FROM moz_cookies WHERE host LIKE '%{0}' AND name LIKE '{1}'";
-
-		/// <summary>
-		/// Operaのクッキーが保存されているファイルへのPath
-		/// </summary>
-		public string OperaCookieFilePath = "%APPDATA%\\Opera\\Opera\\cookies4.dat";
+		public string Safari4CookieFilePath = "%APPDATA%\\Apple Computer\\Safari\\Cookies\\Cookies.plist";
 
 		#endregion
 

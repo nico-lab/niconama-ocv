@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Hal.NicoApiSharp.Cookie
 {
-	class OperaCookieGetter : ICookieGetter
+	class OperaCookieGetter : CookieGetter
 	{
 		const byte MSB = 0x80;
 
@@ -27,61 +27,63 @@ namespace Hal.NicoApiSharp.Cookie
 			public byte[] bytepayload;
 		};
 
-		
-		public System.Net.Cookie[] GetCookies(Uri url, string key)
+		public static new ICookieGetter GetInstance(Cookie.CookieGetter.BROWSER_TYPE type)
 		{
+			switch (type) {
+				case CookieGetter.BROWSER_TYPE.Opera10:
+					return new OperaCookieGetter();
+			}
 
-			string path = Utility.ReplacePathSymbols(ApiSettings.Default.OperaCookieFilePath);
-			return GetCookies(url, key, path);
+			return null;
 		}
 
+		private OperaCookieGetter()
+		{ 
+			base._defaultPath = Utility.ReplacePathSymbols(ApiSettings.Default.Opera10CookieFilePath);
+		}
 
-		public System.Net.Cookie[] GetCookies(Uri url, string key, string filePath)
+		public override System.Net.CookieContainer GetAllCookies(string path)
 		{
-			if (!File.Exists(filePath)) return null;  // ファイルの有無をチェック
-			List<System.Net.Cookie> result = new List<System.Net.Cookie>();
+			System.Net.CookieContainer container = new System.Net.CookieContainer();
+			if (!File.Exists(path)) return container;  // ファイルの有無をチェック
 
 			try {
-				using(FileStream reader = new FileStream(filePath, FileMode.Open, FileAccess.Read)){
+				using (FileStream reader = new FileStream(path, FileMode.Open, FileAccess.Read)) {
 					// 指定したアドレスに読み込み位置を移動
 					reader.Seek(0, SeekOrigin.Begin);
 					Header headerData = getHeader(reader);
 					Record recordData;
 					Stack<string> domainStack = new Stack<string>();
 					Stack<string> pathStack = new Stack<string>();
-					
+
 					//version check
 					if ((headerData.file_version_number & 0xfffff000) == 0x00001000) {
-						
-					    while (reader.Position < reader.Length) {
-					        recordData = getRecord(reader, headerData);
-					        switch (recordData.tag_id) {
-					            case 0x01:  // ドメイン
-					                string domain = getDomainRecode(new System.IO.MemoryStream(recordData.bytepayload), headerData);
-					                if (domain != null) {
-					                    domainStack.Push(domain);
-					                }
-					                break;
-					            case 0x02:  // パス
-					                string page = getPageRecode(new System.IO.MemoryStream(recordData.bytepayload), headerData);
-					                if (page != null) {
-					                    pathStack.Push(page);
-					                }
-					                break;
-					            case 0x03:  // クッキー
-					                string chost = string.Join(".", domainStack.ToArray());
+
+						while (reader.Position < reader.Length) {
+							recordData = getRecord(reader, headerData);
+							switch (recordData.tag_id) {
+								case 0x01:  // ドメイン
+									string domain = getDomainRecode(new System.IO.MemoryStream(recordData.bytepayload), headerData);
+									if (domain != null) {
+										domainStack.Push(domain);
+									}
+									break;
+								case 0x02:  // パス
+									string page = getPageRecode(new System.IO.MemoryStream(recordData.bytepayload), headerData);
+									if (page != null) {
+										pathStack.Push(page);
+									}
+									break;
+								case 0x03:  // クッキー
+									string chost = string.Join(".", domainStack.ToArray());
 									string cpath = '/' + string.Join("/", pathStack.ToArray());
+									
+									System.Net.Cookie cookie = getCookieRecode(new System.IO.MemoryStream(recordData.bytepayload), headerData);
+									cookie.Domain = '.' + string.Join(".", domainStack.ToArray());
+									cookie.Path = '/' + string.Join("/", pathStack.ToArray());
+									container.Add(cookie);
 
-									if (url.Host.EndsWith(chost) && url.AbsolutePath.StartsWith(cpath)) {
-					                    System.Net.Cookie cookie = getCookieRecode(new System.IO.MemoryStream(recordData.bytepayload), headerData);
-					                    if (key.Equals(cookie.Name)) {
-											cookie.Domain = '.' + string.Join(".", domainStack.ToArray());
-											cookie.Path = '/' + string.Join("/", pathStack.ToArray());
-					                        result.Add(cookie);
-					                    }
-					                }
-
-					                break;
+									break;
 								case 0x04 + MSB: //ドメイン終了
 									if (0 < domainStack.Count) {
 										domainStack.Pop();
@@ -92,21 +94,17 @@ namespace Hal.NicoApiSharp.Cookie
 										pathStack.Pop();
 									}
 									break;
-					        }
-					    }
+							}
+						}
 					}
 				}
-			} catch (Exception ex){
+			} catch (Exception ex) {
 				Logger.Default.LogErrorMessage("");
 				Logger.Default.LogException(ex);
 
 			}
 
-			if (result.Count != 0) {
-				return result.ToArray();
-			}
-			return null;
-			
+			return container;
 		}
 
 		private string getDomainRecode(System.IO.Stream stream, Header headerData)
@@ -207,19 +205,5 @@ namespace Hal.NicoApiSharp.Cookie
 			return n;
 		}
 
-		#region ICookieGetter メンバ
-
-
-		public System.Net.CookieCollection[] GetCookieCollection(Uri url)
-		{
-			throw new Exception("The method or operation is not implemented.");
-		}
-
-		public System.Net.CookieCollection[] GetCookieCollection(Uri url, string path)
-		{
-			throw new Exception("The method or operation is not implemented.");
-		}
-
-		#endregion
 	}
 }

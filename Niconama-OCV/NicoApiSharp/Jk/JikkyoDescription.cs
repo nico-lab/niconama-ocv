@@ -1,19 +1,14 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 using Regex = System.Text.RegularExpressions.Regex;
 using Match = System.Text.RegularExpressions.Match;
 
-namespace Hal.NicoApiSharp.Live
+namespace Hal.NicoApiSharp.Jk
 {
-
-	/// <summary>
-	/// æ”¾é€ã®è©³ç´°ã‚’ã‚ã‚‰ã‚ã™ã‚¯ãƒ©ã‚¹
-	/// </summary>
-	public class LiveDescription : ILiveDescription, IErrorData
+	public class JikkyoDescription : Live.ILiveDescription, IErrorData
 	{
-
 		private enum ERROR_CODE
 		{
 			None,
@@ -21,6 +16,7 @@ namespace Hal.NicoApiSharp.Live
 			WebEerror,
 			Undefined
 		}
+
 
 		private string _liveId;
 		private string _communityId;
@@ -31,47 +27,46 @@ namespace Hal.NicoApiSharp.Live
 		private ERROR_CODE _errorCode = ERROR_CODE.None;
 
 		/// <summary>
-		/// æ”¾é€ãƒšãƒ¼ã‚¸ã‹ã‚‰æ”¾é€ã‚¿ã‚¤ãƒˆãƒ«ãªã©ã‚’å«ã‚€æƒ…å ±ã‚’å–å¾—ã™ã‚‹
+		/// •ú‘—ƒy[ƒW‚©‚ç•ú‘—ƒ^ƒCƒgƒ‹‚È‚Ç‚ğŠÜ‚Şî•ñ‚ğæ“¾‚·‚é
 		/// </summary>
-		/// <param name="liveId"></param>
+		/// <param name="jikkyoId"></param>
 		/// <param name="cookies"></param>
 		/// <returns></returns>
-		public static LiveDescription GetInstance(string liveId, System.Net.CookieContainer cookies)
+		public static JikkyoDescription GetInstance(string jikkyoId, System.Net.CookieContainer cookies)
 		{
 
-			if (liveId == null) {
-				throw new ArgumentException("liveIdãŒnullã§ã™ã€‚", "liveId");
+			if (jikkyoId == null) {
+				throw new ArgumentException("jikkyoId‚ªnull‚Å‚·B", "liveId");
 			}
 
-			LiveDescription info = new LiveDescription();
+			JikkyoDescription info = new JikkyoDescription();
 
 			try {
-				string url = string.Format(ApiSettings.Default.LiveWatchUrlFormat, liveId);
+				string url = string.Format(ApiSettings.Default.JikkyoWatchUrlFormat, jikkyoId);
 				string html = Utility.GetResponseText(url, cookies, ApiSettings.Default.DefaultApiTimeout);
 
 				if (html != null) {
 
-					info._liveId = liveId;
+					info._liveId = jikkyoId;
 
-					Match title = Regex.Match(html, ApiSettings.Default.LiveTitleRegPattern);
-					Match caster = Regex.Match(html, ApiSettings.Default.LiveCasterRegPattern);
-					Match comid = Regex.Match(html, ApiSettings.Default.LiveCommunityIdRegPattern);
-					Match comname = Regex.Match(html, ApiSettings.Default.LiveCommunityNameRegPattern);
+					Match title = Regex.Match(html, ApiSettings.Default.JikkyoTitleRegPattern);
+					Match comid = Regex.Match(html, ApiSettings.Default.JikkyoCommunityIdRegPattern);
+					Match comname = Regex.Match(html, ApiSettings.Default.JikkyoCommunityNameRegPattern);
 
-					if (title.Groups["t"].Success && caster.Groups["t"].Success && comname.Groups["t"].Success && comid.Groups["t"].Success) {
+					if (title.Groups["t"].Success && comname.Groups["t"].Success ) {
 
 						info._title = Utility.Unsanitizing(title.Groups["t"].Value);
-						info._caster = Utility.Unsanitizing(caster.Groups["t"].Value);
+						info._caster = "";
 						info._communityId = comid.Groups["t"].Value;
 						info._communityName = Utility.Unsanitizing(comname.Groups["t"].Value.Trim());
 
 					} else {
-						Logger.Default.LogErrorMessage("æ”¾é€ãƒšãƒ¼ã‚¸ã®è§£æã«å¤±æ•—ã—ã¾ã—ãŸã€‚æ­£è¦è¡¨ç¾ã‚’ä¿®æ­£ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚");
+						Logger.Default.LogErrorMessage("•ú‘—ƒy[ƒW‚Ì‰ğÍ‚É¸”s‚µ‚Ü‚µ‚½B³‹K•\Œ»‚ğC³‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B");
 						info._errorCode = ERROR_CODE.ParseError;
 					}
 
 				} else {
-					Logger.Default.LogErrorMessage("æ”¾é€ãƒšãƒ¼ã‚¸ã‚’å–å¾—ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚");
+					Logger.Default.LogErrorMessage("•ú‘—ƒy[ƒW‚ğæ“¾‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B");
 					info._errorCode = ERROR_CODE.WebEerror;
 				}
 
@@ -85,11 +80,12 @@ namespace Hal.NicoApiSharp.Live
 		}
 
 		/// <summary>
-		/// æ”¾é€ãƒšãƒ¼ã‚¸ã‹ã‚‰æ”¾é€ã‚¿ã‚¤ãƒˆãƒ«ãªã©ã‚’å«ã‚€æƒ…å ±ã‚’å–å¾—ã™ã‚‹
+		/// •ú‘—ƒy[ƒW‚©‚ç•ú‘—ƒ^ƒCƒgƒ‹‚È‚Ç‚ğŠÜ‚Şî•ñ‚ğæ“¾‚·‚é
 		/// </summary>
 		/// <param name="liveId"></param>
 		/// <returns></returns>
-		public static LiveDescription GetInstance(string liveId) {
+		public static JikkyoDescription GetInstance(string liveId)
+		{
 			if (LoginManager.DefaultCookies != null) {
 				return GetInstance(liveId, LoginManager.DefaultCookies);
 			}
@@ -97,10 +93,11 @@ namespace Hal.NicoApiSharp.Live
 			return null;
 		}
 
-		#region IDescription ãƒ¡ãƒ³ãƒ
+
+		#region ILiveDescription ƒƒ“ƒo
 
 		/// <summary>
-		/// æ”¾é€IDã‚’å–å¾—ã—ã¾ã™
+		/// •ú‘—ID‚ğæ“¾‚µ‚Ü‚·
 		/// </summary>
 		public string LiveId
 		{
@@ -108,7 +105,7 @@ namespace Hal.NicoApiSharp.Live
 		}
 
 		/// <summary>
-		/// ã‚³ãƒŸãƒ¥ãƒ‹ãƒ†ã‚£IDã‚’å–å¾—ã—ã¾ã™
+		/// ƒRƒ~ƒ…ƒjƒeƒBID‚ğæ“¾‚µ‚Ü‚·
 		/// </summary>
 		public string CommunityId
 		{
@@ -116,7 +113,7 @@ namespace Hal.NicoApiSharp.Live
 		}
 
 		/// <summary>
-		/// ç•ªçµ„åã‚’å–å¾—ã—ã¾ã™
+		/// ”Ô‘g–¼‚ğæ“¾‚µ‚Ü‚·
 		/// </summary>
 		public string LiveName
 		{
@@ -124,7 +121,7 @@ namespace Hal.NicoApiSharp.Live
 		}
 
 		/// <summary>
-		/// ã‚³ãƒŸãƒ¥ãƒ‹ãƒ†ã‚£åã‚’å–å¾—ã—ã¾ã™
+		/// ƒRƒ~ƒ…ƒjƒeƒB–¼‚ğæ“¾‚µ‚Ü‚·
 		/// </summary>
 		public string CommunityName
 		{
@@ -132,19 +129,18 @@ namespace Hal.NicoApiSharp.Live
 		}
 
 		/// <summary>
-		/// æ”¾é€è€…ã‚’å–å¾—ã—ã¾ã™
+		/// •ú‘—Ò‚ğæ“¾‚µ‚Ü‚·
 		/// </summary>
 		public string Caster
 		{
 			get { return _caster; }
 		}
-
 		#endregion
 
-		#region IErrorData ãƒ¡ãƒ³ãƒ
+		#region IErrorData ƒƒ“ƒo
 
 		/// <summary>
-		/// ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã‚’å–å¾—ã—ã¾ã™
+		/// ƒGƒ‰[ƒR[ƒh‚ğæ“¾‚µ‚Ü‚·
 		/// </summary>
 		public string ErrorCode
 		{
@@ -152,7 +148,7 @@ namespace Hal.NicoApiSharp.Live
 		}
 
 		/// <summary>
-		/// ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã®èª¬æ˜ã‚’å–å¾—ã—ã¾ã™
+		/// ƒGƒ‰[ƒR[ƒh‚Ìà–¾‚ğæ“¾‚µ‚Ü‚·
 		/// </summary>
 		public string ErrorMessage
 		{
@@ -160,7 +156,7 @@ namespace Hal.NicoApiSharp.Live
 		}
 
 		/// <summary>
-		/// ã‚¨ãƒ©ãƒ¼ãŒã‚ã‚‹ã‹ã©ã†ã‹ã‚’ç¢ºã‹ã‚ã¾ã™
+		/// ƒGƒ‰[‚ª‚ ‚é‚©‚Ç‚¤‚©‚ğŠm‚©‚ß‚Ü‚·
 		/// </summary>
 		public bool HasError
 		{
@@ -168,7 +164,5 @@ namespace Hal.NicoApiSharp.Live
 		}
 
 		#endregion
-
-
 	}
 }

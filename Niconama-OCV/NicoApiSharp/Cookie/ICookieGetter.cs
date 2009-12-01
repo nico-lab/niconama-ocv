@@ -20,28 +20,41 @@ namespace Hal.NicoApiSharp.Cookie
 		System.Net.Cookie[] GetCookies(Uri url, string key);
 
 		/// <summary>
-		/// クッキーが保存されているPathを指定して対象URL上の名前がKeyであるクッキーを取得する
+		/// 指定されたPathにあるクッキーファイルから対象URL上の名前がKeyであるクッキーを取得する
 		/// </summary>
 		/// <param name="url"></param>
 		/// <param name="key"></param>
 		/// <param name="path"></param>
 		/// <returns></returns>
-		System.Net.Cookie[] GetCookies(Uri url, string key, string path);
+		System.Net.Cookie GetCookie(Uri url, string key, string path);
 
 		/// <summary>
 		/// urlに関連付けられたクッキーを取得します。
 		/// </summary>
 		/// <param name="url"></param>
 		/// <returns></returns>
-		System.Net.CookieCollection[] GetCookieCollection(Uri url);
+		System.Net.CookieCollection[] GetCookieCollections(Uri url);
 
 		/// <summary>
-		/// urlに関連付けられたクッキーを取得します。
+		/// 指定されたPathにあるクッキーファイルからurlに関連付けられたクッキーを取得します。
 		/// </summary>
 		/// <param name="url"></param>
 		/// <param name="path"></param>
 		/// <returns></returns>
-		System.Net.CookieCollection[] GetCookieCollection(Uri url, string path);
+		System.Net.CookieCollection GetCookieCollection(Uri url, string path);
+
+		/// <summary>
+		/// すべてのクッキーを取得する
+		/// </summary>
+		/// <returns></returns>
+		System.Net.CookieContainer[] GetAllCookies();
+
+		/// <summary>
+		/// 指定されたPathにあるクッキーファイルからすべてのクッキーを取得する
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
+		System.Net.CookieContainer GetAllCookies(string path);
 
 	}
 }

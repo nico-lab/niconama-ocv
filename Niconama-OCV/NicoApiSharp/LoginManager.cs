@@ -21,10 +21,13 @@ namespace Hal.NicoApiSharp
 		public static AccountInfomation Login(CookieGetter.BROWSER_TYPE browserType, string cookieFilePath)
 		{
 			ICookieGetter cookieGetter = CookieGetter.GetInstance(browserType);
-			System.Net.Cookie[] cookies;
+			System.Net.Cookie[] cookies = null;
 
 			if(!string.IsNullOrEmpty(cookieFilePath)){
-				cookies = cookieGetter.GetCookies(new Uri("http://www.nicovideo.jp/"), "user_session", cookieFilePath);
+				System.Net.Cookie c = cookieGetter.GetCookie(new Uri("http://www.nicovideo.jp/"), "user_session", cookieFilePath);
+				if (c != null) {
+					cookies = new System.Net.Cookie[] { c };
+				}
 			}else{
 				cookies = cookieGetter.GetCookies(new Uri("http://www.nicovideo.jp/"), "user_session");
 			}
@@ -38,9 +41,7 @@ namespace Hal.NicoApiSharp
 			cookieList.Sort(CompareCookieExpires);
 
 			Logger.Default.LogMessage(string.Format("Found Cookies: type-{0}, cookies-{1}", browserType.ToString(), cookieList.Count));
-			foreach (System.Net.Cookie cookie in cookieList) {
-				
-		
+			foreach (System.Net.Cookie cookie in cookieList) {		
 				System.Net.CookieContainer container = new System.Net.CookieContainer();
 				container.Add(cookie);
 
@@ -55,7 +56,10 @@ namespace Hal.NicoApiSharp
 
 		}
 
-		private static int CompareCookieExpires(System.Net.Cookie a, System.Net.Cookie b) { 
+		private static int CompareCookieExpires(System.Net.Cookie a, System.Net.Cookie b) {
+			if (a == null && b == null) {
+				return 0;
+			}
 			if (a == null) {
 				return -1;
 			}
