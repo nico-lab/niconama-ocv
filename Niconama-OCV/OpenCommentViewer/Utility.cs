@@ -259,6 +259,24 @@ namespace Hal.OpenCommentViewer
 			}
 		}
 
+		/// <summary>
+		/// 実況のId部分を抽出します。
+		/// </summary>
+		/// <param name="url"></param>
+		/// <returns></returns>
+		public static string GetJikkyoIdFromUrl(string url)
+		{
+
+			System.Text.RegularExpressions.Match match = System.Text.RegularExpressions.Regex.Match(url, NicoApiSharp.ApiSettings.Default.JikkyoIdRegPattern);
+
+			if (match.Success) {
+				return match.Groups["id"].Value;
+
+			} else {
+				return null;
+			}
+		}
+
 		#endregion
 
 	}

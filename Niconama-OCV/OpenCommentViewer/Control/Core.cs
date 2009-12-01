@@ -89,7 +89,7 @@ namespace Hal.OpenCommentViewer.Control
 			// コマンドライン引数で指定された放送がある場合はそれに接続する
 			if (_reservedId != null) {
 				_mainview.IdBoxText = _reservedId;
-				ConnectLive(_reservedId);
+				Connect(_reservedId);
 			}
 
 			// ファイルメニューの一番下に終了メニューを追加する
@@ -203,6 +203,37 @@ namespace Hal.OpenCommentViewer.Control
 		}
 
 		/// <summary>
+		/// JikkyoIdから放送に接続する
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <returns></returns>
+		private bool connectJikkyoID(string jikkyoId)
+		{
+			if (_accountInfomation == null) {
+				_mainview.ShowFatalMessage("ログインが完了していません");
+				return false;
+			}
+
+			NicoApiSharp.Jk.GetFlv flvInfo = NicoApiSharp.Jk.GetFlv.GetInstance(jikkyoId);
+
+			if (flvInfo != null) {
+				if (!flvInfo.HasError) {
+					_liveBasicStatus = flvInfo;
+					_liveWatcherStatus = null;
+					_messageServerStatus = flvInfo;
+					_liveDescription = NicoApiSharp.Jk.JikkyoDescription.GetInstance(jikkyoId);
+					_seetType = SeetType.Jikkyo;
+
+					return ConnectServer(_accountInfomation, _liveDescription, _messageServerStatus);
+				} else {
+					_mainview.ShowFatalMessage(flvInfo.ErrorMessage);
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
 		/// 与えられた情報を元にメッセージサーバーに接続を試みる
 		/// </summary>
 		/// <param name="accountInfomation">アカウント情報</param>
@@ -231,11 +262,9 @@ namespace Hal.OpenCommentViewer.Control
 					_chats.Add(new OcvChat(chat));
 				}
 
-				_chatReceiver.Connect(messageServerStatus, chats.Length + 1);
-				return true;
+				return _chatReceiver.Connect(messageServerStatus, chats.Length + 1);
 			} else {
-				_chatReceiver.Connect(messageServerStatus, -1000);
-				return true;
+				return _chatReceiver.Connect(messageServerStatus, -1000);
 			}
 		}
 
@@ -667,9 +696,19 @@ namespace Hal.OpenCommentViewer.Control
 
 		}
 
-		public bool ConnectLive(string liveId)
+		public bool Connect(string id)
 		{
-			return connectLiveID(liveId);
+			string liveId = Utility.GetLiveIdFromUrl(id);
+			if (liveId != null) {
+				return this.connectLiveID(liveId);
+			}
+
+			string jikkyoId = Utility.GetJikkyoIdFromUrl(id);
+			if (jikkyoId != null) {
+				return this.connectJikkyoID(jikkyoId);
+			}
+
+			return false;
 		}
 
 

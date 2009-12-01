@@ -56,7 +56,22 @@ namespace Hal.OpenCommentViewer.Control
 			chatGridView1.AddRange(_core.Chats);
 			startButton.Enabled = true;
 
-			string label = (_core.SeetType == SeetType.Arena ? "【アリーナ】" : "【立ち見】");
+			string label;
+			switch(_core.SeetType){
+				case SeetType.Arena:
+					label = "【アリーナ】";
+					break;
+				case SeetType.Standing:
+					label = "【立ち見】";
+					break;
+				case SeetType.Jikkyo:
+					label = "【実況】";
+					break;
+				default:
+					label = "";
+					break;
+			}
+
 			idBox.Text = string.Format("{0} - {1}", liveId, label);
 			this.Text = string.Format("{0}{1}", label, _core.LiveName);
 
@@ -170,30 +185,35 @@ namespace Hal.OpenCommentViewer.Control
 		private void StartLive()
 		{
 			lock (this) {
-				string liveId = Utility.GetLiveIdFromUrl(idBox.Text);
-				if (liveId != null) {
-					if (_core.ConnectLive(liveId)) {
-						startButton.Enabled = false;
-					}
+				this.Cursor = Cursors.WaitCursor;
+				if (_core.Connect(idBox.Text)) { 
+					startButton.Enabled = false;
 				}
+				
+				this.Cursor = Cursors.Default;
 			}
-		}
 
-		bool __startLock = false;
+		//this.Cursor = Cursors.WaitCursor;
+		//        string liveId = Utility.GetLiveIdFromUrl(idBox.Text);
+		//        if (liveId != null) {
+		//            if (_core.ConnectLive(liveId)) {
+		//                startButton.Enabled = false;
+		//            }
+		//        }
+
+		//        string jikkyoId = Utility.GetJikkyoIdFromUrl(idBox.Text);
+		//        if (jikkyoId != null) {
+		//            if (_core.ConnectLive(jikkyoId)) {
+		//                startButton.Enabled = false;
+		//            }
+		//        }
+		//        this.Cursor = Cursors.Default;
+		}
+		
 		private void startButton_Click(object sender, EventArgs e)
 		{
-			if (!__startLock) {
-				__startLock = true;
-				this.Cursor = Cursors.WaitCursor;
-
-				StartLive();
-
-				this.Cursor = Cursors.Default;
-				__startLock = false;
-			}
+			StartLive();
 		}
-
-		
 
 		private void stopButton_Click(object sender, EventArgs e)
 		{
@@ -213,8 +233,7 @@ namespace Hal.OpenCommentViewer.Control
 			chatGridView1.SaveSettings(UserSettings.Default);
 			UserSettings.Default.Save();
 		}
-
-
+		
 		private void saveTicketToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Control.LiveTicket log = _core.GetLiveTicket();
@@ -238,8 +257,7 @@ namespace Hal.OpenCommentViewer.Control
 			}
 
 		}
-
-
+		
 		private void loginToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			LoginForm f = new LoginForm();
@@ -327,9 +345,9 @@ statusStrip1.Visible = !statusStrip1.Visible;
 		private void idBoxContextMenu_Opening(object sender, CancelEventArgs e)
 		{
 			bool st = (idBox.SelectionLength != 0);
-			bool ct = Utility.GetLiveIdFromUrl(idBox.Text) != null;
+			bool ct = Utility.GetLiveIdFromUrl(idBox.Text) != null || Utility.GetJikkyoIdFromUrl(idBox.Text) != null;
 			bool pt = Clipboard.ContainsText();
-			bool ptag = (pt && Utility.GetLiveIdFromUrl(Clipboard.GetText()) != null);
+			bool ptag = (pt && Utility.GetLiveIdFromUrl(Clipboard.GetText()) != null) || (pt && Utility.GetJikkyoIdFromUrl(Clipboard.GetText()) != null);
 
 			cutIdToolStripMenuItem.Enabled = st;
 			copyIdToolStripMenuItem.Enabled = st;
