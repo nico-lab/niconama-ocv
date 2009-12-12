@@ -52,13 +52,20 @@ namespace Hal.CookieGetterSharp
 							recordData = getRecord(reader, headerData);
 							switch (recordData.tag_id) {
 								case 0x01:  // ドメイン
-									string domain = getDomainRecode(new System.IO.MemoryStream(recordData.bytepayload), headerData);
+									string domain;
+									using(System.IO.MemoryStream ms = new System.IO.MemoryStream(recordData.bytepayload)){
+										domain = getDomainRecode(ms, headerData);
+									}
 									if (domain != null) {
 										domainStack.Push(domain);
 									}
 									break;
 								case 0x02:  // パス
-									string page = getPageRecode(new System.IO.MemoryStream(recordData.bytepayload), headerData);
+									string page;
+									using (System.IO.MemoryStream ms = new System.IO.MemoryStream(recordData.bytepayload)) {
+										page = getPageRecode(ms, headerData);
+									}
+
 									if (page != null) {
 										pathStack.Push(page);
 									}
@@ -67,7 +74,10 @@ namespace Hal.CookieGetterSharp
 									string chost = string.Join(".", domainStack.ToArray());
 									string cpath = '/' + string.Join("/", pathStack.ToArray());
 
-									System.Net.Cookie cookie = getCookieRecode(new System.IO.MemoryStream(recordData.bytepayload), headerData);
+									System.Net.Cookie cookie;
+									using (System.IO.MemoryStream ms = new System.IO.MemoryStream(recordData.bytepayload)) {
+										cookie = getCookieRecode(ms, headerData);
+									}
 									cookie.Domain = '.' + string.Join(".", domainStack.ToArray());
 									cookie.Path = '/' + string.Join("/", pathStack.ToArray());
 									try {
@@ -147,7 +157,10 @@ namespace Hal.CookieGetterSharp
 						cookie.Value = Encoding.ASCII.GetString(recordData.bytepayload);
 						break;
 					case 0x12:
-						long time = getNumber(new System.IO.MemoryStream(recordData.bytepayload), 8);
+						long time;
+						using (System.IO.MemoryStream ms = new System.IO.MemoryStream(recordData.bytepayload)) {
+							time = getNumber(ms, 8);
+						}
 						cookie.Expires = Utility.UnixTimeToDateTime((int)time);
 						break;
 				}
