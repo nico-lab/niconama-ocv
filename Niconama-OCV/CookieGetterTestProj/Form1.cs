@@ -23,7 +23,6 @@ namespace CookieGetterTestProj
 		private void Form1_Load(object sender, EventArgs e)
 		{
 		
-
 			IBrowserStatus[] status = CookieGetter.GetBrowserStatus();
 			comboBox1.Items.Clear();
 			comboBox1.Items.AddRange(status);
