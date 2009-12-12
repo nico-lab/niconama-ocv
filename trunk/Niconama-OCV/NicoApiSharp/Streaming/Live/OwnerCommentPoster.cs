@@ -22,15 +22,19 @@ namespace Hal.NicoApiSharp.Streaming.Live
 		/// コンストラクタ（非同期的に主米を送信する必要がある際に使用する）
 		/// </summary>
 		public OwnerCommentPoster() {
-			_queue = new Queue<PostData>();
-			_thread = new System.Threading.Thread(ThreadLoop);
-			_manualResetEvent = new System.Threading.ManualResetEvent(true);
-			_thread.IsBackground = true;
-			_thread.Start();
+			
 		}
 
 		private void AddTask(PostData postData)
-		{ 
+		{
+			if (_queue == null) { 
+				_queue = new Queue<PostData>();
+				_thread = new System.Threading.Thread(ThreadLoop);
+				_manualResetEvent = new System.Threading.ManualResetEvent(true);
+				_thread.IsBackground = true;
+				_thread.Start();
+			}
+
 			if(!_cancel){
 				lock (_queue) {
 					_queue.Enqueue(postData);
@@ -117,15 +121,17 @@ namespace Hal.NicoApiSharp.Streaming.Live
 		public void Dispose()
 		{
 			_cancel = true;
-			_manualResetEvent.Set();
-			if (_thread.IsAlive) {
-				_thread.Join();
+			if (_queue != null) {
+				_manualResetEvent.Set();
+				if (_thread.IsAlive) {
+					_thread.Join();
+				}
+				_manualResetEvent.Close();
+				_manualResetEvent = null;
+				_thread = null;
+				_queue.Clear();
+				_queue = null;
 			}
-			_manualResetEvent.Close();
-			_manualResetEvent = null;
-			_thread = null;
-			_queue.Clear();
-			_queue = null;
 		}
 
 		#endregion
