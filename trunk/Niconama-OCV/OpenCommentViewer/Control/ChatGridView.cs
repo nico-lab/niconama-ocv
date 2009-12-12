@@ -26,11 +26,7 @@ namespace Hal.OpenCommentViewer.Control
 		protected int _defaultColmunCount = 0;
 		
 		List<Hal.NCSPlugin.IChat> _chats = new List<Hal.NCSPlugin.IChat>();
-		List<int> _widthList = new List<int>();
-		int _dgHeight = 0;
-
-		int _messageColumnWidth = 40;
-
+		List<int> _heightList = new List<int>();
 		
 		/// <summary>
 		/// チャットビューを生成します
@@ -41,9 +37,6 @@ namespace Hal.OpenCommentViewer.Control
 
 			// プラグイン追加前のカラムの量を保存しておく
 			_defaultColmunCount = dataGridView1.Columns.Count;
-
-			// 現在のフォントの高さを取得しておく
-			_dgHeight = System.Windows.Forms.TextRenderer.MeasureText("measure height", dataGridView1.Font).Height;
 
 		}
 
@@ -107,8 +100,7 @@ namespace Hal.OpenCommentViewer.Control
 		/// <param name="chat"></param>
 		public void Add(Hal.NCSPlugin.IChat chat)
 		{
-			// 現在のフォントでの文字列の長さを取得する
-			_widthList.Add(System.Windows.Forms.TextRenderer.MeasureText(chat.Message, dataGridView1.Font).Width);
+			_heightList.Add(0);
 			
 			dataGridView1.SuspendLayout();
 			_chats.Add(chat);
@@ -137,7 +129,7 @@ namespace Hal.OpenCommentViewer.Control
 			foreach (Hal.NCSPlugin.IChat c in chats) {
 				_chats.Add(c);
 				// 現在のフォントでの文字列の長さを取得する
-				_widthList.Add(System.Windows.Forms.TextRenderer.MeasureText(c.Message, dataGridView1.Font).Width);
+				_heightList.Add(0);
 			}
 			dataGridView1.RowCount = _chats.Count;
 
@@ -195,10 +187,9 @@ namespace Hal.OpenCommentViewer.Control
 		/// </summary>
 		public void Clear()
 		{
-
 			dataGridView1.RowCount = 0;
 			_chats.Clear();
-			_widthList.Clear();
+			_heightList.Clear();
 			
 		}
 
@@ -254,6 +245,10 @@ namespace Hal.OpenCommentViewer.Control
 
 				if (d != -1) {
 					dataGridView1.FirstDisplayedScrollingRowIndex = d;
+				}
+
+				for (int i = 0; i < _heightList.Count; i++) {
+					_heightList[i] = 0;
 				}
 
 				dataGridView1.ResumeLayout();
@@ -356,16 +351,16 @@ namespace Hal.OpenCommentViewer.Control
 		protected void dataGridView1_RowHeightInfoNeeded(object sender, System.Windows.Forms.DataGridViewRowHeightInfoNeededEventArgs e)
 		{
 
-			if (e.RowIndex < 0 || _widthList.Count <= e.RowIndex) {
+			if (e.RowIndex < 0 || _heightList.Count <= e.RowIndex) {
+				e.Height = dataGridView1.RowTemplate.Height;
 				return;
 			}
 
-			int w = _widthList[e.RowIndex];
-
-			if (_messageColumnWidth < w) {
-				int line = w / _messageColumnWidth + 1;
-				e.Height = Math.Min(_dgHeight * line + 5, 50);
+			if (_heightList[e.RowIndex] == 0) {
+				_heightList[e.RowIndex] = dataGridView1.Rows[e.RowIndex].GetPreferredHeight(e.RowIndex, DataGridViewAutoSizeRowMode.AllCellsExceptHeader, true) + 3;
 			}
+			
+			e.Height = _heightList[e.RowIndex];
 		}
 		
 		/// <summary>
@@ -377,8 +372,6 @@ namespace Hal.OpenCommentViewer.Control
 		private void dataGridView1_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
 		{
 			if (e.Column.Index == 1) {
-				_messageColumnWidth = dataGridView1.Columns[1].Width;
-
 				UpdateCellValues();
 			}
 		}

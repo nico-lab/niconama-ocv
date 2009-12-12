@@ -4,13 +4,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9CC20246-79AA-43B0-9736-CA65EDB1C334}</ProjectGuid>
+    <ProjectGuid>{ACB84F0E-B482-46B0-8C29-1FAC6C85D622}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Hal.NCSPlugin</RootNamespace>
-    <AssemblyName>NCSPlugin</AssemblyName>
-    <StartupObject>
-    </StartupObject>
+    <RootNamespace>Hal.CookieGetterSharp</RootNamespace>
+    <AssemblyName>CookieGetterSharp</AssemblyName>
     <SccProjectName>Svn</SccProjectName>
     <SccLocalPath>Svn</SccLocalPath>
     <SccAuxPath>Svn</SccAuxPath>
@@ -24,8 +22,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\NCSPlugin.XML</DocumentationFile>
     <PlatformTarget>x86</PlatformTarget>
+    <DocumentationFile>bin\Debug\CookieGetterSharp.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,44 +32,42 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\NCSPlugin.XML</DocumentationFile>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\System.Data.SQLite.DLL</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ICellFormatter.cs" />
-    <Compile Include="IChat.cs" />
-    <Compile Include="IColumnExtention.cs" />
-    <Compile Include="IFilterdChat.cs" />
-    <Compile Include="IPlugin.cs" />
-    <Compile Include="IPluginHost.cs" />
+    <Compile Include="BrowserStatus.cs" />
+    <Compile Include="CookieGetter.cs" />
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="Firefox3CookieGetter.cs" />
+    <Compile Include="Firefox3BrowserManager.cs" />
+    <Compile Include="Firefox3Profile.cs" />
+    <Compile Include="GoogleChrome3BrowserManager.cs" />
+    <Compile Include="GoogleChrome3CookieGetter.cs" />
+    <Compile Include="IBrowserManager.cs" />
+    <Compile Include="IBrowserStatus.cs" />
+    <Compile Include="ICookieGetter.cs" />
+    <Compile Include="IEBrowserManager.cs" />
+    <Compile Include="IEComponentBrowserManager.cs" />
+    <Compile Include="IECookieGetter.cs" />
+    <Compile Include="IESafemodeBrowserManager.cs" />
+    <Compile Include="Lunascape5GeckoBrowserManager.cs" />
+    <Compile Include="Opera10BrowserManager.cs" />
+    <Compile Include="Opera10CookieGetter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
+    <Compile Include="Safari4BrowserManager.cs" />
+    <Compile Include="Safari4CookieGetter.cs" />
+    <Compile Include="SqlCookieGetter.cs" />
+    <Compile Include="Utility.cs" />
+    <Compile Include="Lunascape6GeckoBrowserManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

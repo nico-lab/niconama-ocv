@@ -119,22 +119,22 @@ namespace Hal.NameManagePlugin
 		private void CreateContextMenu()
 		{
 			System.Windows.Forms.ToolStripMenuItem root = new System.Windows.Forms.ToolStripMenuItem("ユーザー管理(&U)");
-			System.Windows.Forms.ToolStripMenuItem getProfileName = new System.Windows.Forms.ToolStripMenuItem("プロフィールから名前を取得");
-			//System.Windows.Forms.ToolStripMenuItem changeName = new System.Windows.Forms.ToolStripMenuItem("名前をつける");
-			//System.Windows.Forms.ToolStripMenuItem autoChangeColor = new System.Windows.Forms.ToolStripMenuItem("適当な色をつける");
-			//System.Windows.Forms.ToolStripMenuItem changeColor = new System.Windows.Forms.ToolStripMenuItem("色を指定する");
+			System.Windows.Forms.ToolStripMenuItem getProfileName = new System.Windows.Forms.ToolStripMenuItem("名前を取得");
+			System.Windows.Forms.ToolStripMenuItem changeName = new System.Windows.Forms.ToolStripMenuItem("名前をつける");
+			System.Windows.Forms.ToolStripMenuItem autoChangeColor = new System.Windows.Forms.ToolStripMenuItem("適当な色をつける");
+			System.Windows.Forms.ToolStripMenuItem changeColor = new System.Windows.Forms.ToolStripMenuItem("色を指定する");
 			System.Windows.Forms.ToolStripMenuItem reset = new System.Windows.Forms.ToolStripMenuItem("設定をリセットする");
 
 			getProfileName.Click += new EventHandler(getProfileName_Click);
-			//changeName.Click += new EventHandler(changeName_Click);
-			//autoChangeColor.Click += new EventHandler(autoChangeColor_Click);
-			//changeColor.Click += new EventHandler(changeColor_Click);
+			changeName.Click += new EventHandler(changeName_Click);
+			autoChangeColor.Click += new EventHandler(autoChangeColor_Click);
+			changeColor.Click += new EventHandler(changeColor_Click);
 			reset.Click += new EventHandler(reset_Click);
 
 			root.DropDownItems.Add(getProfileName);
-			//root.DropDownItems.Add(changeName);
-			//root.DropDownItems.Add(autoChangeColor);
-			//root.DropDownItems.Add(changeColor);
+			root.DropDownItems.Add(changeName);
+			root.DropDownItems.Add(autoChangeColor);
+			root.DropDownItems.Add(changeColor);
 			root.DropDownItems.Add(reset);
 
 			// コンテクストメニューへの追加と、メニューが開かれた際の動作を指定
@@ -152,9 +152,9 @@ namespace Hal.NameManagePlugin
 
 				root.Enabled = (_selectedChat != null);
 				getProfileName.Enabled = (_selectedChat != null && !_selectedChat.Anonymity);
-				//changeName.Enabled = (_selectedChat != null);
-				//autoChangeColor.Enabled = (_selectedChat != null);
-				//changeColor.Enabled = (_selectedChat != null);
+				changeName.Enabled = (_selectedChat != null);
+				autoChangeColor.Enabled = (_selectedChat != null);
+				changeColor.Enabled = (_selectedChat != null);
 				reset.Enabled = (_selectedChat != null && _selectedUser != null);
 
 			});
@@ -188,6 +188,7 @@ namespace Hal.NameManagePlugin
 			_column.HeaderText = "Name";
 			_column.Width = 50;
 			_column.ReadOnly = true;
+			_column.Visible = Properties.Settings.Default.IsAlive;
 
 			CreateContextMenu();
 		}
@@ -195,7 +196,8 @@ namespace Hal.NameManagePlugin
 		
 		public void Run()
 		{
-			
+			Properties.Settings.Default.IsAlive = !Properties.Settings.Default.IsAlive;
+			_column.Visible = Properties.Settings.Default.IsAlive;
 
 		}
 

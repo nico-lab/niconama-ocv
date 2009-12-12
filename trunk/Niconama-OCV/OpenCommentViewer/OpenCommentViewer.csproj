@@ -12,6 +12,10 @@
     <ApplicationIcon>ocv.ico</ApplicationIcon>
     <StartupObject>
     </StartupObject>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -125,6 +129,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CookieGetterSharp\CookieGetterSharp.csproj">
+      <Project>{ACB84F0E-B482-46B0-8C29-1FAC6C85D622}</Project>
+      <Name>CookieGetterSharp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NCSPlugin\NCSPlugin.csproj">
       <Project>{9CC20246-79AA-43B0-9736-CA65EDB1C334}</Project>
       <Name>NCSPlugin</Name>

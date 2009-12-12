@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Hal.NicoApiSharp.Cookie;
+using Hal.CookieGetterSharp;
 
 namespace Hal.NicoApiSharp
 {
@@ -10,7 +10,22 @@ namespace Hal.NicoApiSharp
 	/// </summary>
 	public static class LoginManager
 	{
+
 		static internal System.Net.CookieContainer DefaultCookies = null;
+
+		/// <summary>
+		/// クッキー共有可能なブラウザ識別名一覧を取得します。
+		/// </summary>
+		/// <returns></returns>
+		public static string[] GetAvailableBrowserName() {
+			List<string> results = new List<string>();
+
+			foreach (IBrowserStatus status in CookieGetter.GetBrowserStatus()) {
+				results.Add(status.Name);
+			}
+
+			return results.ToArray();
+		}
 
 		/// <summary>
 		/// ログインする
@@ -21,52 +36,48 @@ namespace Hal.NicoApiSharp
 		public static AccountInfomation Login(CookieGetter.BROWSER_TYPE browserType, string cookieFilePath)
 		{
 			ICookieGetter cookieGetter = CookieGetter.GetInstance(browserType);
-			System.Net.Cookie[] cookies = null;
+			if (cookieGetter == null) return null;
 
 			if(!string.IsNullOrEmpty(cookieFilePath)){
-				System.Net.Cookie c = cookieGetter.GetCookie(new Uri("http://www.nicovideo.jp/"), "user_session", cookieFilePath);
-				if (c != null) {
-					cookies = new System.Net.Cookie[] { c };
-				}
-			}else{
-				cookies = cookieGetter.GetCookies(new Uri("http://www.nicovideo.jp/"), "user_session");
+				cookieGetter.CookiePath = cookieFilePath;
 			}
 
-			if (cookies == null || cookies.Length == 0) {
-				Logger.Default.LogMessage(string.Format("Login not found: type-{0}", browserType.ToString()));
+			return Login(cookieGetter);
+
+		}		
+
+		/// <summary>
+		/// ログインする
+		/// </summary>
+		/// <param name="browserName">GetAvailableBrowserNameで取得したブラウザ名のどれか</param>
+		/// <returns>失敗した場合はnullが返される</returns>
+		public static AccountInfomation Login(string browserName) {
+			foreach (IBrowserStatus status in CookieGetter.GetBrowserStatus()) {
+				if (status.Name.Equals(browserName)) { 
+					return Login(status.CookieGetter);
+				}
+			}
+			return null;
+		}
+
+		private static AccountInfomation Login(ICookieGetter cookieGetter)
+		{
+			System.Net.Cookie cookie = cookieGetter.GetCookie(new Uri("http://www.nicovideo.jp/"), "user_session");
+			if (cookie == null) {
+				Logger.Default.LogMessage(string.Format("Login failed, cookie dosen't found"));
 				return null;
 			}
 
-			List<System.Net.Cookie> cookieList = new List<System.Net.Cookie>(cookies);
-			cookieList.Sort(CompareCookieExpires);
+			System.Net.CookieContainer container = new System.Net.CookieContainer();
+			container.Add(cookie);
 
-			Logger.Default.LogMessage(string.Format("Found Cookies: type-{0}, cookies-{1}", browserType.ToString(), cookieList.Count));
-			foreach (System.Net.Cookie cookie in cookieList) {		
-				System.Net.CookieContainer container = new System.Net.CookieContainer();
-				container.Add(cookie);
-
-				AccountInfomation accountInfomation = NicoApiSharp.AccountInfomation.GetMyAccountInfomation(container);
-				if (accountInfomation != null) {
-					DefaultCookies = container;
-					return accountInfomation;
-				} 
+			AccountInfomation accountInfomation = NicoApiSharp.AccountInfomation.GetMyAccountInfomation(container);
+			if (accountInfomation != null) {
+				DefaultCookies = container;
+				return accountInfomation;
 			}
 
 			return null;
-
-		}
-
-		private static int CompareCookieExpires(System.Net.Cookie a, System.Net.Cookie b) {
-			if (a == null && b == null) {
-				return 0;
-			}
-			if (a == null) {
-				return -1;
-			}
-			if (b == null) {
-				return 1;
-			}
-			return -a.Expires.CompareTo(b.Expires);
 		}
 
 		/// <summary>
@@ -75,7 +86,8 @@ namespace Hal.NicoApiSharp
 		/// <param name="mail"></param>
 		/// <param name="pass"></param>
 		/// <returns>失敗した場合はnullが返される</returns>
-		public static AccountInfomation Login(string mail, string pass) {
+		public static AccountInfomation Login(string mail, string pass)
+		{
 			System.Net.CookieContainer cookies = new System.Net.CookieContainer();
 			string postData = String.Format("mail={0}&password={1}", mail, pass);
 

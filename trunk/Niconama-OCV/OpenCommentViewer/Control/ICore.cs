@@ -71,12 +71,10 @@ namespace Hal.OpenCommentViewer.Control
 		bool ConnectByLiveTicket(LiveTicket ticket);
 
 		/// <summary>
-		/// ログインする
+		/// UserSettingsの設定に従ってログインを実行する
 		/// </summary>
-		/// <param name="browserType"></param>
-		/// <param name="cookieFilePath">クッキーが保存されているファイル、nullの場合既定のファイルを対称にする</param>
 		/// <returns></returns>
-		bool Login(Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE browserType, string cookieFilePath);
+		bool Login();
 
 		/// <summary>
 		/// デバッグ用

@@ -2,43 +2,45 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Hal.NicoApiSharp.Cookie
+namespace Hal.CookieGetterSharp
 {
-	class SafariCookieGetter : CookieGetter
+	class Safari4CookieGetter : CookieGetter
 	{
-		public static new ICookieGetter GetInstance(Cookie.CookieGetter.BROWSER_TYPE type)
+		
+		public Safari4CookieGetter()
 		{
-			switch (type) {
-				case CookieGetter.BROWSER_TYPE.Safari4:
-					return new SafariCookieGetter();
-			}
-
-			return null;
+			this.CookiePath = null;
 		}
 
-		private SafariCookieGetter()
-		{ 
-			base._defaultPath = Utility.ReplacePathSymbols(ApiSettings.Default.Opera10CookieFilePath);
+		public Safari4CookieGetter(string cookieFilePath)
+		{
+			this.CookiePath = cookieFilePath;
 		}
 
-		public override System.Net.CookieContainer GetAllCookies(string path)
+		public override System.Net.CookieContainer GetAllCookies()
 		{
 
 			System.Net.CookieContainer container = new System.Net.CookieContainer();
-			
-			if (!System.IO.File.Exists(path)) {
-				Logger.Default.LogErrorMessage("クッキー取得：存在しないパス - " + path);
-				return container;
-			}
 
+			if (!System.IO.File.Exists(base.CookiePath)) return container;
+			
 			try {
-				using (System.Xml.XmlTextReader xtr = new System.Xml.XmlTextReader(path)) {
+				System.Xml.XmlReaderSettings settings = new System.Xml.XmlReaderSettings();
+				settings.XmlResolver = null;
+				settings.ProhibitDtd = false;
+				settings.CheckCharacters = false;
+
+				using (System.Xml.XmlReader xtr = System.Xml.XmlTextReader.Create(base.CookiePath, settings)) {//new System.Xml.XmlTextReader(this.CookiePath)){ //
 					while (xtr.Read()) {
 						switch (xtr.NodeType) { 
 							case System.Xml.XmlNodeType.Element:
 								if (xtr.Name.ToLower().Equals("dict")) {
 									System.Net.Cookie cookie = getCookie(xtr);
-									container.Add(cookie);
+									try {
+										AddCookieToContainer(container, cookie);
+									} catch {
+										Console.WriteLine(string.Format("Invalid Format! domain:{0},key:{1},value:{2}", cookie.Domain, cookie.Name, cookie.Value));
+									}
 								}
 								break;
 						}
@@ -46,13 +48,13 @@ namespace Hal.NicoApiSharp.Cookie
 				}
 
 			} catch (Exception ex){
-				Logger.Default.LogException(ex);
+				throw new CookieGetterException("Safariのクッキー取得中にエラーが発生しました。", ex);
 			}
 
 			return container;
 		}
 
-		private System.Net.Cookie getCookie(System.Xml.XmlTextReader xtr) {
+		private System.Net.Cookie getCookie(System.Xml.XmlReader xtr) {
 			bool isEnd = false;
 			System.Net.Cookie cookie = new System.Net.Cookie();
 			string tagName = "";
@@ -77,7 +79,7 @@ namespace Hal.NicoApiSharp.Cookie
 										cookie.Domain = xtr.Value;
 										break;
 									case "name":
-										cookie.Name = xtr.Name;
+										cookie.Name = xtr.Value;
 										break;
 									case "value":
 										cookie.Value = xtr.Value;

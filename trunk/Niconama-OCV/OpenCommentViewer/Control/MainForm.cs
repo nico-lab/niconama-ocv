@@ -17,6 +17,7 @@ namespace Hal.OpenCommentViewer.Control
 		{
 			InitializeComponent();
 			idBox.TextBox.ContextMenuStrip = idBoxContextMenu;
+			UserSettings.Default.MainformWindowState.Load(this);
 		}
 
 		#region IPlugin メンバ
@@ -223,7 +224,6 @@ namespace Hal.OpenCommentViewer.Control
 		private void MainForm_Load(object sender, EventArgs e)
 		{
 			idBox.Text = UserSettings.Default.LastAccessId;
-			UserSettings.Default.MainformWindowState.Load(this);
 			chatGridView1.LoadSettings(UserSettings.Default);
 		}
 
@@ -262,7 +262,7 @@ namespace Hal.OpenCommentViewer.Control
 		{
 			LoginForm f = new LoginForm();
 			if (f.ShowDialog() == DialogResult.OK) {
-				_core.Login(UserSettings.Default.BrowserType, UserSettings.Default.CookieFilePath);
+				_core.Login();
 			}
 		}
 
@@ -271,8 +271,8 @@ namespace Hal.OpenCommentViewer.Control
 #if DEBUG
 			_core.CallTestMethod();
 #else
-menuStrip1.Visible = !menuStrip1.Visible;
-statusStrip1.Visible = !statusStrip1.Visible;
+			menuStrip1.Visible = !menuStrip1.Visible;
+			//statusStrip1.Visible = !statusStrip1.Visible;
 #endif
 		}
 
