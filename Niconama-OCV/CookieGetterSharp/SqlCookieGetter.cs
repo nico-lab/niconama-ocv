@@ -5,6 +5,9 @@ using System.Data.SQLite;
 
 namespace Hal.CookieGetterSharp
 {
+	/// <summary>
+	/// SQLiteを利用してクッキーを保存するタイプのブラウザからクッキーを取得するクラス
+	/// </summary>
 	abstract class SqlCookieGetter : CookieGetter
 	{
 		const string CONNECTIONSTRING_FORMAT = "Data Source={0}";
@@ -12,14 +15,14 @@ namespace Hal.CookieGetterSharp
 		public override System.Net.Cookie GetCookie(Uri url, string key)
 		{
 			System.Net.CookieContainer container = GetCookies(base.CookiePath, MakeQuery(url, key));
-			System.Net.CookieCollection collection = container.GetCookies(AddSrashLast(url));
+			System.Net.CookieCollection collection = container.GetCookies(Utility.AddSrashLast(url));
 			return collection[key];
 		}
 
 		public override System.Net.CookieCollection GetCookieCollection(Uri url)
 		{
 			System.Net.CookieContainer container = GetCookies(base.CookiePath, MakeQuery(url));
-			return container.GetCookies(AddSrashLast(url));
+			return container.GetCookies(Utility.AddSrashLast(url));
 		}
 
 		public override System.Net.CookieContainer GetAllCookies()
@@ -56,7 +59,7 @@ namespace Hal.CookieGetterSharp
 
 						System.Net.Cookie cookie = DataToCookie(items.ToArray());
 						try {
-							AddCookieToContainer(container, cookie);
+							Utility.AddCookieToContainer(container, cookie);
 						} catch {
 							Console.WriteLine(string.Format("Invalid Format! domain:{0},key:{1},value:{2}", cookie.Domain, cookie.Name, cookie.Value));
 						}
@@ -77,9 +80,32 @@ namespace Hal.CookieGetterSharp
 			return container;
 		}
 
+		/// <summary>
+		/// SQLから取得したデータをクッキーに変換する
+		/// </summary>
+		/// <param name="data">指定されたQueryで取得した１行分のデータ</param>
+		/// <returns></returns>
 		protected abstract System.Net.Cookie DataToCookie(object[] data);
+
+		/// <summary>
+		/// すべてのクッキーを取得するためのクエリーを生成する
+		/// </summary>
+		/// <returns></returns>
 		protected abstract string MakeQuery();
+
+		/// <summary>
+		/// 指定されたURLに関連したクッキーを取得するためのクエリーを生成する
+		/// </summary>
+		/// <param name="url"></param>
+		/// <returns></returns>
 		protected abstract string MakeQuery(Uri url);
+
+		/// <summary>
+		/// 指定されたURLの名前がkeyであるクッキーを取得するためのクエリーを生成する
+		/// </summary>
+		/// <param name="url"></param>
+		/// <param name="key"></param>
+		/// <returns></returns>
 		protected abstract string MakeQuery(Uri url, string key);
 	}
 }

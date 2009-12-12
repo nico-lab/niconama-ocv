@@ -16,11 +16,6 @@ namespace Hal.CookieGetterSharp
 			get { return CookieGetter.BROWSER_TYPE.Opera10; }
 		}
 
-		public string BrowserName
-		{
-			get { return BrowserType.ToString(); }
-		}
-
 		public IBrowserStatus GetDefaultStatus()
 		{
 			string path = Utility.ReplacePathSymbols(COOKIEPATH);
@@ -30,7 +25,7 @@ namespace Hal.CookieGetterSharp
 			}
 
 			BrowserStatus bs = new BrowserStatus();
-			bs.Name = BrowserName;
+			bs.Name = BrowserType.ToString();
 			bs.CookiePath = path;
 			bs.CookieGetter = new Opera10CookieGetter(path);
 

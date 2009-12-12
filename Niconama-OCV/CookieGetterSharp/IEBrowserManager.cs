@@ -4,6 +4,10 @@ using System.Text;
 
 namespace Hal.CookieGetterSharp
 {
+
+	/// <summary>
+	/// IE系のすべてのクッキーを取得する
+	/// </summary>
 	class IEBrowserManager : IBrowserManager
 	{
 		#region IBrowserManager メンバ
@@ -11,11 +15,6 @@ namespace Hal.CookieGetterSharp
 		public CookieGetter.BROWSER_TYPE BrowserType
 		{
 			get { return CookieGetter.BROWSER_TYPE.IE; }
-		}
-
-		public string BrowserName
-		{
-			get { return BrowserType.ToString(); }
 		}
 
 		public IBrowserStatus GetDefaultStatus()

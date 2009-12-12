@@ -40,6 +40,46 @@ namespace Hal.CookieGetterSharp
 			return path;
 		}
 
+		/// <summary>
+		/// 必要があればuriの最後に/をつける
+		/// Pathの指定がある場合、uriの最後に/があるかないかで取得できない場合があるので
+		/// </summary>
+		/// <param name="uri"></param>
+		/// <returns></returns>
+		public static Uri AddSrashLast(Uri uri)
+		{
+			string o = uri.Segments[uri.Segments.Length - 1];
+			string no = uri.OriginalString;//.Replace("http://", "http://o.");
+			if (!o.Contains(".") && o[o.Length - 1] != '/') {
+				no += "/";
+			}
+			return new Uri(no);
+		}
+
+		/// <summary>
+		/// クッキーコンテナにクッキーを追加する
+		/// domainが.hal.fscs.jpなどだと http://hal.fscs.jp でクッキーが有効にならないので.ありとなし両方指定する
+		/// </summary>
+		/// <param name="container"></param>
+		/// <param name="cookie"></param>
+		public static void AddCookieToContainer(System.Net.CookieContainer container, System.Net.Cookie cookie)
+		{
+
+			if (container == null) {
+				throw new ArgumentNullException("container");
+			}
+
+			if (cookie == null) {
+				throw new ArgumentNullException("cookie");
+			}
+
+			container.Add(cookie);
+			if (cookie.Domain.StartsWith(".")) {
+				container.Add(new System.Net.Cookie(cookie.Name, cookie.Value, cookie.Path, cookie.Domain.Substring(1)));
+			}
+
+		}
+
 		
 	}
 }

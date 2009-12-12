@@ -16,17 +16,12 @@ namespace Hal.CookieGetterSharp
 			get { return CookieGetter.BROWSER_TYPE.Lunascape6Gecko; }
 		}
 
-		public string BrowserName
-		{
-			get { return BrowserType.ToString(); }
-		}
-
 		public IBrowserStatus GetDefaultStatus()
 		{
 			string path = SearchDirectory();
 
 			BrowserStatus bs = new BrowserStatus();
-			bs.Name = BrowserName;
+			bs.Name = BrowserType.ToString();
 			bs.CookiePath = path;
 			bs.CookieGetter = new Firefox3CookieGetter(path);
 
@@ -46,6 +41,10 @@ namespace Hal.CookieGetterSharp
 
 		#endregion
 
+		/// <summary>
+		/// Lunascape6のプラグインフォルダからFirefoxのクッキーが保存されているパスを検索する
+		/// </summary>
+		/// <returns></returns>
 		private string SearchDirectory() {
 			foreach (string folder in System.IO.Directory.GetDirectories(Utility.ReplacePathSymbols(LUNASCAPE_PLUGIN_FOLDER))) {
 				string path = System.IO.Path.Combine(folder, COOKIEPATH);

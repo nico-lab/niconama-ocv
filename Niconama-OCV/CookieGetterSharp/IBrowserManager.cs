@@ -15,11 +15,6 @@ namespace Hal.CookieGetterSharp
 		CookieGetter.BROWSER_TYPE BrowserType { get; }
 
 		/// <summary>
-		/// ブラウザの名前
-		/// </summary>
-		string BrowserName { get; }
-
-		/// <summary>
 		/// 既定のステータスを取得します
 		/// </summary>
 		/// <returns></returns>

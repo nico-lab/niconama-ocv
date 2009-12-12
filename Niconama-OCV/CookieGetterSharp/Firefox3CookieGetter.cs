@@ -40,7 +40,8 @@ namespace Hal.CookieGetterSharp
 			return cookie;
 		}
 
-		private string makeWhere(Uri url) {
+		private string makeWhere(Uri url)
+		{
 			Stack<string> hostStack = new Stack<string>(url.Host.Split('.'));
 			StringBuilder hostBuilder = new StringBuilder('.' + hostStack.Pop());
 			string[] pathes = url.Segments;
@@ -84,6 +85,6 @@ namespace Hal.CookieGetterSharp
 			return string.Format("{0} {1} AND name = \"{2}\" ORDER BY expiry", SELECT_QUERY, makeWhere(url), key);
 		}
 
-		
+
 	}
 }
