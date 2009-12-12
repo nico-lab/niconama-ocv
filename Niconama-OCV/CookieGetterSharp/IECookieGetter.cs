@@ -3,27 +3,24 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Hal.NicoApiSharp.Cookie
+namespace Hal.CookieGetterSharp
 {
 
 	/// <summary>
 	/// IEやトライデントエンジンを利用しているブラウザのクッキーを取得する
 	/// </summary>
-	class IEComponentCookieGetter : CookieGetter
+	class IECookieGetter : CookieGetter
 	{
-		
-		public static new ICookieGetter GetInstance(Cookie.CookieGetter.BROWSER_TYPE type)
-		{
-			switch (type) {
-				case CookieGetter.BROWSER_TYPE.IEComponent:
-					return new IEComponentCookieGetter();
-			}
+		bool _checkSubDirectory;
 
-			return null;
+		public IECookieGetter() {
+			base.CookiePath = System.Environment.GetFolderPath(Environment.SpecialFolder.Cookies);
+			this._checkSubDirectory = true;
 		}
 
-		private IEComponentCookieGetter() { 
-		
+		public IECookieGetter(string path, bool checkSubDirectory) {
+			base.CookiePath = path;
+			this._checkSubDirectory = checkSubDirectory;
 		}
 
 		/// <summary>
@@ -32,52 +29,78 @@ namespace Hal.NicoApiSharp.Cookie
 		/// <param name="url"></param>
 		/// <param name="key"></param>
 		/// <returns></returns>
-		public override System.Net.Cookie[] GetCookies(Uri url, string key)
+		public override System.Net.Cookie GetCookie(Uri url, string key)
 		{
 			
 			List<string> files = SelectFiles(url, GetAllFiles());
 			List<System.Net.Cookie> cookies = new List<System.Net.Cookie>();
 			foreach (string filepath in files) {
 				System.Net.CookieContainer container = new System.Net.CookieContainer();
-				PickCookiesFromFile(filepath, container);
-				System.Net.CookieCollection collection = container.GetCookies(url);
 
-				if (collection[key] != null) {
-					cookies.Add(collection[key]);
+				foreach (System.Net.Cookie cookie in PickCookiesFromFile(filepath)) {
+					if (cookie.Name.Equals(key)) {
+						cookies.Add(cookie);
+					}
 				}
 			}
 
-			return cookies.ToArray();
+			if (cookies.Count != 0) { 
+				// Expiresが最新のものを返す
+				cookies.Sort(CompareCookieExpiresDesc);
+				return cookies[0];
+			}
+
+			return null;
 		}
 
 		/// <summary>
 		/// urlに関連付けられたクッキーを取得します。
 		/// </summary>
 		/// <param name="url"></param>
-		/// <param name="path"></param>
 		/// <returns></returns>
-		public override System.Net.CookieCollection GetCookieCollection(Uri url, string path)
+		public override System.Net.CookieCollection GetCookieCollection(Uri url)
 		{
 			//関係のあるファイルだけ調べることによってパフォーマンスを向上させる
 			List<string> files = SelectFiles(url, GetAllFiles());
-			System.Net.CookieContainer container = new System.Net.CookieContainer();
+			List<System.Net.Cookie> cookies = new List<System.Net.Cookie>();
 
 			foreach (string filepath in files) {
-				PickCookiesFromFile(filepath, container);
+				cookies.AddRange(PickCookiesFromFile(filepath));
 			}
 
-			return container.GetCookies(url);
+			// Expiresが最新のもで上書きする
+			cookies.Sort(CompareCookieExpiresAsc);
+			System.Net.CookieCollection collection = new System.Net.CookieCollection();
+			foreach (System.Net.Cookie cookie in cookies) {
+				try {
+					collection.Add(cookie);
+				} catch(Exception ex) {
+					System.Diagnostics.Debug.WriteLine(ex.Message);
+				}
+			}
+			return collection;
 		}
 
-		public override System.Net.CookieContainer GetAllCookies(string path) {
-			System.Net.CookieContainer container = new System.Net.CookieContainer();
+		public override System.Net.CookieContainer GetAllCookies() {
+			
+			List<System.Net.Cookie> cookies = new List<System.Net.Cookie>();
+
 			foreach (string file in GetAllFiles())
 			{
-				PickCookiesFromFile(file, container);
+				cookies.AddRange(PickCookiesFromFile(file));
 			}
-			
 
-			return container;			
+			// Expiresが最新のもで上書きする
+			cookies.Sort(CompareCookieExpiresAsc);
+			System.Net.CookieContainer container = new System.Net.CookieContainer();
+			foreach (System.Net.Cookie cookie in cookies) {
+				try{
+					AddCookieToContainer(container, cookie);
+				} catch (Exception ex) {
+					System.Diagnostics.Debug.WriteLine(ex.Message);
+				}
+			}
+			return container;
 		}
 
 		/// <summary>
@@ -111,10 +134,14 @@ namespace Hal.NicoApiSharp.Cookie
 		private List<string> GetAllFiles()
 		{
 			List<string> results = new List<string>();
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.Cookies);
-			// VISTA用などのLOWサブフォルダも検索範囲に含める
-			Stack<string> cookieFolders = new Stack<string>(System.IO.Directory.GetDirectories(path));
-			cookieFolders.Push(path);
+			
+			Stack<string> cookieFolders = new Stack<string>();
+			cookieFolders.Push(base.CookiePath);
+
+			if(_checkSubDirectory){
+				// VISTA用などのLOWサブフォルダも検索範囲に含める
+				System.IO.Directory.GetDirectories(base.CookiePath);
+			}
 
 			foreach (string folder in cookieFolders) {
 				if (System.IO.Directory.Exists(folder)) {
@@ -131,14 +158,13 @@ namespace Hal.NicoApiSharp.Cookie
 		}
 
 		/// <summary>
-		/// 指定されたファイルからクッキーを拾い上げる
+		/// 指定されたファイルからクッキーを取得する
 		/// </summary>
-		/// <param name="filepath"></param>
-		/// <param name="url"></param>
+		/// <param name="filePath"></param>
 		/// <returns></returns>
-		private void PickCookiesFromFile(string filePath, System.Net.CookieContainer container)
+		private System.Net.Cookie[] PickCookiesFromFile(string filePath)
 		{
-
+			List<System.Net.Cookie> results = new List<System.Net.Cookie>();
 			try {
 				string data = System.IO.File.ReadAllText(filePath, Encoding.GetEncoding("Shift_JIS"));
 				string[] blocks = data.Split('*');
@@ -160,22 +186,20 @@ namespace Hal.NicoApiSharp.Cookie
 						}
 
 						// 有効期限を取得する
-						int uexp = 0, lexp = 0;
-						if (int.TryParse(lines[4], out lexp) && int.TryParse(lines[5], out uexp)) {
+						long uexp = 0, lexp = 0;
+						if (long.TryParse(lines[4], out lexp) && long.TryParse(lines[5], out uexp)) {
 							cookie.Expires = FileTimeToDateTime(lexp, uexp);
 						}
-						
-						System.Net.CookieCollection collection = container.GetCookies(uri);
 
-						if (collection == null || collection[cookie.Name] == null || collection[cookie.Name].Expires < cookie.Expires) {
-							container.Add(cookie);
-						}
+						results.Add(cookie);
 					}
 
 				}
 			} catch (Exception ex) {
-				Logger.Default.LogException(ex);
+				throw new CookieGetterException("IEクッキーの解析に失敗しました。", ex);
 			}
+
+			return results.ToArray();
 		}
 
 		/// <summary>
@@ -214,9 +238,50 @@ namespace Hal.NicoApiSharp.Cookie
 		/// <param name="low"></param>
 		/// <param name="high"></param>
 		/// <returns></returns>
-		private DateTime FileTimeToDateTime(int low, int high) {
+		private DateTime FileTimeToDateTime(long low, long high)
+		{
 			long ticks = ((long)high << 32) + low;
 			return new DateTime(ticks).AddYears(1600);
+		}
+
+		/// <summary>
+		/// クッキーを有効期限の昇順に並び替える
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
+		private static int CompareCookieExpiresAsc(System.Net.Cookie a, System.Net.Cookie b)
+		{
+			if (a == null && b == null) {
+				return 0;
+			}
+			if (a == null) {
+				return -1;
+			}
+			if (b == null) {
+				return 1;
+			}
+			return -a.Expires.CompareTo(b.Expires);
+		}
+
+		/// <summary>
+		/// クッキーを有効期限の降順に並び替える
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
+		private static int CompareCookieExpiresDesc(System.Net.Cookie a, System.Net.Cookie b)
+		{
+			if (a == null && b == null) {
+				return 0;
+			}
+			if (a == null) {
+				return -1;
+			}
+			if (b == null) {
+				return 1;
+			}
+			return a.Expires.CompareTo(b.Expires);
 		}
 
 	}

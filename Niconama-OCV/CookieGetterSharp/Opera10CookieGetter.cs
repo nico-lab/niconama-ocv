@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace Hal.NicoApiSharp.Cookie
+namespace Hal.CookieGetterSharp
 {
-	class OperaCookieGetter : CookieGetter
+	class Opera10CookieGetter : CookieGetter
 	{
 		const byte MSB = 0x80;
 
@@ -27,28 +27,22 @@ namespace Hal.NicoApiSharp.Cookie
 			public byte[] bytepayload;
 		};
 
-		public static new ICookieGetter GetInstance(Cookie.CookieGetter.BROWSER_TYPE type)
+		public Opera10CookieGetter()
 		{
-			switch (type) {
-				case CookieGetter.BROWSER_TYPE.Opera10:
-					return new OperaCookieGetter();
-			}
-
-			return null;
+			this.CookiePath = null;
 		}
 
-		private OperaCookieGetter()
-		{ 
-			base._defaultPath = Utility.ReplacePathSymbols(ApiSettings.Default.Opera10CookieFilePath);
+		public Opera10CookieGetter(string cookieFilePath) {
+			this.CookiePath = cookieFilePath;
 		}
 
-		public override System.Net.CookieContainer GetAllCookies(string path)
+		public override System.Net.CookieContainer GetAllCookies()
 		{
 			System.Net.CookieContainer container = new System.Net.CookieContainer();
-			if (!File.Exists(path)) return container;  // ファイルの有無をチェック
+			if (!File.Exists(base.CookiePath)) return container;  // ファイルの有無をチェック
 
 			try {
-				using (FileStream reader = new FileStream(path, FileMode.Open, FileAccess.Read)) {
+				using (FileStream reader = new FileStream(base.CookiePath, FileMode.Open, FileAccess.Read)) {
 					// 指定したアドレスに読み込み位置を移動
 					reader.Seek(0, SeekOrigin.Begin);
 					Header headerData = getHeader(reader);
@@ -81,7 +75,11 @@ namespace Hal.NicoApiSharp.Cookie
 									System.Net.Cookie cookie = getCookieRecode(new System.IO.MemoryStream(recordData.bytepayload), headerData);
 									cookie.Domain = '.' + string.Join(".", domainStack.ToArray());
 									cookie.Path = '/' + string.Join("/", pathStack.ToArray());
-									container.Add(cookie);
+									try {
+										AddCookieToContainer(container, cookie);
+									} catch {
+										Console.WriteLine(string.Format("Invalid Format! domain:{0},key:{1},value:{2}", cookie.Domain, cookie.Name, cookie.Value));
+									}
 
 									break;
 								case 0x04 + MSB: //ドメイン終了
@@ -99,9 +97,7 @@ namespace Hal.NicoApiSharp.Cookie
 					}
 				}
 			} catch (Exception ex) {
-				Logger.Default.LogErrorMessage("");
-				Logger.Default.LogException(ex);
-
+				throw new Exception("Operaのクッキー取得でエラーが発生しました。", ex);
 			}
 
 			return container;

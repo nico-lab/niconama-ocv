@@ -4,6 +4,10 @@ using System.Text;
 
 namespace Hal.OpenCommentViewer
 {
+	public enum LoginMode {
+		AvailableBrowser,
+		Custom
+	}
 
 	/// <summary>
 	/// ユーザー単位の設定を管理するクラス
@@ -11,6 +15,7 @@ namespace Hal.OpenCommentViewer
 	[Serializable]
 	public partial class UserSettings
 	{
+		
 
 		/// <summary>
 		/// 最後に接続した放送ID
@@ -18,9 +23,13 @@ namespace Hal.OpenCommentViewer
 		public string LastAccessId = "";
 		public List<ColumnStatus> ColumnStates = new List<ColumnStatus>();
 
+		public LoginMode LoginMode = LoginMode.AvailableBrowser;
+
 		public bool ShowAccountForm = true;
 		public int _BrowserType = 0;
 		public string CookieFilePath = null;
+
+		public string ShareBrowserName = null;
 
 
 		/// <summary>
@@ -29,9 +38,9 @@ namespace Hal.OpenCommentViewer
 		public WindowState MainformWindowState = new WindowState();
 
 		[System.Xml.Serialization.XmlIgnoreAttribute()]
-		public Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE BrowserType
+		public Hal.CookieGetterSharp.CookieGetter.BROWSER_TYPE BrowserType
 		{
-			get { return (NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE)_BrowserType; }
+			get { return (Hal.CookieGetterSharp.CookieGetter.BROWSER_TYPE)_BrowserType; }
 			set { _BrowserType = (int)value; }
 		}
 

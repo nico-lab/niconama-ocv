@@ -2,31 +2,25 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Hal.NicoApiSharp.Cookie
+namespace Hal.CookieGetterSharp
 {
 
 	/// <summary>
-	/// GoogleChrome3.0からクッキーを取得する
+	/// GoogleChromeからクッキーを取得する
 	/// </summary>
-	class GoogleChromeCookieGetter : SqlCookieGetter
+	class GoogleChrome3CookieGetter : SqlCookieGetter
 	{
 
 		const string SELECT_QUERY = "SELECT value, name, host_key, path, expires_utc FROM cookies";
 
-		public static new ICookieGetter GetInstance(Cookie.CookieGetter.BROWSER_TYPE type)
+		public GoogleChrome3CookieGetter()
 		{
-			switch (type) {
-				case CookieGetter.BROWSER_TYPE.Chrome3:
-					return new GoogleChromeCookieGetter();
-			}
-
-			return null;
 		}
 
-		private GoogleChromeCookieGetter() {
+		public GoogleChrome3CookieGetter(string cookieFilePath) {
+			this.CookiePath = cookieFilePath;
 		}
 
-		
 		protected override System.Net.Cookie DataToCookie(object[] data)
 		{
 			System.Net.Cookie cookie = new System.Net.Cookie();
@@ -38,22 +32,19 @@ namespace Hal.NicoApiSharp.Cookie
 			try {
 				long exp = (long)data[4];
 				cookie.Expires = new DateTime(exp);
-			} catch {
-				Logger.Default.LogMessage("googlechromeのexpires変換に失敗しました");					
+			} catch (Exception ex){
+				throw new CookieGetterException("googlechromeのexpires変換に失敗しました", ex);
 			}
 
 			return cookie;
 		}
-		
 
-		protected override string MakeQuery(Uri url) 
-		{ 
+		private string makeWhere(Uri url) {
 			Stack<string> hostStack = new Stack<string>(url.Host.Split('.'));
 			StringBuilder hostBuilder = new StringBuilder('.' + hostStack.Pop());
 			string[] pathes = url.Segments;
 
 			StringBuilder sb = new StringBuilder();
-			sb.Append(SELECT_QUERY);
 			sb.Append(" WHERE (");
 
 			bool needOr = false;
@@ -75,14 +66,21 @@ namespace Hal.NicoApiSharp.Cookie
 
 			sb.Append(')');
 			return sb.ToString();
-		
+		}
+
+		protected override string MakeQuery()
+		{
+			return SELECT_QUERY + " ORDER BY creation_utc DESC";
+		}
+
+		protected override string MakeQuery(Uri url) 
+		{
+			return string.Format("{0} {1} ORDER BY creation_utc DESC", SELECT_QUERY, makeWhere(url));
 		}
 
 		protected override string MakeQuery(Uri url, string key)
 		{
-			string baseQuery = MakeQuery(url);
-			return string.Format("{0} AND name = \"{1}\"", baseQuery, key);
-
+			return string.Format("{0} {1} AND name = \"{2}\" ORDER BY creation_utc DESC", SELECT_QUERY, makeWhere(url), key);
 		}
 	}
 }

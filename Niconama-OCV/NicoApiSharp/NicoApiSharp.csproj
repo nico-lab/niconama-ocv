@@ -9,6 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Hal.NicoApiSharp</RootNamespace>
     <AssemblyName>NicoApiSharp</AssemblyName>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,15 +48,6 @@
   <ItemGroup>
     <Compile Include="AccountInfomation.cs" />
     <Compile Include="ApiSettings.cs" />
-    <Compile Include="Cookie\CookieGetter.cs" />
-    <Compile Include="Cookie\FirefoxCookieGetter.cs" />
-    <Compile Include="Cookie\GoogleChromeCookieGetter.cs" />
-    <Compile Include="Cookie\ICookieGetter.cs" />
-    <Compile Include="Cookie\IEComponentCookieGetter.cs" />
-    <Compile Include="Cookie\OperaCookieGetter.cs" />
-    <Compile Include="Cookie\SafariCookieGetter.cs" />
-    <Compile Include="Cookie\SqlCookieGetter.cs" />
-    <Compile Include="Cookie\SqliteManager.cs" />
     <Compile Include="LoginManager.cs" />
     <Compile Include="ExXMLDocument.cs" />
     <Compile Include="Chat.cs" />
@@ -93,6 +88,12 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CookieGetterSharp\CookieGetterSharp.csproj">
+      <Project>{ACB84F0E-B482-46B0-8C29-1FAC6C85D622}</Project>
+      <Name>CookieGetterSharp</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Video\" />

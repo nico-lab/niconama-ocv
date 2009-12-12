@@ -80,10 +80,10 @@ namespace Hal.OpenCommentViewer.Control
 			if (UserSettings.Default.ShowAccountForm) {
 				LoginForm f = new LoginForm();
 				if (f.ShowDialog(this._form) == System.Windows.Forms.DialogResult.OK) {
-					Login(UserSettings.Default.BrowserType, UserSettings.Default.CookieFilePath);
+					Login();
 				}
 			} else {
-				Login(UserSettings.Default.BrowserType, UserSettings.Default.CookieFilePath);
+				Login();
 			}
 
 			// コマンドライン引数で指定された放送がある場合はそれに接続する
@@ -392,10 +392,16 @@ namespace Hal.OpenCommentViewer.Control
 		/// <param name="browserType"></param>
 		/// <param name="cookieFilePath">クッキーが保存されているファイル、nullの場合既定のファイルを対称にする</param>
 		/// <returns></returns>
-		public virtual bool Login(Hal.NicoApiSharp.Cookie.CookieGetter.BROWSER_TYPE browserType, string cookieFilePath)
+		public virtual bool Login()
 		{
 
-			NicoApiSharp.AccountInfomation accountInfomation = NicoApiSharp.LoginManager.Login(browserType, cookieFilePath);
+			NicoApiSharp.AccountInfomation accountInfomation = null;
+			
+			if (UserSettings.Default.LoginMode == LoginMode.AvailableBrowser) {
+				accountInfomation = NicoApiSharp.LoginManager.Login(UserSettings.Default.ShareBrowserName);
+			} else {
+				accountInfomation = NicoApiSharp.LoginManager.Login(UserSettings.Default.BrowserType, UserSettings.Default.CookieFilePath);
+			}			
 
 			if(accountInfomation != null){
 				_accountInfomation = accountInfomation;

@@ -31,6 +31,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{4029
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookieGetterSharp", "CookieGetterSharp\CookieGetterSharp.csproj", "{ACB84F0E-B482-46B0-8C29-1FAC6C85D622}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{02BACD03-DBDE-43BF-AF84-A02D49A606A7}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookieGetterTestProj", "CookieGetterTestProj\CookieGetterTestProj.csproj", "{0AB80BB1-00E1-42FC-91FC-09A40981D76C}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -85,11 +103,32 @@ Global
 		{91B164F7-5A8C-4454-A022-1346439787D2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{91B164F7-5A8C-4454-A022-1346439787D2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{91B164F7-5A8C-4454-A022-1346439787D2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{ACB84F0E-B482-46B0-8C29-1FAC6C85D622}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{ACB84F0E-B482-46B0-8C29-1FAC6C85D622}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACB84F0E-B482-46B0-8C29-1FAC6C85D622}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACB84F0E-B482-46B0-8C29-1FAC6C85D622}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{ACB84F0E-B482-46B0-8C29-1FAC6C85D622}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{ACB84F0E-B482-46B0-8C29-1FAC6C85D622}.Release|.NET.ActiveCfg = Release|Any CPU
+		{ACB84F0E-B482-46B0-8C29-1FAC6C85D622}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACB84F0E-B482-46B0-8C29-1FAC6C85D622}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACB84F0E-B482-46B0-8C29-1FAC6C85D622}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{ACB84F0E-B482-46B0-8C29-1FAC6C85D622}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0AB80BB1-00E1-42FC-91FC-09A40981D76C}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{0AB80BB1-00E1-42FC-91FC-09A40981D76C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AB80BB1-00E1-42FC-91FC-09A40981D76C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AB80BB1-00E1-42FC-91FC-09A40981D76C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0AB80BB1-00E1-42FC-91FC-09A40981D76C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0AB80BB1-00E1-42FC-91FC-09A40981D76C}.Release|.NET.ActiveCfg = Release|Any CPU
+		{0AB80BB1-00E1-42FC-91FC-09A40981D76C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AB80BB1-00E1-42FC-91FC-09A40981D76C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AB80BB1-00E1-42FC-91FC-09A40981D76C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0AB80BB1-00E1-42FC-91FC-09A40981D76C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{91B164F7-5A8C-4454-A022-1346439787D2} = {402930E9-61EF-4DDB-AC63-12FF8208A283}
+		{0AB80BB1-00E1-42FC-91FC-09A40981D76C} = {02BACD03-DBDE-43BF-AF84-A02D49A606A7}
 	EndGlobalSection
 EndGlobal
