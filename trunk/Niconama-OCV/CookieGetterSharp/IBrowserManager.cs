@@ -5,7 +5,7 @@ using System.Text;
 namespace Hal.CookieGetterSharp
 {
 	/// <summary>
-	/// クッキーが保存されているパスを検索する能力を表すインターフェース
+	/// CookieGetterを生成するためのインターフェース
 	/// </summary>
 	interface IBrowserManager
 	{
@@ -15,13 +15,13 @@ namespace Hal.CookieGetterSharp
 		BrowserType BrowserType { get; }
 
 		/// <summary>
-		/// 既定のステータスを取得します
+		/// 既定のCookieGetterを取得します
 		/// </summary>
 		/// <returns></returns>
 		ICookieGetter CreateDefaultCookieGetter();
 
 		/// <summary>
-		/// 利用可能なすべてのステータスを取得します
+		/// 利用可能なすべてのCookieGetterを取得します
 		/// </summary>
 		/// <returns></returns>
 		ICookieGetter[] CreateCookieGetters();
