@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data.SQLite;
@@ -6,7 +6,7 @@ using System.Data.SQLite;
 namespace Hal.CookieGetterSharp
 {
 	/// <summary>
-	/// SQLite‚ğ—˜—p‚µ‚ÄƒNƒbƒL[‚ğ•Û‘¶‚·‚éƒ^ƒCƒv‚Ìƒuƒ‰ƒEƒU‚©‚çƒNƒbƒL[‚ğæ“¾‚·‚éƒNƒ‰ƒX
+	/// SQLiteã‚’åˆ©ç”¨ã—ã¦ã‚¯ãƒƒã‚­ãƒ¼ã‚’ä¿å­˜ã™ã‚‹ã‚¿ã‚¤ãƒ—ã®ãƒ–ãƒ©ã‚¦ã‚¶ã‹ã‚‰ã‚¯ãƒƒã‚­ãƒ¼ã‚’å–å¾—ã™ã‚‹ã‚¯ãƒ©ã‚¹
 	/// </summary>
 	abstract class SqlCookieGetter : CookieGetter
 	{
@@ -74,7 +74,7 @@ namespace Hal.CookieGetterSharp
 				}
 
 			} catch (Exception ex) {
-				throw new CookieGetterException("ƒNƒbƒL[‚ğæ“¾’†ASqliteƒAƒNƒZƒX‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B", ex);
+				throw new CookieGetterException("ã‚¯ãƒƒã‚­ãƒ¼ã‚’å–å¾—ä¸­ã€Sqliteã‚¢ã‚¯ã‚»ã‚¹ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚", ex);
 			} finally {
 				if (temp != null) {
 					System.IO.File.Delete(temp);
@@ -85,27 +85,27 @@ namespace Hal.CookieGetterSharp
 		}
 
 		/// <summary>
-		/// SQL‚©‚çæ“¾‚µ‚½ƒf[ƒ^‚ğƒNƒbƒL[‚É•ÏŠ·‚·‚é
+		/// SQLã‹ã‚‰å–å¾—ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’ã‚¯ãƒƒã‚­ãƒ¼ã«å¤‰æ›ã™ã‚‹
 		/// </summary>
-		/// <param name="data">w’è‚³‚ê‚½Query‚Åæ“¾‚µ‚½‚Ps•ª‚Ìƒf[ƒ^</param>
+		/// <param name="data">æŒ‡å®šã•ã‚ŒãŸQueryã§å–å¾—ã—ãŸï¼‘è¡Œåˆ†ã®ãƒ‡ãƒ¼ã‚¿</param>
 		/// <returns></returns>
 		protected abstract System.Net.Cookie DataToCookie(object[] data);
 
 		/// <summary>
-		/// ‚·‚×‚Ä‚ÌƒNƒbƒL[‚ğæ“¾‚·‚é‚½‚ß‚ÌƒNƒGƒŠ[‚ğ¶¬‚·‚é
+		/// ã™ã¹ã¦ã®ã‚¯ãƒƒã‚­ãƒ¼ã‚’å–å¾—ã™ã‚‹ãŸã‚ã®ã‚¯ã‚¨ãƒªãƒ¼ã‚’ç”Ÿæˆã™ã‚‹
 		/// </summary>
 		/// <returns></returns>
 		protected abstract string MakeQuery();
 
 		/// <summary>
-		/// w’è‚³‚ê‚½URL‚ÉŠÖ˜A‚µ‚½ƒNƒbƒL[‚ğæ“¾‚·‚é‚½‚ß‚ÌƒNƒGƒŠ[‚ğ¶¬‚·‚é
+		/// æŒ‡å®šã•ã‚ŒãŸURLã«é–¢é€£ã—ãŸã‚¯ãƒƒã‚­ãƒ¼ã‚’å–å¾—ã™ã‚‹ãŸã‚ã®ã‚¯ã‚¨ãƒªãƒ¼ã‚’ç”Ÿæˆã™ã‚‹
 		/// </summary>
 		/// <param name="url"></param>
 		/// <returns></returns>
 		protected abstract string MakeQuery(Uri url);
 
 		/// <summary>
-		/// w’è‚³‚ê‚½URL‚Ì–¼‘O‚ªkey‚Å‚ ‚éƒNƒbƒL[‚ğæ“¾‚·‚é‚½‚ß‚ÌƒNƒGƒŠ[‚ğ¶¬‚·‚é
+		/// æŒ‡å®šã•ã‚ŒãŸURLã®åå‰ãŒkeyã§ã‚ã‚‹ã‚¯ãƒƒã‚­ãƒ¼ã‚’å–å¾—ã™ã‚‹ãŸã‚ã®ã‚¯ã‚¨ãƒªãƒ¼ã‚’ç”Ÿæˆã™ã‚‹
 		/// </summary>
 		/// <param name="url"></param>
 		/// <param name="key"></param>

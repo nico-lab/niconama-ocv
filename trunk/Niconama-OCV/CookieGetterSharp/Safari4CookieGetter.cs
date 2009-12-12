@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -21,8 +21,8 @@ namespace Hal.CookieGetterSharp
 			try {
 				System.Xml.XmlReaderSettings settings = new System.Xml.XmlReaderSettings();
 
-				// DTD‚ğæ“¾‚·‚é‚½‚ß‚ÉƒEƒFƒuƒAƒNƒZƒX‚·‚é‚Ì‚ğ—}§‚·‚é
-				// (’ÊM’x‰„‚âAƒAƒNƒZƒXƒGƒ‰[‚ğ”rœ‚·‚é‚½‚ß)
+				// DTDã‚’å–å¾—ã™ã‚‹ãŸã‚ã«ã‚¦ã‚§ãƒ–ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ã®ã‚’æŠ‘åˆ¶ã™ã‚‹
+				// (é€šä¿¡é…å»¶ã‚„ã€ã‚¢ã‚¯ã‚»ã‚¹ã‚¨ãƒ©ãƒ¼ã‚’æ’é™¤ã™ã‚‹ãŸã‚)
 				settings.XmlResolver = null;
 				settings.ProhibitDtd = false;
 				settings.CheckCharacters = false;
@@ -45,7 +45,7 @@ namespace Hal.CookieGetterSharp
 				}
 
 			} catch (Exception ex) {
-				throw new CookieGetterException("Safari‚ÌƒNƒbƒL[æ“¾’†‚ÉƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B", ex);
+				throw new CookieGetterException("Safariã®ã‚¯ãƒƒã‚­ãƒ¼å–å¾—ä¸­ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚", ex);
 			}
 
 			return container;

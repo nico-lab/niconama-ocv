@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,7 +7,7 @@ namespace Hal.CookieGetterSharp
 	class Utility
 	{
 		/// <summary>
-		/// UnixŠÔ‚ğDateTime‚É•ÏŠ·‚·‚é
+		/// Unixæ™‚é–“ã‚’DateTimeã«å¤‰æ›ã™ã‚‹
 		/// </summary>
 		/// <param name="UnixTime"></param>
 		/// <returns></returns>
@@ -17,7 +17,7 @@ namespace Hal.CookieGetterSharp
 		}
 
 		/// <summary>
-		/// DateTime‚ğUnixŠÔ‚É•ÏŠ·‚·‚é
+		/// DateTimeã‚’Unixæ™‚é–“ã«å¤‰æ›ã™ã‚‹
 		/// </summary>
 		/// <param name="time"></param>
 		/// <returns></returns>
@@ -28,7 +28,7 @@ namespace Hal.CookieGetterSharp
 		}
 
 		/// <summary>
-		/// %APPDATA%‚È‚Ç‚ğÀÛ‚ÌƒpƒX‚É•ÏŠ·‚·‚é
+		/// %APPDATA%ãªã©ã‚’å®Ÿéš›ã®ãƒ‘ã‚¹ã«å¤‰æ›ã™ã‚‹
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
@@ -41,8 +41,8 @@ namespace Hal.CookieGetterSharp
 		}
 
 		/// <summary>
-		/// •K—v‚ª‚ ‚ê‚Îuri‚ÌÅŒã‚É/‚ğ‚Â‚¯‚é
-		/// Path‚Ìw’è‚ª‚ ‚éê‡Auri‚ÌÅŒã‚É/‚ª‚ ‚é‚©‚È‚¢‚©‚Åæ“¾‚Å‚«‚È‚¢ê‡‚ª‚ ‚é‚Ì‚Å
+		/// å¿…è¦ãŒã‚ã‚Œã°uriã®æœ€å¾Œã«/ã‚’ã¤ã‘ã‚‹
+		/// Pathã®æŒ‡å®šãŒã‚ã‚‹å ´åˆã€uriã®æœ€å¾Œã«/ãŒã‚ã‚‹ã‹ãªã„ã‹ã§å–å¾—ã§ããªã„å ´åˆãŒã‚ã‚‹ã®ã§
 		/// </summary>
 		/// <param name="uri"></param>
 		/// <returns></returns>
@@ -57,8 +57,8 @@ namespace Hal.CookieGetterSharp
 		}
 
 		/// <summary>
-		/// ƒNƒbƒL[ƒRƒ“ƒeƒi‚ÉƒNƒbƒL[‚ğ’Ç‰Á‚·‚é
-		/// domain‚ª.hal.fscs.jp‚È‚Ç‚¾‚Æ http://hal.fscs.jp ‚ÅƒNƒbƒL[‚ª—LŒø‚É‚È‚ç‚È‚¢‚Ì‚Å.‚ ‚è‚Æ‚È‚µ—¼•ûw’è‚·‚é
+		/// ã‚¯ãƒƒã‚­ãƒ¼ã‚³ãƒ³ãƒ†ãƒŠã«ã‚¯ãƒƒã‚­ãƒ¼ã‚’è¿½åŠ ã™ã‚‹
+		/// domainãŒ.hal.fscs.jpãªã©ã ã¨ http://hal.fscs.jp ã§ã‚¯ãƒƒã‚­ãƒ¼ãŒæœ‰åŠ¹ã«ãªã‚‰ãªã„ã®ã§.ã‚ã‚Šã¨ãªã—ä¸¡æ–¹æŒ‡å®šã™ã‚‹
 		/// </summary>
 		/// <param name="container"></param>
 		/// <param name="cookie"></param>

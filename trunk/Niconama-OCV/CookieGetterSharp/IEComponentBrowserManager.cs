@@ -1,15 +1,15 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Hal.CookieGetterSharp
 {
 	/// <summary>
-	/// IEƒRƒ“ƒ|[ƒlƒ“ƒg‚ÅƒAƒNƒZƒX‰Â”\‚ÈƒNƒbƒL[‚Ì‚İ‚ğæ“¾‚·‚é
+	/// IEã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã§ã‚¢ã‚¯ã‚»ã‚¹å¯èƒ½ãªã‚¯ãƒƒã‚­ãƒ¼ã®ã¿ã‚’å–å¾—ã™ã‚‹
 	/// </summary>
 	class IEComponentBrowserManager : IBrowserManager
 	{
-		#region IBrowserManager ƒƒ“ƒo
+		#region IBrowserManager ãƒ¡ãƒ³ãƒ
 
 		public BrowserType BrowserType
 		{
@@ -24,7 +24,7 @@ namespace Hal.CookieGetterSharp
 		}
 
 		/// <summary>
-		/// IEBrowserManager‚ÅŠÂ‹«‚É‚ ‚í‚¹‚Ä“KØ‚È•¨‚ğ•Ô‚·‚æ‚¤‚É‚µ‚Ä‚ ‚é‚Ì‚ÅA‚±‚±‚Å‚Í‰½‚à‚µ‚È‚¢
+		/// IEBrowserManagerã§ç’°å¢ƒã«ã‚ã‚ã›ã¦é©åˆ‡ãªç‰©ã‚’è¿”ã™ã‚ˆã†ã«ã—ã¦ã‚ã‚‹ã®ã§ã€ã“ã“ã§ã¯ä½•ã‚‚ã—ãªã„
 		/// </summary>
 		/// <returns></returns>
 		public ICookieGetter[] CreateCookieGetters()

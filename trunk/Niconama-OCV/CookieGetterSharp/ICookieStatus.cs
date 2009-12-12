@@ -1,52 +1,52 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Hal.CookieGetterSharp
 {
 	/// <summary>
-	/// Path‚ªFile‚ÆDirectory‚Ì‚Ç‚¿‚ç‚ğ¦‚µ‚Ä‚¢‚é‚©‚ğ•\‚·
+	/// PathãŒFileã¨Directoryã®ã©ã¡ã‚‰ã‚’ç¤ºã—ã¦ã„ã‚‹ã‹ã‚’è¡¨ã™
 	/// </summary>
 	public enum PathType {
  
 		/// <summary>
-		/// ƒtƒ@ƒCƒ‹
+		/// ãƒ•ã‚¡ã‚¤ãƒ«
 		/// </summary>
 		File,
 
 		/// <summary>
-		/// ƒfƒBƒŒƒNƒgƒŠ
+		/// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 		/// </summary>
 		Directory
 	}
 
 	/// <summary>
-	/// ƒNƒbƒL[ƒQƒbƒ^[‚Ìó‘Ô‚ğ•\‚·ƒCƒ“ƒ^[ƒtƒF[ƒX
+	/// ã‚¯ãƒƒã‚­ãƒ¼ã‚²ãƒƒã‚¿ãƒ¼ã®çŠ¶æ…‹ã‚’è¡¨ã™ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
 	/// </summary>
 	public interface ICookieStatus
 	{
 		/// <summary>
-		/// ƒuƒ‰ƒEƒU‚Ìí—Ş‚ğæ“¾‚·‚é
+		/// ãƒ–ãƒ©ã‚¦ã‚¶ã®ç¨®é¡ã‚’å–å¾—ã™ã‚‹
 		/// </summary>
 		BrowserType BrowserType { get; }
 
 		/// <summary>
-		/// ¯•Ê–¼‚ğæ“¾‚·‚é
+		/// è­˜åˆ¥åã‚’å–å¾—ã™ã‚‹
 		/// </summary>
 		string Name { get; }
 
 		/// <summary>
-		/// —˜—p‰Â”\‚©‚Ç‚¤‚©‚ğæ“¾‚·‚é
+		/// åˆ©ç”¨å¯èƒ½ã‹ã©ã†ã‹ã‚’å–å¾—ã™ã‚‹
 		/// </summary>
 		bool IsAvailable { get; }
 		
 		/// <summary>
-		/// ƒNƒbƒL[‚ª•Û‘¶‚³‚ê‚Ä‚¢‚éƒtƒHƒ‹ƒ_‚ğæ“¾Aİ’è‚·‚é
+		/// ã‚¯ãƒƒã‚­ãƒ¼ãŒä¿å­˜ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚©ãƒ«ãƒ€ã‚’å–å¾—ã€è¨­å®šã™ã‚‹
 		/// </summary>
 		string CookiePath { get; set; }
 
 		/// <summary>
-		/// CookiePath‚ªFile‚ğ•\‚·‚Ì‚©ADirectory‚ğ•\‚·‚Ì‚©‚ğæ“¾‚·‚é
+		/// CookiePathãŒFileã‚’è¡¨ã™ã®ã‹ã€Directoryã‚’è¡¨ã™ã®ã‹ã‚’å–å¾—ã™ã‚‹
 		/// </summary>
 		PathType PathType { get; }
 

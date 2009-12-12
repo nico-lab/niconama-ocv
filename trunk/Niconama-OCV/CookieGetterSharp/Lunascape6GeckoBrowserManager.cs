@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,7 +9,7 @@ namespace Hal.CookieGetterSharp
 		const string LUNASCAPE_PLUGIN_FOLDER = "%APPDATA%\\Lunascape\\Lunascape6\\plugins";
 		const string COOKIEPATH = "data\\cookies.sqlite";
 
-		#region IBrowserManager ƒƒ“ƒo
+		#region IBrowserManager ãƒ¡ãƒ³ãƒ
 
 		public BrowserType BrowserType
 		{
@@ -32,7 +32,7 @@ namespace Hal.CookieGetterSharp
 		#endregion
 
 		/// <summary>
-		/// Lunascape6‚Ìƒvƒ‰ƒOƒCƒ“ƒtƒHƒ‹ƒ_‚©‚çFirefox‚ÌƒNƒbƒL[‚ª•Û‘¶‚³‚ê‚Ä‚¢‚éƒpƒX‚ğŒŸõ‚·‚é
+		/// Lunascape6ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãƒ•ã‚©ãƒ«ãƒ€ã‹ã‚‰Firefoxã®ã‚¯ãƒƒã‚­ãƒ¼ãŒä¿å­˜ã•ã‚Œã¦ã„ã‚‹ãƒ‘ã‚¹ã‚’æ¤œç´¢ã™ã‚‹
 		/// </summary>
 		/// <returns></returns>
 		private string SearchDirectory() {

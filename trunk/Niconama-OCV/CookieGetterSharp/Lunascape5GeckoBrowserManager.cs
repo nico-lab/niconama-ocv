@@ -1,4 +1,4 @@
-using System;
+Ôªøusing System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,7 +8,7 @@ namespace Hal.CookieGetterSharp
 	{
 		const string COOKIEPATH = "%APPDATA%\\Lunascape\\Lunascape5\\ApplicationData\\gecko\\cookies.sqlite";
 
-		#region IBrowserManager ÉÅÉìÉo
+		#region IBrowserManager „É°„É≥„Éê
 
 		public BrowserType BrowserType
 		{

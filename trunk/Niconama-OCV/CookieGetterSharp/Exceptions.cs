@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,34 +6,34 @@ namespace Hal.CookieGetterSharp
 {
 
 	/// <summary>
-	/// ƒNƒbƒL[Žæ“¾‚ÉŠÖ‚·‚é—áŠO
+	/// ã‚¯ãƒƒã‚­ãƒ¼å–å¾—ã«é–¢ã™ã‚‹ä¾‹å¤–
 	/// </summary>
 	[global::System.Serializable]
 	public class CookieGetterException : Exception
 	{
 		/// <summary>
-		/// ƒNƒ‰ƒX‚ÌV‚µ‚¢ƒCƒ“ƒXƒ^ƒ“ƒX‚ð‰Šú‰»‚µ‚Ü‚·B
+		/// ã‚¯ãƒ©ã‚¹ã®æ–°ã—ã„ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’åˆæœŸåŒ–ã—ã¾ã™ã€‚
 		/// </summary>
 		public CookieGetterException() { }
 
 		/// <summary>
-		/// Žw’è‚µ‚½ƒGƒ‰[ ƒƒbƒZ[ƒW‚ðŽg—p‚µ‚ÄASystem.Exception ƒNƒ‰ƒX‚ÌV‚µ‚¢ƒCƒ“ƒXƒ^ƒ“ƒX‚ð‰Šú‰»‚µ‚Ü‚·B
+		/// æŒ‡å®šã—ãŸã‚¨ãƒ©ãƒ¼ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ä½¿ç”¨ã—ã¦ã€System.Exception ã‚¯ãƒ©ã‚¹ã®æ–°ã—ã„ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’åˆæœŸåŒ–ã—ã¾ã™ã€‚
 		/// </summary>
-		/// <param name="message">ƒGƒ‰[‚ðà–¾‚·‚éƒƒbƒZ[ƒWB</param>
+		/// <param name="message">ã‚¨ãƒ©ãƒ¼ã‚’èª¬æ˜Žã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã€‚</param>
 		public CookieGetterException(string message) : base(message) { }
 
 		/// <summary>
-		/// Žw’è‚µ‚½ƒGƒ‰[ ƒƒbƒZ[ƒW‚ÆA‚±‚Ì—áŠO‚ÌŒ´ˆö‚Å‚ ‚é“à•”—áŠO‚Ö‚ÌŽQÆ‚ðŽg—p‚µ‚ÄASystem.Exception ƒNƒ‰ƒX‚ÌV‚µ‚¢ƒCƒ“ƒXƒ^ƒ“ƒX‚ð‰Šú‰»‚µ‚Ü‚·B
+		/// æŒ‡å®šã—ãŸã‚¨ãƒ©ãƒ¼ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã¨ã€ã“ã®ä¾‹å¤–ã®åŽŸå› ã§ã‚ã‚‹å†…éƒ¨ä¾‹å¤–ã¸ã®å‚ç…§ã‚’ä½¿ç”¨ã—ã¦ã€System.Exception ã‚¯ãƒ©ã‚¹ã®æ–°ã—ã„ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’åˆæœŸåŒ–ã—ã¾ã™ã€‚
 		/// </summary>
-		/// <param name="message">—áŠO‚ÌŒ´ˆö‚ðà–¾‚·‚éƒGƒ‰[ ƒƒbƒZ[ƒWB</param>
-		/// <param name="inner">Œ»Ý‚Ì—áŠO‚ÌŒ´ˆö‚Å‚ ‚é—áŠOB“à•”—áŠO‚ªŽw’è‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍAnull ŽQÆ (Visual Basic ‚Ìê‡‚Í Nothing)B</param>
+		/// <param name="message">ä¾‹å¤–ã®åŽŸå› ã‚’èª¬æ˜Žã™ã‚‹ã‚¨ãƒ©ãƒ¼ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã€‚</param>
+		/// <param name="inner">ç¾åœ¨ã®ä¾‹å¤–ã®åŽŸå› ã§ã‚ã‚‹ä¾‹å¤–ã€‚å†…éƒ¨ä¾‹å¤–ãŒæŒ‡å®šã•ã‚Œã¦ã„ãªã„å ´åˆã¯ã€null å‚ç…§ (Visual Basic ã®å ´åˆã¯ Nothing)ã€‚</param>
 		public CookieGetterException(string message, Exception inner) : base(message, inner) { }
 
 		/// <summary>
-		/// ƒVƒŠƒAƒ‹‰»‚µ‚½ƒf[ƒ^‚ðŽg—p‚µ‚ÄASystem.Exception ƒNƒ‰ƒX‚ÌV‚µ‚¢ƒCƒ“ƒXƒ^ƒ“ƒX‚ð‰Šú‰»‚µ‚Ü‚·B
+		/// ã‚·ãƒªã‚¢ãƒ«åŒ–ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’ä½¿ç”¨ã—ã¦ã€System.Exception ã‚¯ãƒ©ã‚¹ã®æ–°ã—ã„ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’åˆæœŸåŒ–ã—ã¾ã™ã€‚
 		/// </summary>
-		/// <param name="info">ƒXƒ[‚³‚ê‚Ä‚¢‚é—áŠO‚ÉŠÖ‚·‚éƒVƒŠƒAƒ‹‰»Ï‚ÝƒIƒuƒWƒFƒNƒg ƒf[ƒ^‚ð•ÛŽ‚µ‚Ä‚¢‚é System.Runtime.Serialization.SerializationInfoB</param>
-		/// <param name="context">“]‘—Œ³‚Ü‚½‚Í“]‘—æ‚ÉŠÖ‚·‚éƒRƒ“ƒeƒLƒXƒgî•ñ‚ðŠÜ‚ñ‚Å‚¢‚é System.Runtime.Serialization.StreamingContextB</param>
+		/// <param name="info">ã‚¹ãƒ­ãƒ¼ã•ã‚Œã¦ã„ã‚‹ä¾‹å¤–ã«é–¢ã™ã‚‹ã‚·ãƒªã‚¢ãƒ«åŒ–æ¸ˆã¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ ãƒ‡ãƒ¼ã‚¿ã‚’ä¿æŒã—ã¦ã„ã‚‹ System.Runtime.Serialization.SerializationInfoã€‚</param>
+		/// <param name="context">è»¢é€å…ƒã¾ãŸã¯è»¢é€å…ˆã«é–¢ã™ã‚‹ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆæƒ…å ±ã‚’å«ã‚“ã§ã„ã‚‹ System.Runtime.Serialization.StreamingContextã€‚</param>
 		protected CookieGetterException(
 		  System.Runtime.Serialization.SerializationInfo info,
 		  System.Runtime.Serialization.StreamingContext context)
