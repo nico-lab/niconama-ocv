@@ -17,7 +17,8 @@ namespace Hal.CookieGetterSharp
 		{
 		}
 
-		public GoogleChrome3CookieGetter(string cookieFilePath) {
+		public GoogleChrome3CookieGetter(string cookieFilePath)
+		{
 			this.CookiePath = cookieFilePath;
 		}
 
@@ -32,14 +33,15 @@ namespace Hal.CookieGetterSharp
 			try {
 				long exp = (long)data[4];
 				cookie.Expires = new DateTime(exp);
-			} catch (Exception ex){
+			} catch (Exception ex) {
 				throw new CookieGetterException("googlechromeのexpires変換に失敗しました", ex);
 			}
 
 			return cookie;
 		}
 
-		private string makeWhere(Uri url) {
+		private string makeWhere(Uri url)
+		{
 			Stack<string> hostStack = new Stack<string>(url.Host.Split('.'));
 			StringBuilder hostBuilder = new StringBuilder('.' + hostStack.Pop());
 			string[] pathes = url.Segments;
@@ -73,7 +75,7 @@ namespace Hal.CookieGetterSharp
 			return SELECT_QUERY + " ORDER BY creation_utc DESC";
 		}
 
-		protected override string MakeQuery(Uri url) 
+		protected override string MakeQuery(Uri url)
 		{
 			return string.Format("{0} {1} ORDER BY creation_utc DESC", SELECT_QUERY, makeWhere(url));
 		}

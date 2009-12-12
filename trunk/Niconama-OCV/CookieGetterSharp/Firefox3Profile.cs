@@ -4,6 +4,10 @@ using System.Text;
 
 namespace Hal.CookieGetterSharp
 {
+
+	/// <summary>
+	/// Firefox3のプロフィールを表現します。
+	/// </summary>
 	class Firefox3Profile
 	{
 		public string name;

@@ -7,17 +7,12 @@ namespace Hal.CookieGetterSharp
 	class GoogleChrome3BrowserManager : IBrowserManager
 	{
 		const string COOKIEPATH = "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\Cookies";
-		
+
 		#region IBrowserManager ÉÅÉìÉo
 
 		public CookieGetter.BROWSER_TYPE BrowserType
 		{
 			get { return CookieGetter.BROWSER_TYPE.GoogleChrome3; }
-		}
-
-		public string BrowserName
-		{
-			get { return BrowserType.ToString(); }
 		}
 
 		public IBrowserStatus GetDefaultStatus()
@@ -29,7 +24,7 @@ namespace Hal.CookieGetterSharp
 			}
 
 			BrowserStatus bs = new BrowserStatus();
-			bs.Name = BrowserName;
+			bs.Name = BrowserType.ToString();
 			bs.CookiePath = path;
 			bs.CookieGetter = new GoogleChrome3CookieGetter(path);
 

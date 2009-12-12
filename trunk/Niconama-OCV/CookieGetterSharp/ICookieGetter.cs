@@ -6,7 +6,7 @@ namespace Hal.CookieGetterSharp
 {
 
 	/// <summary>
-	/// 指定されたパスからからブラウザのクッキーを取得するためのインターフェース
+	/// 指定されたパスからブラウザのクッキーを取得するためのインターフェース
 	/// </summary>
 	public interface ICookieGetter
 	{

@@ -15,11 +15,6 @@ namespace Hal.CookieGetterSharp
 			get { return CookieGetter.BROWSER_TYPE.Lunascape5Gecko; }
 		}
 
-		public string BrowserName
-		{
-			get { return BrowserType.ToString(); }
-		}
-
 		public IBrowserStatus GetDefaultStatus()
 		{
 			string path = Utility.ReplacePathSymbols(COOKIEPATH);
@@ -29,7 +24,7 @@ namespace Hal.CookieGetterSharp
 			}
 
 			BrowserStatus bs = new BrowserStatus();
-			bs.Name = BrowserName;
+			bs.Name = BrowserType.ToString();
 			bs.CookiePath = path;
 			bs.CookieGetter = new Firefox3CookieGetter(path);
 

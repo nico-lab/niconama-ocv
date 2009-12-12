@@ -13,12 +13,14 @@ namespace Hal.CookieGetterSharp
 	{
 		bool _checkSubDirectory;
 
-		public IECookieGetter() {
+		public IECookieGetter()
+		{
 			base.CookiePath = System.Environment.GetFolderPath(Environment.SpecialFolder.Cookies);
 			this._checkSubDirectory = true;
 		}
 
-		public IECookieGetter(string path, bool checkSubDirectory) {
+		public IECookieGetter(string path, bool checkSubDirectory)
+		{
 			base.CookiePath = path;
 			this._checkSubDirectory = checkSubDirectory;
 		}
@@ -31,7 +33,7 @@ namespace Hal.CookieGetterSharp
 		/// <returns></returns>
 		public override System.Net.Cookie GetCookie(Uri url, string key)
 		{
-			
+
 			List<string> files = SelectFiles(url, GetAllFiles());
 			List<System.Net.Cookie> cookies = new List<System.Net.Cookie>();
 			foreach (string filepath in files) {
@@ -44,7 +46,7 @@ namespace Hal.CookieGetterSharp
 				}
 			}
 
-			if (cookies.Count != 0) { 
+			if (cookies.Count != 0) {
 				// Expiresが最新のものを返す
 				cookies.Sort(CompareCookieExpiresDesc);
 				return cookies[0];
@@ -74,19 +76,19 @@ namespace Hal.CookieGetterSharp
 			foreach (System.Net.Cookie cookie in cookies) {
 				try {
 					collection.Add(cookie);
-				} catch(Exception ex) {
+				} catch (Exception ex) {
 					System.Diagnostics.Debug.WriteLine(ex.Message);
 				}
 			}
 			return collection;
 		}
 
-		public override System.Net.CookieContainer GetAllCookies() {
-			
+		public override System.Net.CookieContainer GetAllCookies()
+		{
+
 			List<System.Net.Cookie> cookies = new List<System.Net.Cookie>();
 
-			foreach (string file in GetAllFiles())
-			{
+			foreach (string file in GetAllFiles()) {
 				cookies.AddRange(PickCookiesFromFile(file));
 			}
 
@@ -94,8 +96,8 @@ namespace Hal.CookieGetterSharp
 			cookies.Sort(CompareCookieExpiresAsc);
 			System.Net.CookieContainer container = new System.Net.CookieContainer();
 			foreach (System.Net.Cookie cookie in cookies) {
-				try{
-					AddCookieToContainer(container, cookie);
+				try {
+					Utility.AddCookieToContainer(container, cookie);
 				} catch (Exception ex) {
 					System.Diagnostics.Debug.WriteLine(ex.Message);
 				}
@@ -123,7 +125,7 @@ namespace Hal.CookieGetterSharp
 					results.Add(filePath);
 				}
 			}
-				
+
 			return results;
 		}
 
@@ -134,11 +136,11 @@ namespace Hal.CookieGetterSharp
 		private List<string> GetAllFiles()
 		{
 			List<string> results = new List<string>();
-			
+
 			Stack<string> cookieFolders = new Stack<string>();
 			cookieFolders.Push(base.CookiePath);
 
-			if(_checkSubDirectory){
+			if (_checkSubDirectory) {
 				// VISTA用などのLOWサブフォルダも検索範囲に含める
 				System.IO.Directory.GetDirectories(base.CookiePath);
 			}
@@ -168,7 +170,7 @@ namespace Hal.CookieGetterSharp
 			try {
 				string data = System.IO.File.ReadAllText(filePath, Encoding.GetEncoding("Shift_JIS"));
 				string[] blocks = data.Split('*');
-				
+
 				foreach (string block in blocks) {
 					string[] lines = block.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -207,7 +209,8 @@ namespace Hal.CookieGetterSharp
 		/// </summary>
 		/// <param name="host"></param>
 		/// <returns></returns>
-		private string RemoveTopLevelDomain(string host) {
+		private string RemoveTopLevelDomain(string host)
+		{
 			List<string> hosts = new List<string>(host.Split('.'));
 			if (hosts.Count != 1) {
 				hosts.RemoveAt(hosts.Count - 1);
@@ -221,8 +224,9 @@ namespace Hal.CookieGetterSharp
 		/// </summary>
 		/// <param name="fileName"></param>
 		/// <returns></returns>
-		private string GetFileHostName(string fileName) { 
-			int start = fileName.IndexOf('@')+1;
+		private string GetFileHostName(string fileName)
+		{
+			int start = fileName.IndexOf('@') + 1;
 			int end = fileName.LastIndexOf('[');
 			if (start < end) {
 				return fileName.Substring(start, end - start);
@@ -289,11 +293,11 @@ namespace Hal.CookieGetterSharp
 
 /*
 
- * クッキーファイルの中身
- * クッキーは * で区切られている
- * 上から名前、値、URL、？、有効期限１、有効期限2、生成日１、生成日２となっている
- * 日付はWindows32APIのFiletime
- * クッキーの名前はユーザー名＠トップドメインを除いたホスト名[識別番号].txt
+* クッキーファイルの中身
+* クッキーは * で区切られている
+* 上から名前、値、URL、？、有効期限１、有効期限2、生成日１、生成日２となっている
+* 日付はWindows32APIのFiletime
+* クッキーの名前はユーザー名＠トップドメインを除いたホスト名[識別番号].txt
 
 user_session
 user_session_460838_-------------------
@@ -323,6 +327,6 @@ nicovideo.jp/
 30043046
 *
 
- 
- 
- */
+
+
+*/

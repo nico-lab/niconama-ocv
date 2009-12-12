@@ -6,7 +6,7 @@ namespace Hal.CookieGetterSharp
 {
 	class Safari4CookieGetter : CookieGetter
 	{
-		
+
 		public Safari4CookieGetter()
 		{
 			this.CookiePath = null;
@@ -23,21 +23,24 @@ namespace Hal.CookieGetterSharp
 			System.Net.CookieContainer container = new System.Net.CookieContainer();
 
 			if (!System.IO.File.Exists(base.CookiePath)) return container;
-			
+
 			try {
 				System.Xml.XmlReaderSettings settings = new System.Xml.XmlReaderSettings();
+
+				// DTDを取得するためにウェブアクセスするのを抑制する
+				// (通信遅延や、アクセスエラーを排除するため)
 				settings.XmlResolver = null;
 				settings.ProhibitDtd = false;
 				settings.CheckCharacters = false;
 
-				using (System.Xml.XmlReader xtr = System.Xml.XmlTextReader.Create(base.CookiePath, settings)) {//new System.Xml.XmlTextReader(this.CookiePath)){ //
+				using (System.Xml.XmlReader xtr = System.Xml.XmlTextReader.Create(base.CookiePath, settings)) {
 					while (xtr.Read()) {
-						switch (xtr.NodeType) { 
+						switch (xtr.NodeType) {
 							case System.Xml.XmlNodeType.Element:
 								if (xtr.Name.ToLower().Equals("dict")) {
 									System.Net.Cookie cookie = getCookie(xtr);
 									try {
-										AddCookieToContainer(container, cookie);
+										Utility.AddCookieToContainer(container, cookie);
 									} catch {
 										Console.WriteLine(string.Format("Invalid Format! domain:{0},key:{1},value:{2}", cookie.Domain, cookie.Name, cookie.Value));
 									}
@@ -47,34 +50,35 @@ namespace Hal.CookieGetterSharp
 					}
 				}
 
-			} catch (Exception ex){
+			} catch (Exception ex) {
 				throw new CookieGetterException("Safariのクッキー取得中にエラーが発生しました。", ex);
 			}
 
 			return container;
 		}
 
-		private System.Net.Cookie getCookie(System.Xml.XmlReader xtr) {
+		private System.Net.Cookie getCookie(System.Xml.XmlReader xtr)
+		{
 			bool isEnd = false;
 			System.Net.Cookie cookie = new System.Net.Cookie();
 			string tagName = "";
 			string kind = "";
 
 			while (xtr.Read() && !isEnd) {
-				switch (xtr.NodeType) { 
+				switch (xtr.NodeType) {
 					case System.Xml.XmlNodeType.Element:
 						tagName = xtr.Name.ToLower();
 						break;
 
 					case System.Xml.XmlNodeType.Text:
-						switch (tagName) { 
+						switch (tagName) {
 							case "key":
 								kind = xtr.Value.ToLower();
 								break;
 							case "real":
 							case "string":
 							case "date":
-								switch (kind) { 
+								switch (kind) {
 									case "domain":
 										cookie.Domain = xtr.Value;
 										break;

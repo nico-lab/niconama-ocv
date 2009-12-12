@@ -10,7 +10,8 @@ namespace Hal.CookieGetterSharp
 	/// </summary>
 	abstract public class CookieGetter : ICookieGetter
 	{
-		
+		#region [宣言]
+
 		/// <summary>
 		/// ブラウザの種類
 		/// </summary>
@@ -62,12 +63,14 @@ namespace Hal.CookieGetterSharp
 			Lunascape6Gecko
 		}
 
+		#endregion [宣言]
 
-		#region Static Member
+		#region [静的メンバー]
 
 		static IBrowserManager[] _browserManagers;
 
-		static CookieGetter() {
+		static CookieGetter()
+		{
 			_browserManagers = new IBrowserManager[]{
 				new IEBrowserManager(),
 				new IEComponentBrowserManager(),
@@ -112,8 +115,7 @@ namespace Hal.CookieGetterSharp
 			return results.ToArray();
 		}
 
-		#endregion
-
+		#endregion [静的メンバー]
 
 		private string _cookiePath = "";
 
@@ -162,45 +164,5 @@ namespace Hal.CookieGetterSharp
 
 		#endregion
 
-		/// <summary>
-		/// 必要があればuriの最後に/をつける
-		/// Pathの指定がある場合、uriの最後に/があるかないかで取得できない場合があるので
-		/// </summary>
-		/// <param name="uri"></param>
-		/// <returns></returns>
-		protected static Uri AddSrashLast(Uri uri) { 
-			string o = uri.Segments[uri.Segments.Length - 1];
-			string no = uri.OriginalString;//.Replace("http://", "http://o.");
-			if (!o.Contains(".") && o[o.Length - 1] != '/') {
-				no += "/";
-			} 
-			return new Uri(no);
-		}
-
-		/// <summary>
-		/// クッキーコンテナにクッキーを追加する
-		/// domainが.hal.fscs.jpなどだと http://hal.fscs.jp でクッキーが有効にならないので.ありとなし両方指定する
-		/// </summary>
-		/// <param name="container"></param>
-		/// <param name="cookie"></param>
-		protected static void AddCookieToContainer(System.Net.CookieContainer container, System.Net.Cookie cookie)
-		{
-
-			if (container == null) {
-				throw new ArgumentNullException("container");
-			}
-
-			if (cookie == null) {
-				throw new ArgumentNullException("cookie");
-			}
-
-			container.Add(cookie);
-			if (cookie.Domain.StartsWith(".")) {
-				container.Add(new System.Net.Cookie(cookie.Name, cookie.Value, cookie.Path, cookie.Domain.Substring(1)));
-			}
-
-		}
-
-		
 	}
 }

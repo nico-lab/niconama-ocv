@@ -10,7 +10,8 @@ namespace Hal.CookieGetterSharp
 		string _cookieFilePath;
 		ICookieGetter _cookieGetter;
 
-		internal BrowserStatus() {
+		internal BrowserStatus()
+		{
 		}
 
 		#region IBrowserStatus ƒƒ“ƒo

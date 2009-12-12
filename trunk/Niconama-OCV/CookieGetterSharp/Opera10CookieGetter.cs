@@ -32,7 +32,8 @@ namespace Hal.CookieGetterSharp
 			this.CookiePath = null;
 		}
 
-		public Opera10CookieGetter(string cookieFilePath) {
+		public Opera10CookieGetter(string cookieFilePath)
+		{
 			this.CookiePath = cookieFilePath;
 		}
 
@@ -71,12 +72,12 @@ namespace Hal.CookieGetterSharp
 								case 0x03:  // クッキー
 									string chost = string.Join(".", domainStack.ToArray());
 									string cpath = '/' + string.Join("/", pathStack.ToArray());
-									
+
 									System.Net.Cookie cookie = getCookieRecode(new System.IO.MemoryStream(recordData.bytepayload), headerData);
 									cookie.Domain = '.' + string.Join(".", domainStack.ToArray());
 									cookie.Path = '/' + string.Join("/", pathStack.ToArray());
 									try {
-										AddCookieToContainer(container, cookie);
+										Utility.AddCookieToContainer(container, cookie);
 									} catch {
 										Console.WriteLine(string.Format("Invalid Format! domain:{0},key:{1},value:{2}", cookie.Domain, cookie.Name, cookie.Value));
 									}
@@ -107,7 +108,7 @@ namespace Hal.CookieGetterSharp
 		{
 			Record recordData;
 
-			while ( stream.Position < stream.Length ) {
+			while (stream.Position < stream.Length) {
 				recordData = getRecord(stream, headerData);
 
 				switch (recordData.tag_id) {
@@ -179,7 +180,7 @@ namespace Hal.CookieGetterSharp
 			int topData = stream.ReadByte();
 			stream.Seek(-1, SeekOrigin.Current);
 			recordData.tag_id = (int)getNumber(stream, headerData.idtag_length);
-			
+
 			// MSBがONのとき、Tag IDのみになる。（以降のDataLength,Dataはない）
 			if ((topData & MSB) == 0) {
 
