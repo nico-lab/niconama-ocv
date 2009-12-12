@@ -12,30 +12,26 @@ namespace Hal.CookieGetterSharp
 	{
 		#region IBrowserManager ƒƒ“ƒo
 
-		public CookieGetter.BROWSER_TYPE BrowserType
+		public BrowserType BrowserType
 		{
-			get { return CookieGetter.BROWSER_TYPE.IESafemode; }
+			get { return BrowserType.IESafemode; }
 		}
 
-		public IBrowserStatus GetDefaultStatus()
+		public ICookieGetter CreateDefaultCookieGetter()
 		{
 			string cookieFolder = Environment.GetFolderPath(Environment.SpecialFolder.Cookies);
 			string lowFolder = System.IO.Path.Combine(cookieFolder, "low");
-
-			BrowserStatus bs = new BrowserStatus();
-			bs.Name = BrowserType.ToString();
-			bs.CookiePath = lowFolder;
-			bs.CookieGetter = new IECookieGetter(lowFolder, false);
-			return bs;
+			CookieStatus status = new CookieStatus(this.BrowserType.ToString(), lowFolder, this.BrowserType, PathType.Directory);
+			return new IECookieGetter(status, false);
 		}
 
 		/// <summary>
 		/// IEBrowserManager‚ÅŠÂ‹«‚É‚ ‚í‚¹‚Ä“KØ‚È•¨‚ğ•Ô‚·‚æ‚¤‚É‚µ‚Ä‚ ‚é‚Ì‚ÅA‚±‚±‚Å‚Í‰½‚à‚µ‚È‚¢
 		/// </summary>
 		/// <returns></returns>
-		public IBrowserStatus[] GetStatus()
+		public ICookieGetter[] CreateCookieGetters()
 		{
-			return new IBrowserStatus[0];
+			return new ICookieGetter[0];
 		}
 
 		#endregion

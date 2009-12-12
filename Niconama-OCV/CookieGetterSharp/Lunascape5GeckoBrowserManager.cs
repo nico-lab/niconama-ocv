@@ -10,12 +10,12 @@ namespace Hal.CookieGetterSharp
 
 		#region IBrowserManager ÉÅÉìÉo
 
-		public CookieGetter.BROWSER_TYPE BrowserType
+		public BrowserType BrowserType
 		{
-			get { return CookieGetter.BROWSER_TYPE.Lunascape5Gecko; }
+			get { return BrowserType.Lunascape5Gecko; }
 		}
 
-		public IBrowserStatus GetDefaultStatus()
+		public ICookieGetter CreateDefaultCookieGetter()
 		{
 			string path = Utility.ReplacePathSymbols(COOKIEPATH);
 
@@ -23,23 +23,13 @@ namespace Hal.CookieGetterSharp
 				path = null;
 			}
 
-			BrowserStatus bs = new BrowserStatus();
-			bs.Name = BrowserType.ToString();
-			bs.CookiePath = path;
-			bs.CookieGetter = new Firefox3CookieGetter(path);
-
-			return bs;
+			CookieStatus status = new CookieStatus("Lunascape5 Gecko", path, this.BrowserType, PathType.File);
+			return new Firefox3CookieGetter(status);
 		}
 
-		public IBrowserStatus[] GetStatus()
+		public ICookieGetter[] CreateCookieGetters()
 		{
-			string path = Utility.ReplacePathSymbols(COOKIEPATH);
-
-			if (!System.IO.File.Exists(path)) {
-				return new BrowserStatus[0];
-			}
-
-			return new IBrowserStatus[] { GetDefaultStatus() };
+			return new ICookieGetter[] { CreateDefaultCookieGetter() };
 		}
 
 		#endregion

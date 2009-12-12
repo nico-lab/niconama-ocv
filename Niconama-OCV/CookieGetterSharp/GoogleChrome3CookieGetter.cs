@@ -13,13 +13,8 @@ namespace Hal.CookieGetterSharp
 
 		const string SELECT_QUERY = "SELECT value, name, host_key, path, expires_utc FROM cookies";
 
-		public GoogleChrome3CookieGetter()
+		public GoogleChrome3CookieGetter(ICookieStatus status) : base(status)
 		{
-		}
-
-		public GoogleChrome3CookieGetter(string cookieFilePath)
-		{
-			this.CookiePath = cookieFilePath;
 		}
 
 		protected override System.Net.Cookie DataToCookie(object[] data)

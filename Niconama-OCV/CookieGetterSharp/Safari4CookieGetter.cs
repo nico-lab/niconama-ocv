@@ -7,14 +7,8 @@ namespace Hal.CookieGetterSharp
 	class Safari4CookieGetter : CookieGetter
 	{
 
-		public Safari4CookieGetter()
+		public Safari4CookieGetter(ICookieStatus status) : base(status)
 		{
-			this.CookiePath = null;
-		}
-
-		public Safari4CookieGetter(string cookieFilePath)
-		{
-			this.CookiePath = cookieFilePath;
 		}
 
 		public override System.Net.CookieContainer GetAllCookies()

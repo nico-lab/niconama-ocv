@@ -43,7 +43,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{02BACD03-D
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookieGetterTestProj", "CookieGetterTestProj\CookieGetterTestProj.csproj", "{0AB80BB1-00E1-42FC-91FC-09A40981D76C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookieGetterTestProject", "CookieGetterTestProj\CookieGetterTestProject.csproj", "{0AB80BB1-00E1-42FC-91FC-09A40981D76C}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"

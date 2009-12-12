@@ -7,6 +7,9 @@ using Match = System.Text.RegularExpressions.Match;
 
 namespace Hal.NicoApiSharp.Streaming.Jikkyo
 {
+	/// <summary>
+	/// À‹µ‚ÌÚ×‚ğæ“¾‚µ‚Ü‚·
+	/// </summary>
 	public class JikkyoDescription : Streaming.IDescription, IErrorData
 	{
 		private enum ERROR_CODE

@@ -12,19 +12,19 @@ namespace Hal.CookieGetterSharp
 		/// <summary>
 		/// ブラウザの種類
 		/// </summary>
-		CookieGetter.BROWSER_TYPE BrowserType { get; }
+		BrowserType BrowserType { get; }
 
 		/// <summary>
 		/// 既定のステータスを取得します
 		/// </summary>
 		/// <returns></returns>
-		IBrowserStatus GetDefaultStatus();
+		ICookieGetter CreateDefaultCookieGetter();
 
 		/// <summary>
 		/// 利用可能なすべてのステータスを取得します
 		/// </summary>
 		/// <returns></returns>
-		IBrowserStatus[] GetStatus();
+		ICookieGetter[] CreateCookieGetters();
 		
 	}
 }

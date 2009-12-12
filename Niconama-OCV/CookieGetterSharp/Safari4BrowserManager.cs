@@ -10,12 +10,12 @@ namespace Hal.CookieGetterSharp
 
 		#region IBrowserManager ÉÅÉìÉo
 
-		public CookieGetter.BROWSER_TYPE BrowserType
+		public BrowserType BrowserType
 		{
-			get { return CookieGetter.BROWSER_TYPE.Safari4; }
+			get { return BrowserType.Safari4; }
 		}
 
-		public IBrowserStatus GetDefaultStatus()
+		public ICookieGetter CreateDefaultCookieGetter()
 		{
 			string path = Utility.ReplacePathSymbols(COOKIEPATH);
 
@@ -23,23 +23,13 @@ namespace Hal.CookieGetterSharp
 				path = null;
 			}
 
-			BrowserStatus bs = new BrowserStatus();
-			bs.Name = BrowserType.ToString();
-			bs.CookiePath = path;
-			bs.CookieGetter = new Safari4CookieGetter(path);
-
-			return bs;
+			CookieStatus status = new CookieStatus(this.BrowserType.ToString(), path, this.BrowserType, PathType.File);
+			return new Safari4CookieGetter(status);
 		}
 
-		public IBrowserStatus[] GetStatus()
+		public ICookieGetter[] CreateCookieGetters()
 		{
-			string path = Utility.ReplacePathSymbols(COOKIEPATH);
-
-			if (!System.IO.File.Exists(path)) {
-				return new BrowserStatus[0];
-			}
-
-			return new IBrowserStatus[] { GetDefaultStatus() };
+			return new ICookieGetter[] { CreateDefaultCookieGetter() };
 		}
 
 		#endregion

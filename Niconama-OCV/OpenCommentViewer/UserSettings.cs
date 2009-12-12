@@ -38,9 +38,9 @@ namespace Hal.OpenCommentViewer
 		public WindowState MainformWindowState = new WindowState();
 
 		[System.Xml.Serialization.XmlIgnoreAttribute()]
-		public Hal.CookieGetterSharp.CookieGetter.BROWSER_TYPE BrowserType
+		public Hal.CookieGetterSharp.BrowserType BrowserType
 		{
-			get { return (Hal.CookieGetterSharp.CookieGetter.BROWSER_TYPE)_BrowserType; }
+			get { return (Hal.CookieGetterSharp.BrowserType)_BrowserType; }
 			set { _BrowserType = (int)value; }
 		}
 

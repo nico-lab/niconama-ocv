@@ -10,60 +10,6 @@ namespace Hal.CookieGetterSharp
 	/// </summary>
 	abstract public class CookieGetter : ICookieGetter
 	{
-		#region [宣言]
-
-		/// <summary>
-		/// ブラウザの種類
-		/// </summary>
-		public enum BROWSER_TYPE
-		{
-			/// <summary>
-			/// IE系ブラウザ(IEComponet + IESafemode)
-			/// </summary>
-			IE,
-
-			/// <summary>
-			/// XPのIEやトライデントエンジンを使用しているブラウザ
-			/// </summary>
-			IEComponet,
-
-			/// <summary>
-			/// Vista以降のIE
-			/// </summary>
-			IESafemode,
-
-			/// <summary>
-			/// Firefox
-			/// </summary>
-			Firefox3,
-
-			/// <summary>
-			/// Google Chrome
-			/// </summary>
-			GoogleChrome3,
-
-			/// <summary>
-			/// Opera10
-			/// </summary>
-			Opera10,
-
-			/// <summary>
-			/// Safari4
-			/// </summary>
-			Safari4,
-
-			/// <summary>
-			/// Lunascape5 Geckoエンジン
-			/// </summary>
-			Lunascape5Gecko,
-
-			/// <summary>
-			/// Lunascape6 Geckoエンジン
-			/// </summary>
-			Lunascape6Gecko
-		}
-
-		#endregion [宣言]
 
 		#region [静的メンバー]
 
@@ -89,11 +35,11 @@ namespace Hal.CookieGetterSharp
 		/// </summary>
 		/// <param name="type"></param>
 		/// <returns></returns>
-		public static ICookieGetter GetInstance(BROWSER_TYPE type)
+		public static ICookieGetter CreateInstance(BrowserType type)
 		{
 			foreach (IBrowserManager manager in _browserManagers) {
 				if (manager.BrowserType == type) {
-					return manager.GetDefaultStatus().CookieGetter;
+					return manager.CreateDefaultCookieGetter();
 				}
 			}
 
@@ -101,15 +47,24 @@ namespace Hal.CookieGetterSharp
 		}
 
 		/// <summary>
-		/// 利用可能なブラウザの情報を取得します。
+		/// すべてのクッキーゲッターを取得する
 		/// </summary>
+		/// <param name="availableOnly">利用可能なものだけを選択するかどうか</param>
 		/// <returns></returns>
-		public static IBrowserStatus[] GetBrowserStatus()
+		public static ICookieGetter[] CreateInstances(bool availableOnly)
 		{
-			List<IBrowserStatus> results = new List<IBrowserStatus>();
+			List<ICookieGetter> results = new List<ICookieGetter>();
 
 			foreach (IBrowserManager manager in _browserManagers) {
-				results.AddRange(manager.GetStatus());
+				if (availableOnly) {
+					foreach (ICookieGetter cg in manager.CreateCookieGetters()) {
+						if (cg.CookieStatus.IsAvailable) {
+							results.Add(cg);
+						}
+					}
+				} else {
+					results.AddRange(manager.CreateCookieGetters());
+				}
 			}
 
 			return results.ToArray();
@@ -117,17 +72,37 @@ namespace Hal.CookieGetterSharp
 
 		#endregion [静的メンバー]
 
-		private string _cookiePath = "";
+		private readonly ICookieStatus _cookieStatus;
+
+		internal CookieGetter(ICookieStatus status) {
+			if (status == null) {
+				throw new ArgumentNullException("status");
+			}
+			_cookieStatus = status;
+		}
 
 		#region ICookieGetter メンバ
 
 		/// <summary>
 		/// クッキーが保存されているファイル・ディレクトリへのパスを取得・設定します。
 		/// </summary>
-		public string CookiePath
+		internal string CookiePath
 		{
-			get { return _cookiePath; }
-			set { _cookiePath = value; }
+			get {
+				return this.CookieStatus.CookiePath;
+			}
+
+			set {
+				this.CookieStatus.CookiePath = value;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ICookieStatus CookieStatus
+		{
+			get { return _cookieStatus; }
 		}
 
 		/// <summary>
@@ -163,6 +138,42 @@ namespace Hal.CookieGetterSharp
 		public abstract System.Net.CookieContainer GetAllCookies();
 
 		#endregion
+
+		#region Objectのオーバーライド
+
+		/// <summary>
+		/// 設定の名前を返します。
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
+			return this.CookieStatus.Name;
+		}
+
+		/// <summary>
+		/// クッキーゲッターを比較して等しいか検査します
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public override bool Equals(object obj)
+		{
+			ICookieGetter that = obj as ICookieGetter;
+			if (that == null) return false;
+
+			return this.CookieStatus.Equals(that.CookieStatus);
+		}
+
+		/// <summary>
+		/// ハッシュ値を計算します
+		/// </summary>
+		/// <returns></returns>
+		public override int GetHashCode()
+		{
+			return this.CookieStatus.GetHashCode();
+		}
+
+		#endregion
+
 
 	}
 }

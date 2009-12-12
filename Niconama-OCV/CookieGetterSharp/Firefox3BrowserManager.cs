@@ -12,42 +12,41 @@ namespace Hal.CookieGetterSharp
 
 		#region IBrowserManager ÉÅÉìÉo
 
-		public CookieGetter.BROWSER_TYPE BrowserType
+		public BrowserType BrowserType
 		{
-			get { return CookieGetter.BROWSER_TYPE.Firefox3; }
+			get { return BrowserType.Firefox3; }
 		}
 
-		public IBrowserStatus GetDefaultStatus()
+		public ICookieGetter CreateDefaultCookieGetter()
 		{
 			Firefox3Profile prof = Firefox3Profile.GetDefaultProfile(Utility.ReplacePathSymbols(DATAFOLDER), INIFILE_NAME);
-			return CreateBrowserStatus(prof);
+			return CreateCookieGetter(prof);
 		}
 
-		public IBrowserStatus[] GetStatus()
+		public ICookieGetter[] CreateCookieGetters()
 		{
 			Firefox3Profile[] profs = Firefox3Profile.GetProfiles(Utility.ReplacePathSymbols(DATAFOLDER), INIFILE_NAME);
-			BrowserStatus[] infos = new BrowserStatus[profs.Length];
+			ICookieGetter[] cgs = new ICookieGetter[profs.Length];
 			for (int i = 0; i < profs.Length; i++) {
-				infos[i] = CreateBrowserStatus(profs[i]);
+				cgs[i] = CreateCookieGetter(profs[i]);
 			}
-			return infos;
+			return cgs;
 		}
 
 		#endregion
 
-		private BrowserStatus CreateBrowserStatus(Firefox3Profile prof)
+		private ICookieGetter CreateCookieGetter(Firefox3Profile prof)
 		{
-			BrowserStatus bs = new BrowserStatus();
+			string name = "Firefox3";
+			string path = null;
+
 			if (prof != null) {
-				bs.CookiePath = System.IO.Path.Combine(prof.path, COOKEFILE_NAME);
-				bs.CookieGetter = new Firefox3CookieGetter(bs.CookiePath);
-				bs.Name = BrowserType.ToString() + "-" + prof.name;
-			} else {
-				bs.CookiePath = null;
-				bs.CookieGetter = new Firefox3CookieGetter();
-				bs.Name = BrowserType.ToString();
+				name += " " + prof.name;
+				path = System.IO.Path.Combine(prof.path, COOKEFILE_NAME);				
 			}
-			return bs;
+
+			CookieStatus status = new CookieStatus(name, path, this.BrowserType, PathType.File);
+			return new Firefox3CookieGetter(status);
 		}
 	}
 }

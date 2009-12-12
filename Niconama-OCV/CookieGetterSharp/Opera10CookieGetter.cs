@@ -27,14 +27,8 @@ namespace Hal.CookieGetterSharp
 			public byte[] bytepayload;
 		};
 
-		public Opera10CookieGetter()
+		public Opera10CookieGetter(ICookieStatus status) : base(status)
 		{
-			this.CookiePath = null;
-		}
-
-		public Opera10CookieGetter(string cookieFilePath)
-		{
-			this.CookiePath = cookieFilePath;
 		}
 
 		public override System.Net.CookieContainer GetAllCookies()
@@ -98,7 +92,7 @@ namespace Hal.CookieGetterSharp
 					}
 				}
 			} catch (Exception ex) {
-				throw new Exception("Operaのクッキー取得でエラーが発生しました。", ex);
+				throw new CookieGetterException("Operaのクッキー取得でエラーが発生しました。", ex);
 			}
 
 			return container;

@@ -5,8 +5,18 @@ using Hal.NicoApiSharp.Streaming;
 
 namespace Hal.NicoApiSharp.Streaming.Jikkyo
 {
+	/// <summary>
+	/// 実況コメントを取得するための情報を表すクラス
+	/// </summary>
 	public class GetFlv : IBasicStatus, IMessageServerStatus, IErrorData
 	{
+
+		/// <summary>
+		/// API:GetFlvから情報を取得する
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <param name="cookies"></param>
+		/// <returns></returns>
 		public static GetFlv GetInstance(string liveId, System.Net.CookieContainer cookies)
 		{
 
@@ -27,6 +37,11 @@ namespace Hal.NicoApiSharp.Streaming.Jikkyo
 			return null;
 		}
 
+		/// <summary>
+		/// API:GetFlvから情報を取得する
+		/// </summary>
+		/// <param name="liveId"></param>
+		/// <returns></returns>
 		public static GetFlv GetInstance(string liveId)
 		{
 			if (LoginManager.DefaultCookies != null) {
@@ -96,28 +111,43 @@ namespace Hal.NicoApiSharp.Streaming.Jikkyo
 		}
 
 
-		#region ILiveBasicStatus メンバ
+		#region IBasicStatus メンバ
 
+		/// <summary>
+		/// 実況IDを取得する
+		/// </summary>
 		public string Id
 		{
 			get { return _liveId; }
 		}
 
+		/// <summary>
+		/// コミュニティ情報を取得する
+		/// </summary>
 		public string CommunityId
 		{
 			get { return ""; }
 		}
 
+		/// <summary>
+		/// サーバー上での放送開始時間を取得する
+		/// </summary>
 		public DateTime StartTime
 		{
 			get { return GetDateTime(_params["start_time"]); }
 		}
 
+		/// <summary>
+		/// PC上での放送開始時間を取得する
+		/// </summary>
 		public DateTime LocalStartTime
 		{
 			get { return this.StartTime + this.ServerTimeDelay; }
 		}
 
+		/// <summary>
+		/// 座席名を取得する
+		/// </summary>
 		public string RoomLabel
 		{
 			get { return ""; }
@@ -127,16 +157,25 @@ namespace Hal.NicoApiSharp.Streaming.Jikkyo
 
 		#region IMessageServerStatus メンバ
 
+		/// <summary>
+		/// メッセージサーバーのアドレス
+		/// </summary>
 		public string Address
 		{
 			get { return _params["ms"]; }
 		}
 
+		/// <summary>
+		/// メッセージサーバーのポート番号
+		/// </summary>
 		public int Port
 		{
 			get { return GetInt(_params["ms_port"], 0); }
 		}
 
+		/// <summary>
+		/// スレッド番号
+		/// </summary>
 		public int Thread
 		{
 			get { return GetInt(_params["thread_id"], 0); }
@@ -146,16 +185,25 @@ namespace Hal.NicoApiSharp.Streaming.Jikkyo
 
 		#region IAccountInfomation メンバ
 
+		/// <summary>
+		/// ユーザーIDを取得する
+		/// </summary>
 		public int UserId
 		{
 			get { return GetInt(_params["user_id"], 0); }
 		}
 
+		/// <summary>
+		/// ユーザー名を取得する
+		/// </summary>
 		public string UserName
 		{
 			get { return ""; }
 		}
 
+		/// <summary>
+		/// プレミアム会員かどうか
+		/// </summary>
 		public bool IsPremium
 		{
 			get { return GetInt(_params["is_premium"], 0) == 1; }
@@ -165,6 +213,9 @@ namespace Hal.NicoApiSharp.Streaming.Jikkyo
 
 		#region IErrorData メンバ
 
+		/// <summary>
+		/// サーバーから送られてきたエラーコード
+		/// </summary>
 		public string ErrorCode
 		{
 			get {
@@ -175,6 +226,9 @@ namespace Hal.NicoApiSharp.Streaming.Jikkyo
 			}
 		}
 
+		/// <summary>
+		/// エラーコードの意味
+		/// </summary>
 		public string ErrorMessage
 		{
 			get {
@@ -191,6 +245,9 @@ namespace Hal.NicoApiSharp.Streaming.Jikkyo
 			}
 		}
 
+		/// <summary>
+		/// エラーがあるかどうか
+		/// </summary>
 		public bool HasError
 		{
 			get { return _params.ContainsKey("error"); }

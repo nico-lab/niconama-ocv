@@ -40,16 +40,16 @@ namespace Hal.OpenCommentViewer.Control
 			}
 
 			switch (UserSettings.Default.BrowserType) {
-				case Hal.CookieGetterSharp.CookieGetter.BROWSER_TYPE.IE:
+				case Hal.CookieGetterSharp.BrowserType.IE:
 					radioButton1.Checked = true;
 					break;
-				case Hal.CookieGetterSharp.CookieGetter.BROWSER_TYPE.Opera10:
+				case Hal.CookieGetterSharp.BrowserType.Opera10:
 					radioButton2.Checked = true;
 					break;
-				case Hal.CookieGetterSharp.CookieGetter.BROWSER_TYPE.Firefox3:
+				case Hal.CookieGetterSharp.BrowserType.Firefox3:
 					radioButton3.Checked = true;
 					break;
-				case Hal.CookieGetterSharp.CookieGetter.BROWSER_TYPE.GoogleChrome3:
+				case Hal.CookieGetterSharp.BrowserType.GoogleChrome3:
 					radioButton4.Checked = true;
 					break;
 			}
@@ -88,13 +88,13 @@ namespace Hal.OpenCommentViewer.Control
 				this.DialogResult = DialogResult.OK;
 
 				if (radioButton1.Checked) {
-					UserSettings.Default.BrowserType = Hal.CookieGetterSharp.CookieGetter.BROWSER_TYPE.IE;
+					UserSettings.Default.BrowserType = Hal.CookieGetterSharp.BrowserType.IE;
 				} else if (radioButton2.Checked) {
-					UserSettings.Default.BrowserType = Hal.CookieGetterSharp.CookieGetter.BROWSER_TYPE.Opera10;
+					UserSettings.Default.BrowserType = Hal.CookieGetterSharp.BrowserType.Opera10;
 				} else if (radioButton3.Checked) {
-					UserSettings.Default.BrowserType = Hal.CookieGetterSharp.CookieGetter.BROWSER_TYPE.Firefox3;
+					UserSettings.Default.BrowserType = Hal.CookieGetterSharp.BrowserType.Firefox3;
 				} else if (radioButton4.Checked) {
-					UserSettings.Default.BrowserType = Hal.CookieGetterSharp.CookieGetter.BROWSER_TYPE.GoogleChrome3;
+					UserSettings.Default.BrowserType = Hal.CookieGetterSharp.BrowserType.GoogleChrome3;
 				} else {
 					this.DialogResult = DialogResult.Cancel;
 				}

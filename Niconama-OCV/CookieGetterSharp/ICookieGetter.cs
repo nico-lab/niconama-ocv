@@ -11,9 +11,9 @@ namespace Hal.CookieGetterSharp
 	public interface ICookieGetter
 	{
 		/// <summary>
-		/// クッキーが保存されているファイル・ディレクトリへのパスを取得・設定します。
+		/// クッキーに関する情報を取得します。
 		/// </summary>
-		string CookiePath { get; set;}
+		ICookieStatus CookieStatus { get; }
 
 		/// <summary>
 		/// 対象URL上の名前がKeyであるクッキーを取得します。
