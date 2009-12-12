@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -19,7 +19,7 @@ namespace Hal.CookieGetterSharp
 			_pathType = pathType;
 		}
 
-		#region IBrowserStatus ƒƒ“ƒo
+		#region IBrowserStatus ãƒ¡ãƒ³ãƒ
 
 		public BrowserType BrowserType
 		{
@@ -56,7 +56,7 @@ namespace Hal.CookieGetterSharp
 
 		#endregion
 
-		#region Object‚ÌƒI[ƒo[ƒ‰ƒCƒh
+		#region Objectã®ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰
 
 		public override string ToString()
 		{
@@ -82,7 +82,7 @@ namespace Hal.CookieGetterSharp
 		#endregion
 
 
-		#region IBrowserStatus ƒƒ“ƒo
+		#region IBrowserStatus ãƒ¡ãƒ³ãƒ
 
 		
 

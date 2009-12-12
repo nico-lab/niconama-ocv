@@ -1,26 +1,26 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Hal.CookieGetterSharp
 {
 	/// <summary>
-	/// ƒuƒ‰ƒEƒU‚Ìí—Ş
+	/// ãƒ–ãƒ©ã‚¦ã‚¶ã®ç¨®é¡
 	/// </summary>
 	public enum BrowserType
 	{
 		/// <summary>
-		/// IEŒnƒuƒ‰ƒEƒU(IEComponet + IESafemode)
+		/// IEç³»ãƒ–ãƒ©ã‚¦ã‚¶(IEComponet + IESafemode)
 		/// </summary>
 		IE,
 
 		/// <summary>
-		/// XP‚ÌIE‚âƒgƒ‰ƒCƒfƒ“ƒgƒGƒ“ƒWƒ“‚ğg—p‚µ‚Ä‚¢‚éƒuƒ‰ƒEƒU
+		/// XPã®IEã‚„ãƒˆãƒ©ã‚¤ãƒ‡ãƒ³ãƒˆã‚¨ãƒ³ã‚¸ãƒ³ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ãƒ–ãƒ©ã‚¦ã‚¶
 		/// </summary>
 		IEComponet,
 
 		/// <summary>
-		/// VistaˆÈ~‚ÌIE
+		/// Vistaä»¥é™ã®IE
 		/// </summary>
 		IESafemode,
 
@@ -45,12 +45,12 @@ namespace Hal.CookieGetterSharp
 		Safari4,
 
 		/// <summary>
-		/// Lunascape5 GeckoƒGƒ“ƒWƒ“
+		/// Lunascape5 Geckoã‚¨ãƒ³ã‚¸ãƒ³
 		/// </summary>
 		Lunascape5Gecko,
 
 		/// <summary>
-		/// Lunascape6 GeckoƒGƒ“ƒWƒ“
+		/// Lunascape6 Geckoã‚¨ãƒ³ã‚¸ãƒ³
 		/// </summary>
 		Lunascape6Gecko
 	}

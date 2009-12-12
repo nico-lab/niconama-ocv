@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,11 +6,11 @@ namespace Hal.CookieGetterSharp
 {
 
 	/// <summary>
-	/// IEŒn‚Ì‚·‚×‚Ä‚ÌƒNƒbƒL[‚ğæ“¾‚·‚é
+	/// IEç³»ã®ã™ã¹ã¦ã®ã‚¯ãƒƒã‚­ãƒ¼ã‚’å–å¾—ã™ã‚‹
 	/// </summary>
 	class IEBrowserManager : IBrowserManager
 	{
-		#region IBrowserManager ƒƒ“ƒo
+		#region IBrowserManager ãƒ¡ãƒ³ãƒ
 
 		public BrowserType BrowserType
 		{

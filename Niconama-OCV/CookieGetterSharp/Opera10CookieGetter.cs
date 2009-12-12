@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -34,11 +34,11 @@ namespace Hal.CookieGetterSharp
 		public override System.Net.CookieContainer GetAllCookies()
 		{
 			System.Net.CookieContainer container = new System.Net.CookieContainer();
-			if (!File.Exists(base.CookiePath)) return container;  // ƒtƒ@ƒCƒ‹‚Ì—L–³‚ğƒ`ƒFƒbƒN
+			if (!File.Exists(base.CookiePath)) return container;  // ãƒ•ã‚¡ã‚¤ãƒ«ã®æœ‰ç„¡ã‚’ãƒã‚§ãƒƒã‚¯
 
 			try {
 				using (FileStream reader = new FileStream(base.CookiePath, FileMode.Open, FileAccess.Read)) {
-					// w’è‚µ‚½ƒAƒhƒŒƒX‚É“Ç‚İ‚İˆÊ’u‚ğˆÚ“®
+					// æŒ‡å®šã—ãŸã‚¢ãƒ‰ãƒ¬ã‚¹ã«èª­ã¿è¾¼ã¿ä½ç½®ã‚’ç§»å‹•
 					reader.Seek(0, SeekOrigin.Begin);
 					Header headerData = getHeader(reader);
 					Record recordData;
@@ -51,19 +51,19 @@ namespace Hal.CookieGetterSharp
 						while (reader.Position < reader.Length) {
 							recordData = getRecord(reader, headerData);
 							switch (recordData.tag_id) {
-								case 0x01:  // ƒhƒƒCƒ“
+								case 0x01:  // ãƒ‰ãƒ¡ã‚¤ãƒ³
 									string domain = getDomainRecode(new System.IO.MemoryStream(recordData.bytepayload), headerData);
 									if (domain != null) {
 										domainStack.Push(domain);
 									}
 									break;
-								case 0x02:  // ƒpƒX
+								case 0x02:  // ãƒ‘ã‚¹
 									string page = getPageRecode(new System.IO.MemoryStream(recordData.bytepayload), headerData);
 									if (page != null) {
 										pathStack.Push(page);
 									}
 									break;
-								case 0x03:  // ƒNƒbƒL[
+								case 0x03:  // ã‚¯ãƒƒã‚­ãƒ¼
 									string chost = string.Join(".", domainStack.ToArray());
 									string cpath = '/' + string.Join("/", pathStack.ToArray());
 
@@ -77,12 +77,12 @@ namespace Hal.CookieGetterSharp
 									}
 
 									break;
-								case 0x04 + MSB: //ƒhƒƒCƒ“I—¹
+								case 0x04 + MSB: //ãƒ‰ãƒ¡ã‚¤ãƒ³çµ‚äº†
 									if (0 < domainStack.Count) {
 										domainStack.Pop();
 									}
 									break;
-								case 0x05 + MSB: //ƒpƒXI—¹
+								case 0x05 + MSB: //ãƒ‘ã‚¹çµ‚äº†
 									if (0 < pathStack.Count) {
 										pathStack.Pop();
 									}
@@ -92,7 +92,7 @@ namespace Hal.CookieGetterSharp
 					}
 				}
 			} catch (Exception ex) {
-				throw new CookieGetterException("Opera‚ÌƒNƒbƒL[æ“¾‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B", ex);
+				throw new CookieGetterException("Operaã®ã‚¯ãƒƒã‚­ãƒ¼å–å¾—ã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚", ex);
 			}
 
 			return container;
@@ -175,7 +175,7 @@ namespace Hal.CookieGetterSharp
 			stream.Seek(-1, SeekOrigin.Current);
 			recordData.tag_id = (int)getNumber(stream, headerData.idtag_length);
 
-			// MSB‚ªON‚Ì‚Æ‚«ATag ID‚Ì‚İ‚É‚È‚éBiˆÈ~‚ÌDataLength,Data‚Í‚È‚¢j
+			// MSBãŒONã®ã¨ãã€Tag IDã®ã¿ã«ãªã‚‹ã€‚ï¼ˆä»¥é™ã®DataLength,Dataã¯ãªã„ï¼‰
 			if ((topData & MSB) == 0) {
 
 				recordData.length = (int)getNumber(stream, headerData.length_length);

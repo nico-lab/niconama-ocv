@@ -1,27 +1,27 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Hal.CookieGetterSharp
 {
 	/// <summary>
-	/// CookieGetter‚ğ¶¬‚·‚é‚½‚ß‚ÌƒCƒ“ƒ^[ƒtƒF[ƒX
+	/// CookieGetterã‚’ç”Ÿæˆã™ã‚‹ãŸã‚ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
 	/// </summary>
 	interface IBrowserManager
 	{
 		/// <summary>
-		/// ƒuƒ‰ƒEƒU‚Ìí—Ş
+		/// ãƒ–ãƒ©ã‚¦ã‚¶ã®ç¨®é¡
 		/// </summary>
 		BrowserType BrowserType { get; }
 
 		/// <summary>
-		/// Šù’è‚ÌCookieGetter‚ğæ“¾‚µ‚Ü‚·
+		/// æ—¢å®šã®CookieGetterã‚’å–å¾—ã—ã¾ã™
 		/// </summary>
 		/// <returns></returns>
 		ICookieGetter CreateDefaultCookieGetter();
 
 		/// <summary>
-		/// —˜—p‰Â”\‚È‚·‚×‚Ä‚ÌCookieGetter‚ğæ“¾‚µ‚Ü‚·
+		/// åˆ©ç”¨å¯èƒ½ãªã™ã¹ã¦ã®CookieGetterã‚’å–å¾—ã—ã¾ã™
 		/// </summary>
 		/// <returns></returns>
 		ICookieGetter[] CreateCookieGetters();

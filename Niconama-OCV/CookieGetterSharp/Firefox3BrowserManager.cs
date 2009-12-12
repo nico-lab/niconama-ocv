@@ -1,4 +1,4 @@
-using System;
+Ôªøusing System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,7 +10,7 @@ namespace Hal.CookieGetterSharp
 		const string INIFILE_NAME = "profiles.ini";
 		const string COOKEFILE_NAME = "cookies.sqlite";
 
-		#region IBrowserManager ÉÅÉìÉo
+		#region IBrowserManager „É°„É≥„Éê
 
 		public BrowserType BrowserType
 		{

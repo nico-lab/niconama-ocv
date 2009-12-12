@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,7 +6,7 @@ namespace Hal.CookieGetterSharp
 {
 
 	/// <summary>
-	/// Firefox3‚ÌƒvƒƒtƒB[ƒ‹‚ğ•\Œ»‚µ‚Ü‚·B
+	/// Firefox3ã®ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«ã‚’è¡¨ç¾ã—ã¾ã™ã€‚
 	/// </summary>
 	class Firefox3Profile
 	{
@@ -16,7 +16,7 @@ namespace Hal.CookieGetterSharp
 		public bool isDefault;
 
 		/// <summary>
-		/// Šù’è‚Ìƒvƒƒtƒ@ƒCƒ‹‚ğæ“¾‚·‚é
+		/// æ—¢å®šã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—ã™ã‚‹
 		/// </summary>
 		/// <returns></returns>
 		public static Firefox3Profile GetDefaultProfile(string moz_path, string iniFileName)
@@ -37,7 +37,7 @@ namespace Hal.CookieGetterSharp
 		}
 
 		/// <summary>
-		/// Firefox‚ÌƒvƒƒtƒB[ƒ‹ƒtƒHƒ‹ƒ_“à‚ÌƒtƒHƒ‹ƒ_‚ğ‚·‚×‚Äæ“¾‚·‚é
+		/// Firefoxã®ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«ãƒ•ã‚©ãƒ«ãƒ€å†…ã®ãƒ•ã‚©ãƒ«ãƒ€ã‚’ã™ã¹ã¦å–å¾—ã™ã‚‹
 		/// </summary>
 		/// <returns></returns>
 		public static Firefox3Profile[] GetProfiles(string moz_path, string iniFileName)

@@ -1,4 +1,4 @@
-using System;
+Ôªøusing System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,7 +9,7 @@ namespace Hal.CookieGetterSharp
 		
 		const string COOKIEPATH = "%APPDATA%\\Opera\\Opera\\cookies4.dat";
 
-		#region IBrowserManager ÉÅÉìÉo
+		#region IBrowserManager „É°„É≥„Éê
 
 		public BrowserType BrowserType
 		{
