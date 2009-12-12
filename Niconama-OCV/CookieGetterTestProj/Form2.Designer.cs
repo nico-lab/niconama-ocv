@@ -47,17 +47,25 @@
 			this.button2 = new System.Windows.Forms.Button();
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.label7 = new System.Windows.Forms.Label();
-			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.radioButton1 = new System.Windows.Forms.RadioButton();
+			this.radioButton2 = new System.Windows.Forms.RadioButton();
+			this.radioButton3 = new System.Windows.Forms.RadioButton();
+			this.radioButton4 = new System.Windows.Forms.RadioButton();
+			this.radioButton5 = new System.Windows.Forms.RadioButton();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.flowLayoutPanel1);
+			this.groupBox1.Controls.Add(this.radioButton5);
+			this.groupBox1.Controls.Add(this.radioButton4);
+			this.groupBox1.Controls.Add(this.radioButton3);
+			this.groupBox1.Controls.Add(this.radioButton2);
+			this.groupBox1.Controls.Add(this.radioButton1);
 			this.groupBox1.Location = new System.Drawing.Point(12, 12);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(295, 96);
+			this.groupBox1.Size = new System.Drawing.Size(219, 70);
 			this.groupBox1.TabIndex = 0;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "ブラウザ";
@@ -65,7 +73,7 @@
 			// checkBox1
 			// 
 			this.checkBox1.AutoSize = true;
-			this.checkBox1.Location = new System.Drawing.Point(12, 114);
+			this.checkBox1.Location = new System.Drawing.Point(12, 88);
 			this.checkBox1.Name = "checkBox1";
 			this.checkBox1.Size = new System.Drawing.Size(226, 16);
 			this.checkBox1.TabIndex = 1;
@@ -76,15 +84,15 @@
 			// textBox1
 			// 
 			this.textBox1.Enabled = false;
-			this.textBox1.Location = new System.Drawing.Point(12, 134);
+			this.textBox1.Location = new System.Drawing.Point(12, 108);
 			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(241, 19);
+			this.textBox1.Size = new System.Drawing.Size(175, 19);
 			this.textBox1.TabIndex = 2;
 			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(10, 170);
+			this.label1.Location = new System.Drawing.Point(10, 144);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(27, 12);
 			this.label1.TabIndex = 3;
@@ -92,24 +100,24 @@
 			// 
 			// textBox2
 			// 
-			this.textBox2.Location = new System.Drawing.Point(43, 167);
+			this.textBox2.Location = new System.Drawing.Point(43, 141);
 			this.textBox2.Name = "textBox2";
-			this.textBox2.Size = new System.Drawing.Size(261, 19);
+			this.textBox2.Size = new System.Drawing.Size(188, 19);
 			this.textBox2.TabIndex = 4;
 			this.textBox2.Text = "http://live.nicovideo.jp/";
 			// 
 			// textBox3
 			// 
-			this.textBox3.Location = new System.Drawing.Point(43, 192);
+			this.textBox3.Location = new System.Drawing.Point(43, 166);
 			this.textBox3.Name = "textBox3";
-			this.textBox3.Size = new System.Drawing.Size(264, 19);
+			this.textBox3.Size = new System.Drawing.Size(188, 19);
 			this.textBox3.TabIndex = 6;
 			this.textBox3.Text = "user_session";
 			// 
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(10, 195);
+			this.label2.Location = new System.Drawing.Point(10, 169);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(24, 12);
 			this.label2.TabIndex = 5;
@@ -127,9 +135,9 @@
 			this.groupBox2.Controls.Add(this.label5);
 			this.groupBox2.Controls.Add(this.label4);
 			this.groupBox2.Controls.Add(this.label3);
-			this.groupBox2.Location = new System.Drawing.Point(313, 88);
+			this.groupBox2.Location = new System.Drawing.Point(253, 59);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(298, 126);
+			this.groupBox2.Size = new System.Drawing.Size(233, 126);
 			this.groupBox2.TabIndex = 7;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "取得結果";
@@ -141,7 +149,7 @@
 			this.textBox7.Location = new System.Drawing.Point(62, 98);
 			this.textBox7.Name = "textBox7";
 			this.textBox7.ReadOnly = true;
-			this.textBox7.Size = new System.Drawing.Size(230, 19);
+			this.textBox7.Size = new System.Drawing.Size(165, 19);
 			this.textBox7.TabIndex = 7;
 			// 
 			// textBox6
@@ -151,7 +159,7 @@
 			this.textBox6.Location = new System.Drawing.Point(62, 74);
 			this.textBox6.Name = "textBox6";
 			this.textBox6.ReadOnly = true;
-			this.textBox6.Size = new System.Drawing.Size(230, 19);
+			this.textBox6.Size = new System.Drawing.Size(165, 19);
 			this.textBox6.TabIndex = 6;
 			// 
 			// textBox5
@@ -161,7 +169,7 @@
 			this.textBox5.Location = new System.Drawing.Point(62, 49);
 			this.textBox5.Name = "textBox5";
 			this.textBox5.ReadOnly = true;
-			this.textBox5.Size = new System.Drawing.Size(230, 19);
+			this.textBox5.Size = new System.Drawing.Size(165, 19);
 			this.textBox5.TabIndex = 5;
 			// 
 			// textBox4
@@ -171,7 +179,7 @@
 			this.textBox4.Location = new System.Drawing.Point(62, 22);
 			this.textBox4.Name = "textBox4";
 			this.textBox4.ReadOnly = true;
-			this.textBox4.Size = new System.Drawing.Size(230, 19);
+			this.textBox4.Size = new System.Drawing.Size(165, 19);
 			this.textBox4.TabIndex = 4;
 			// 
 			// label6
@@ -212,7 +220,7 @@
 			// 
 			// button1
 			// 
-			this.button1.Location = new System.Drawing.Point(313, 27);
+			this.button1.Location = new System.Drawing.Point(253, 23);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(84, 23);
 			this.button1.TabIndex = 8;
@@ -222,7 +230,7 @@
 			// 
 			// button2
 			// 
-			this.button2.Location = new System.Drawing.Point(259, 132);
+			this.button2.Location = new System.Drawing.Point(193, 105);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(45, 23);
 			this.button2.TabIndex = 9;
@@ -237,24 +245,72 @@
 			// label7
 			// 
 			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(373, 33);
+			this.label7.Location = new System.Drawing.Point(350, 29);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(0, 12);
 			this.label7.TabIndex = 10;
 			// 
-			// flowLayoutPanel1
+			// radioButton1
 			// 
-			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 15);
-			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(289, 78);
-			this.flowLayoutPanel1.TabIndex = 5;
+			this.radioButton1.AutoSize = true;
+			this.radioButton1.Checked = true;
+			this.radioButton1.Location = new System.Drawing.Point(6, 18);
+			this.radioButton1.Name = "radioButton1";
+			this.radioButton1.Size = new System.Drawing.Size(33, 16);
+			this.radioButton1.TabIndex = 0;
+			this.radioButton1.TabStop = true;
+			this.radioButton1.Text = "IE";
+			this.radioButton1.UseVisualStyleBackColor = true;
+			// 
+			// radioButton2
+			// 
+			this.radioButton2.AutoSize = true;
+			this.radioButton2.Location = new System.Drawing.Point(45, 18);
+			this.radioButton2.Name = "radioButton2";
+			this.radioButton2.Size = new System.Drawing.Size(59, 16);
+			this.radioButton2.TabIndex = 1;
+			this.radioButton2.TabStop = true;
+			this.radioButton2.Text = "Firefox";
+			this.radioButton2.UseVisualStyleBackColor = true;
+			// 
+			// radioButton3
+			// 
+			this.radioButton3.AutoSize = true;
+			this.radioButton3.Location = new System.Drawing.Point(110, 18);
+			this.radioButton3.Name = "radioButton3";
+			this.radioButton3.Size = new System.Drawing.Size(53, 16);
+			this.radioButton3.TabIndex = 2;
+			this.radioButton3.TabStop = true;
+			this.radioButton3.Text = "Opera";
+			this.radioButton3.UseVisualStyleBackColor = true;
+			// 
+			// radioButton4
+			// 
+			this.radioButton4.AutoSize = true;
+			this.radioButton4.Location = new System.Drawing.Point(6, 40);
+			this.radioButton4.Name = "radioButton4";
+			this.radioButton4.Size = new System.Drawing.Size(53, 16);
+			this.radioButton4.TabIndex = 3;
+			this.radioButton4.TabStop = true;
+			this.radioButton4.Text = "Safari";
+			this.radioButton4.UseVisualStyleBackColor = true;
+			// 
+			// radioButton5
+			// 
+			this.radioButton5.AutoSize = true;
+			this.radioButton5.Location = new System.Drawing.Point(66, 40);
+			this.radioButton5.Name = "radioButton5";
+			this.radioButton5.Size = new System.Drawing.Size(97, 16);
+			this.radioButton5.TabIndex = 4;
+			this.radioButton5.TabStop = true;
+			this.radioButton5.Text = "GoogleChrome";
+			this.radioButton5.UseVisualStyleBackColor = true;
 			// 
 			// Form2
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(613, 227);
+			this.ClientSize = new System.Drawing.Size(511, 220);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button1);
@@ -269,6 +325,7 @@
 			this.Name = "Form2";
 			this.Text = "Form2";
 			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
 			this.ResumeLayout(false);
@@ -298,6 +355,10 @@
 		private System.Windows.Forms.Button button2;
 		private System.Windows.Forms.OpenFileDialog openFileDialog1;
 		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+		private System.Windows.Forms.RadioButton radioButton5;
+		private System.Windows.Forms.RadioButton radioButton4;
+		private System.Windows.Forms.RadioButton radioButton3;
+		private System.Windows.Forms.RadioButton radioButton2;
+		private System.Windows.Forms.RadioButton radioButton1;
 	}
 }
