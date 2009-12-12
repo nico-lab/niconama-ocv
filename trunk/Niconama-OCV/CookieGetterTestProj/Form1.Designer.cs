@@ -30,14 +30,14 @@
 			this.components = new System.ComponentModel.Container();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.button2 = new System.Windows.Forms.Button();
+			this.button1 = new System.Windows.Forms.Button();
 			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
-			this.cookieBindingSource = new System.Windows.Forms.BindingSource(this.components);
 			this.domainDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.pathDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.valueDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cookieBindingSource = new System.Windows.Forms.BindingSource(this.components);
 			this.panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.cookieBindingSource)).BeginInit();
@@ -46,7 +46,7 @@
 			// panel1
 			// 
 			this.panel1.Controls.Add(this.textBox1);
-			this.panel1.Controls.Add(this.button2);
+			this.panel1.Controls.Add(this.button1);
 			this.panel1.Controls.Add(this.comboBox1);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.panel1.Location = new System.Drawing.Point(0, 426);
@@ -62,15 +62,15 @@
 			this.textBox1.TabIndex = 3;
 			this.textBox1.Text = "http://www.google.co.jp/";
 			// 
-			// button2
+			// button1
 			// 
-			this.button2.Location = new System.Drawing.Point(546, 6);
-			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(75, 23);
-			this.button2.TabIndex = 2;
-			this.button2.Text = "Get Cookie";
-			this.button2.UseVisualStyleBackColor = true;
-			this.button2.Click += new System.EventHandler(this.button2_Click);
+			this.button1.Location = new System.Drawing.Point(546, 6);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(75, 23);
+			this.button1.TabIndex = 2;
+			this.button1.Text = "Get Cookie";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// comboBox1
 			// 
@@ -98,10 +98,6 @@
 			this.dataGridView1.Size = new System.Drawing.Size(690, 426);
 			this.dataGridView1.TabIndex = 2;
 			// 
-			// cookieBindingSource
-			// 
-			this.cookieBindingSource.DataSource = typeof(System.Net.Cookie);
-			// 
 			// domainDataGridViewTextBoxColumn
 			// 
 			this.domainDataGridViewTextBoxColumn.DataPropertyName = "Domain";
@@ -125,6 +121,10 @@
 			this.valueDataGridViewTextBoxColumn.DataPropertyName = "Value";
 			this.valueDataGridViewTextBoxColumn.HeaderText = "Value";
 			this.valueDataGridViewTextBoxColumn.Name = "valueDataGridViewTextBoxColumn";
+			// 
+			// cookieBindingSource
+			// 
+			this.cookieBindingSource.DataSource = typeof(System.Net.Cookie);
 			// 
 			// Form1
 			// 
@@ -150,7 +150,7 @@
 		private System.Windows.Forms.DataGridView dataGridView1;
 		private System.Windows.Forms.BindingSource cookieBindingSource;
 		private System.Windows.Forms.ComboBox comboBox1;
-		private System.Windows.Forms.Button button2;
+		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.TextBox textBox1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn domainDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn pathDataGridViewTextBoxColumn;

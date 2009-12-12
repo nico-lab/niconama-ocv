@@ -45,7 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BrowserStatus.cs" />
+    <Compile Include="BrowserType.cs" />
+    <Compile Include="CookieStatus.cs" />
     <Compile Include="CookieGetter.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Firefox3CookieGetter.cs" />
@@ -54,7 +55,7 @@
     <Compile Include="GoogleChrome3BrowserManager.cs" />
     <Compile Include="GoogleChrome3CookieGetter.cs" />
     <Compile Include="IBrowserManager.cs" />
-    <Compile Include="IBrowserStatus.cs" />
+    <Compile Include="ICookieStatus.cs" />
     <Compile Include="ICookieGetter.cs" />
     <Compile Include="IEBrowserManager.cs" />
     <Compile Include="IEComponentBrowserManager.cs" />

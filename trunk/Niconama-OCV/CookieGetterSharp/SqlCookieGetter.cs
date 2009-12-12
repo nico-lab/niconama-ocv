@@ -12,6 +12,10 @@ namespace Hal.CookieGetterSharp
 	{
 		const string CONNECTIONSTRING_FORMAT = "Data Source={0}";
 
+		public SqlCookieGetter(ICookieStatus status) : base(status) 
+		{ 
+		}
+
 		public override System.Net.Cookie GetCookie(Uri url, string key)
 		{
 			System.Net.CookieContainer container = GetCookies(base.CookiePath, MakeQuery(url, key));

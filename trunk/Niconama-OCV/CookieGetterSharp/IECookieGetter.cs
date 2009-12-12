@@ -13,16 +13,10 @@ namespace Hal.CookieGetterSharp
 	{
 		bool _checkSubDirectory;
 
-		public IECookieGetter()
+		public IECookieGetter(ICookieStatus status, bool checkSubDirectory)
+			: base(status)
 		{
-			base.CookiePath = System.Environment.GetFolderPath(Environment.SpecialFolder.Cookies);
 			this._checkSubDirectory = true;
-		}
-
-		public IECookieGetter(string path, bool checkSubDirectory)
-		{
-			base.CookiePath = path;
-			this._checkSubDirectory = checkSubDirectory;
 		}
 
 		/// <summary>

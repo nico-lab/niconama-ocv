@@ -20,8 +20,8 @@ namespace Hal.NicoApiSharp
 		public static string[] GetAvailableBrowserName() {
 			List<string> results = new List<string>();
 
-			foreach (IBrowserStatus status in CookieGetter.GetBrowserStatus()) {
-				results.Add(status.Name);
+			foreach (ICookieGetter getter in CookieGetter.CreateInstances(true)) {
+				results.Add(getter.CookieStatus.Name);
 			}
 
 			return results.ToArray();
@@ -33,13 +33,13 @@ namespace Hal.NicoApiSharp
 		/// <param name="browserType"></param>
 		/// <param name="cookieFilePath">クッキーが保存されているファイル、nullの場合既定のファイルを対称にする</param>
 		/// <returns>失敗した場合はnullが返される</returns>
-		public static AccountInfomation Login(CookieGetter.BROWSER_TYPE browserType, string cookieFilePath)
+		public static AccountInfomation Login(BrowserType browserType, string cookieFilePath)
 		{
-			ICookieGetter cookieGetter = CookieGetter.GetInstance(browserType);
+			ICookieGetter cookieGetter = CookieGetter.CreateInstance(browserType);
 			if (cookieGetter == null) return null;
 
 			if(!string.IsNullOrEmpty(cookieFilePath)){
-				cookieGetter.CookiePath = cookieFilePath;
+				cookieGetter.CookieStatus.CookiePath = cookieFilePath;
 			}
 
 			return Login(cookieGetter);
@@ -52,9 +52,9 @@ namespace Hal.NicoApiSharp
 		/// <param name="browserName">GetAvailableBrowserNameで取得したブラウザ名のどれか</param>
 		/// <returns>失敗した場合はnullが返される</returns>
 		public static AccountInfomation Login(string browserName) {
-			foreach (IBrowserStatus status in CookieGetter.GetBrowserStatus()) {
-				if (status.Name.Equals(browserName)) { 
-					return Login(status.CookieGetter);
+			foreach (ICookieGetter getter in CookieGetter.CreateInstances(true)) {
+				if (getter.CookieStatus.Name.Equals(browserName)) { 
+					return Login(getter);
 				}
 			}
 			return null;

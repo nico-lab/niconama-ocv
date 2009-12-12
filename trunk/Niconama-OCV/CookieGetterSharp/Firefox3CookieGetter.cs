@@ -12,14 +12,8 @@ namespace Hal.CookieGetterSharp
 	{
 		const string SELECT_QUERY = "SELECT value, name, host, path, expiry FROM moz_cookies";
 
-		public Firefox3CookieGetter()
+		public Firefox3CookieGetter(ICookieStatus status) : base(status)
 		{
-			this.CookiePath = null;
-		}
-
-		public Firefox3CookieGetter(string cookieFilePath)
-		{
-			this.CookiePath = cookieFilePath;
 		}
 
 		protected override System.Net.Cookie DataToCookie(object[] data)
