@@ -36,11 +36,11 @@ namespace CookieGetterTestProj
 			ICookieGetter cookieGetter = CookieGetter.CreateInstance(type);
 			
 			if (checkBox1.Checked) {
-				cookieGetter.CookieStatus.CookiePath = textBox1.Text;
+				cookieGetter.Status.CookiePath = textBox1.Text;
 			}
 
 			Uri uri;
-			if(cookieGetter.CookieStatus.IsAvailable && Uri.TryCreate(textBox2.Text, UriKind.Absolute, out uri)){
+			if(cookieGetter.Status.IsAvailable && Uri.TryCreate(textBox2.Text, UriKind.Absolute, out uri)){
 				System.Net.Cookie cookie;
 				try {
 					cookie = cookieGetter.GetCookie(uri, textBox3.Text);
