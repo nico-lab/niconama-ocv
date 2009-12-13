@@ -58,7 +58,7 @@ namespace Hal.CookieGetterSharp
 			foreach (IBrowserManager manager in _browserManagers) {
 				if (availableOnly) {
 					foreach (ICookieGetter cg in manager.CreateCookieGetters()) {
-						if (cg.CookieStatus.IsAvailable) {
+						if (cg.Status.IsAvailable) {
 							results.Add(cg);
 						}
 					}
@@ -89,18 +89,18 @@ namespace Hal.CookieGetterSharp
 		internal string CookiePath
 		{
 			get {
-				return this.CookieStatus.CookiePath;
+				return this.Status.CookiePath;
 			}
 
 			set {
-				this.CookieStatus.CookiePath = value;
+				this.Status.CookiePath = value;
 			}
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
-		public ICookieStatus CookieStatus
+		public ICookieStatus Status
 		{
 			get { return _cookieStatus; }
 		}
@@ -147,7 +147,7 @@ namespace Hal.CookieGetterSharp
 		/// <returns></returns>
 		public override string ToString()
 		{
-			return this.CookieStatus.Name;
+			return this.Status.Name;
 		}
 
 		/// <summary>
@@ -160,7 +160,7 @@ namespace Hal.CookieGetterSharp
 			ICookieGetter that = obj as ICookieGetter;
 			if (that == null) return false;
 
-			return this.CookieStatus.Equals(that.CookieStatus);
+			return this.Status.Equals(that.Status);
 		}
 
 		/// <summary>
@@ -169,7 +169,7 @@ namespace Hal.CookieGetterSharp
 		/// <returns></returns>
 		public override int GetHashCode()
 		{
-			return this.CookieStatus.GetHashCode();
+			return this.Status.GetHashCode();
 		}
 
 		#endregion

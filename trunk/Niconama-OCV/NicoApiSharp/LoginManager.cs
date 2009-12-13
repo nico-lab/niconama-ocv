@@ -21,7 +21,7 @@ namespace Hal.NicoApiSharp
 			List<string> results = new List<string>();
 
 			foreach (ICookieGetter getter in CookieGetter.CreateInstances(true)) {
-				results.Add(getter.CookieStatus.Name);
+				results.Add(getter.Status.Name);
 			}
 
 			return results.ToArray();
@@ -39,7 +39,7 @@ namespace Hal.NicoApiSharp
 			if (cookieGetter == null) return null;
 
 			if(!string.IsNullOrEmpty(cookieFilePath)){
-				cookieGetter.CookieStatus.CookiePath = cookieFilePath;
+				cookieGetter.Status.CookiePath = cookieFilePath;
 			}
 
 			return Login(cookieGetter);
@@ -53,7 +53,7 @@ namespace Hal.NicoApiSharp
 		/// <returns>é∏îsÇµÇΩèÍçáÇÕnullÇ™ï‘Ç≥ÇÍÇÈ</returns>
 		public static AccountInfomation Login(string browserName) {
 			foreach (ICookieGetter getter in CookieGetter.CreateInstances(true)) {
-				if (getter.CookieStatus.Name.Equals(browserName)) { 
+				if (getter.Status.Name.Equals(browserName)) { 
 					return Login(getter);
 				}
 			}
