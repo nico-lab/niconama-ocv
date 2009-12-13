@@ -26,6 +26,11 @@ namespace Hal.CookieGetterSharp
 		public ICookieGetter[] CreateCookieGetters()
 		{
 			Firefox3Profile[] profs = Firefox3Profile.GetProfiles(Utility.ReplacePathSymbols(DATAFOLDER), INIFILE_NAME);
+
+			if (profs.Length == 0) {
+				return new ICookieGetter[] { CreateCookieGetter(null) };
+			}
+
 			ICookieGetter[] cgs = new ICookieGetter[profs.Length];
 			for (int i = 0; i < profs.Length; i++) {
 				cgs[i] = CreateCookieGetter(profs[i]);
