@@ -10,14 +10,14 @@ namespace Hal.CookieGetterSharp
 	public enum BrowserType
 	{
 		/// <summary>
-		/// IE系ブラウザ(IEComponet + IESafemode)
+		/// IE系ブラウザ(IEComponent + IESafemode)
 		/// </summary>
 		IE,
 
 		/// <summary>
 		/// XPのIEやトライデントエンジンを使用しているブラウザ
 		/// </summary>
-		IEComponet,
+		IEComponent,
 
 		/// <summary>
 		/// Vista以降のIE

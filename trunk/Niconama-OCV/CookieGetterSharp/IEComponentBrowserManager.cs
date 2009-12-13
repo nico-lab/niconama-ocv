@@ -13,7 +13,7 @@ namespace Hal.CookieGetterSharp
 
 		public BrowserType BrowserType
 		{
-			get { return BrowserType.IEComponet; }
+			get { return BrowserType.IEComponent; }
 		}
 
 		public ICookieGetter CreateDefaultCookieGetter()
