@@ -36,10 +36,13 @@ namespace Hal.CookieGetterSharp
 		/// </summary>
 		/// <returns></returns>
 		private string SearchDirectory() {
-			foreach (string folder in System.IO.Directory.GetDirectories(Utility.ReplacePathSymbols(LUNASCAPE_PLUGIN_FOLDER))) {
-				string path = System.IO.Path.Combine(folder, COOKIEPATH);
-				if (System.IO.File.Exists(path)) {
-					return path;
+			string dir = Utility.ReplacePathSymbols(LUNASCAPE_PLUGIN_FOLDER);
+			if (System.IO.Directory.Exists(dir)) {
+				foreach (string folder in System.IO.Directory.GetDirectories(dir)) {
+					string path = System.IO.Path.Combine(folder, COOKIEPATH);
+					if (System.IO.File.Exists(path)) {
+						return path;
+					}
 				}
 			}
 			return null;
