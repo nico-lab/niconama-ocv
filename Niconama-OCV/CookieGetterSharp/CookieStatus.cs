@@ -10,6 +10,7 @@ namespace Hal.CookieGetterSharp
 		readonly BrowserType _browserType;
 		readonly PathType _pathType;
 		string _path;
+		string _displayName;
 
 		internal CookieStatus(string name, string path, BrowserType browserType, PathType pathType)
 		{
@@ -17,6 +18,7 @@ namespace Hal.CookieGetterSharp
 			_path = path;
 			_browserType = browserType;
 			_pathType = pathType;
+			_displayName = null;
 		}
 
 		#region IBrowserStatus メンバ
@@ -54,13 +56,26 @@ namespace Hal.CookieGetterSharp
 			get { return _pathType; }
 		}
 
+		public string DisplayName {
+			get {
+				if (string.IsNullOrEmpty(_displayName)) {
+					return this.Name;
+				} else {
+					return _displayName;
+				}
+			}
+			set {
+				_displayName = value;
+			}
+		}
+
 		#endregion
 
 		#region Objectのオーバーライド
 
 		public override string ToString()
 		{
-			return _name;
+			return this.DisplayName;
 		}
 
 		public override bool Equals(object obj)
