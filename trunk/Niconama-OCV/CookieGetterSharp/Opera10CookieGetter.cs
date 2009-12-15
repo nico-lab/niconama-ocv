@@ -33,8 +33,13 @@ namespace Hal.CookieGetterSharp
 
 		public override System.Net.CookieContainer GetAllCookies()
 		{
+
+			if (base.CookiePath == null || !File.Exists(base.CookiePath)) {
+				throw new CookieGetterException("Operaのクッキーパスが正しく設定されていません。");
+			}
+			
 			System.Net.CookieContainer container = new System.Net.CookieContainer();
-			if (!File.Exists(base.CookiePath)) return container;  // ファイルの有無をチェック
+			
 
 			try {
 				using (FileStream reader = new FileStream(base.CookiePath, FileMode.Open, FileAccess.Read)) {

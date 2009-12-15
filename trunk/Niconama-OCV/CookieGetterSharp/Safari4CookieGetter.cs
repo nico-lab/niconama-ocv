@@ -13,10 +13,11 @@ namespace Hal.CookieGetterSharp
 
 		public override System.Net.CookieContainer GetAllCookies()
 		{
+			if (base.CookiePath == null || !System.IO.File.Exists(base.CookiePath)) {
+				throw new CookieGetterException("Safariのクッキーパスが正しく設定されていません。");
+			}
 
 			System.Net.CookieContainer container = new System.Net.CookieContainer();
-
-			if (!System.IO.File.Exists(base.CookiePath)) return container;
 
 			try {
 				System.Xml.XmlReaderSettings settings = new System.Xml.XmlReaderSettings();

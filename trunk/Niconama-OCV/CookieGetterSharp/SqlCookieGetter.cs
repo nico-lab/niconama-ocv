@@ -36,9 +36,11 @@ namespace Hal.CookieGetterSharp
 
 		protected virtual System.Net.CookieContainer GetCookies(string path, string query)
 		{
-			System.Net.CookieContainer container = new System.Net.CookieContainer();
+			if (path == null || !System.IO.File.Exists(path)) {
+				throw new CookieGetterException("クッキーパスが正しく設定されていません。");
+			}
 
-			if (path == null || !System.IO.File.Exists(path)) return container;
+			System.Net.CookieContainer container = new System.Net.CookieContainer();
 
 			string temp = null;
 

@@ -9,6 +9,7 @@ namespace Hal.CookieGetterSharp
 	/// </summary>
 	public enum BrowserType
 	{
+
 		/// <summary>
 		/// IE系ブラウザ(IEComponent + IESafemode)
 		/// </summary>
@@ -52,6 +53,16 @@ namespace Hal.CookieGetterSharp
 		/// <summary>
 		/// Lunascape6 Geckoエンジン
 		/// </summary>
-		Lunascape6Gecko
+		Lunascape6Gecko,
+
+		/// <summary>
+		/// Lunascape6 Webkitエンジン
+		/// </summary>
+		Lunascape6Webkit,
+
+		/// <summary>
+		/// Google Chromium
+		/// </summary>
+		Chromium
 	}
 }
