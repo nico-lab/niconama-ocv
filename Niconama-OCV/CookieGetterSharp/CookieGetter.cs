@@ -26,7 +26,9 @@ namespace Hal.CookieGetterSharp
 				new Opera10BrowserManager(),
 				new Safari4BrowserManager(),
 				new Lunascape5GeckoBrowserManager(),
-				new Lunascape6GeckoBrowserManager()
+				new Lunascape6GeckoBrowserManager(),
+				new Lunascape6WebkitBrowserManager(),
+				new ChromiumBrowserManager()				
 			};
 		}
 

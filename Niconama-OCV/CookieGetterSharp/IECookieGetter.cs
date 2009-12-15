@@ -129,6 +129,10 @@ namespace Hal.CookieGetterSharp
 		/// <returns></returns>
 		private List<string> GetAllFiles()
 		{
+			if (base.CookiePath == null || !System.IO.Directory.Exists(base.CookiePath)) {
+				throw new CookieGetterException("IEのクッキーパスが正しく設定されていません。");
+			}
+
 			List<string> results = new List<string>();
 
 			Stack<string> cookieFolders = new Stack<string>();
