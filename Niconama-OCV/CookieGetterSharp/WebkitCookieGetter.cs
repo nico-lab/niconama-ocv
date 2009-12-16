@@ -7,7 +7,7 @@ namespace Hal.CookieGetterSharp
 	class WebkitCookieGetter : CookieGetter
 	{		
 
-		public WebkitCookieGetter(ICookieStatus status)
+		public WebkitCookieGetter(CookieStatus status)
 			: base(status)
 		{ 
 		}

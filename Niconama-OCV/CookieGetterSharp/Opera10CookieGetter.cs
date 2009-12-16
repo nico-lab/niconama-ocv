@@ -27,7 +27,7 @@ namespace Hal.CookieGetterSharp
 			public byte[] bytepayload;
 		};
 
-		public Opera10CookieGetter(ICookieStatus status) : base(status)
+		public Opera10CookieGetter(CookieStatus status) : base(status)
 		{
 		}
 

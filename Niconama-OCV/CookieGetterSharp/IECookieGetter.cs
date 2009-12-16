@@ -13,7 +13,7 @@ namespace Hal.CookieGetterSharp
 	{
 		bool _checkSubDirectory;
 
-		public IECookieGetter(ICookieStatus status, bool checkSubDirectory)
+		public IECookieGetter(CookieStatus status, bool checkSubDirectory)
 			: base(status)
 		{
 			this._checkSubDirectory = true;
