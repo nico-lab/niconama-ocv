@@ -38,7 +38,7 @@ namespace Hal.CookieGetterSharp
 		/// <summary>
 		/// ToStringで表示される名前。nullにするとNameが表示されるようになる。
 		/// </summary>
-		string DisplayName { get; }
+		string DisplayName { get; set; }
 
 		/// <summary>
 		/// 利用可能かどうかを取得する
