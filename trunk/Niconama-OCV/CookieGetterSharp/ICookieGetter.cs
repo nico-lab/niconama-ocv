@@ -13,7 +13,7 @@ namespace Hal.CookieGetterSharp
 		/// <summary>
 		/// クッキーに関する情報を取得します。
 		/// </summary>
-		ICookieStatus Status { get; }
+		CookieStatus Status { get; }
 
 		/// <summary>
 		/// 対象URL上の名前がKeyであるクッキーを取得します。

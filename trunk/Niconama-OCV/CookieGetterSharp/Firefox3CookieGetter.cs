@@ -12,7 +12,7 @@ namespace Hal.CookieGetterSharp
 	{
 		const string SELECT_QUERY = "SELECT value, name, host, path, expiry FROM moz_cookies";
 
-		public Firefox3CookieGetter(ICookieStatus status) : base(status)
+		public Firefox3CookieGetter(CookieStatus status) : base(status)
 		{
 		}
 

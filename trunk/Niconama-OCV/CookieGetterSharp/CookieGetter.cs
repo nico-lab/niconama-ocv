@@ -49,6 +49,20 @@ namespace Hal.CookieGetterSharp
 		}
 
 		/// <summary>
+		/// CookieStatusからCookieGetterを復元する
+		/// </summary>
+		/// <param name="status"></param>
+		/// <returns></returns>
+		public static ICookieGetter CreateInstance(CookieStatus status) {
+			ICookieGetter cookieGetter = CreateInstance(status.BrowserType);
+			cookieGetter.Status.Name = status.Name;
+			cookieGetter.Status.CookiePath = status.CookiePath;
+			cookieGetter.Status.DisplayName = status.DisplayName;
+
+			return cookieGetter;
+		}
+
+		/// <summary>
 		/// すべてのクッキーゲッターを取得する
 		/// </summary>
 		/// <param name="availableOnly">利用可能なものだけを選択するかどうか</param>
@@ -74,9 +88,9 @@ namespace Hal.CookieGetterSharp
 
 		#endregion [静的メンバー]
 
-		private readonly ICookieStatus _cookieStatus;
+		private readonly CookieStatus _cookieStatus;
 
-		internal CookieGetter(ICookieStatus status) {
+		internal CookieGetter(CookieStatus status) {
 			if (status == null) {
 				throw new ArgumentNullException("status");
 			}
@@ -102,7 +116,7 @@ namespace Hal.CookieGetterSharp
 		/// <summary>
 		/// 
 		/// </summary>
-		public ICookieStatus Status
+		public CookieStatus Status
 		{
 			get { return _cookieStatus; }
 		}
@@ -149,7 +163,7 @@ namespace Hal.CookieGetterSharp
 		/// <returns></returns>
 		public override string ToString()
 		{
-			return this.Status.Name;
+			return this.Status.ToString();
 		}
 
 		/// <summary>

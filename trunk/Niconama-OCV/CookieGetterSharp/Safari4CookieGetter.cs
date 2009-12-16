@@ -7,7 +7,7 @@ namespace Hal.CookieGetterSharp
 	class Safari4CookieGetter : CookieGetter
 	{
 
-		public Safari4CookieGetter(ICookieStatus status) : base(status)
+		public Safari4CookieGetter(CookieStatus status) : base(status)
 		{
 		}
 

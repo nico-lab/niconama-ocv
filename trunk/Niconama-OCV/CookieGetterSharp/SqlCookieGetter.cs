@@ -12,7 +12,7 @@ namespace Hal.CookieGetterSharp
 	{
 		const string CONNECTIONSTRING_FORMAT = "Data Source={0}";
 
-		public SqlCookieGetter(ICookieStatus status) : base(status) 
+		public SqlCookieGetter(CookieStatus status) : base(status) 
 		{ 
 		}
 
