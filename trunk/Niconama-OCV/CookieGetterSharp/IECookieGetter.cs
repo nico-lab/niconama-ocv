@@ -71,9 +71,13 @@ namespace Hal.CookieGetterSharp
 				try {
 					collection.Add(cookie);
 				} catch (Exception ex) {
+					CookieGetter.Exceptions.Enqueue(ex);
 					System.Diagnostics.Debug.WriteLine(ex.Message);
 				}
 			}
+
+
+
 			return collection;
 		}
 
@@ -93,6 +97,7 @@ namespace Hal.CookieGetterSharp
 				try {
 					Utility.AddCookieToContainer(container, cookie);
 				} catch (Exception ex) {
+					CookieGetter.Exceptions.Enqueue(ex);
 					System.Diagnostics.Debug.WriteLine(ex.Message);
 				}
 			}
@@ -224,7 +229,7 @@ namespace Hal.CookieGetterSharp
 		/// <returns></returns>
 		private string GetFileHostName(string fileName)
 		{
-			int start = fileName.IndexOf('@') + 1;
+			int start = fileName.LastIndexOf('@') + 1;
 			int end = fileName.LastIndexOf('[');
 			if (start < end) {
 				return fileName.Substring(start, end - start);
@@ -263,7 +268,7 @@ namespace Hal.CookieGetterSharp
 			if (b == null) {
 				return 1;
 			}
-			return -a.Expires.CompareTo(b.Expires);
+			return a.Expires.CompareTo(b.Expires);
 		}
 
 		/// <summary>
@@ -283,7 +288,7 @@ namespace Hal.CookieGetterSharp
 			if (b == null) {
 				return 1;
 			}
-			return a.Expires.CompareTo(b.Expires);
+			return -a.Expires.CompareTo(b.Expires);
 		}
 
 	}

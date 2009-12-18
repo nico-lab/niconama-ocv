@@ -43,7 +43,7 @@ namespace Hal.CookieGetterSharp
 			// Å@\\xÇ∆ÇQåÖÇÃÇPÇUêiêîíl
 			// Å@\\\\
 			// Å@\Ç™Ç»Ç¢èÍçáÇÃêÊì™ÇPï∂éö
-			string matchPattern = "^(\\\\x[0-9a-fA-F]{2})|^(\\\\\\\\)|^(.)";
+			string matchPattern = "^(\\\\x[0-9a-fA-F]{2})|^(\\\\\\\\)|^(.)|[\"()]";
 			System.Text.RegularExpressions.Regex reg = new System.Text.RegularExpressions.Regex(matchPattern, System.Text.RegularExpressions.RegexOptions.Compiled);
 
 			string[] blocks = line.Split(new string[] { "\\0\\0\\0" }, StringSplitOptions.RemoveEmptyEntries);
@@ -54,7 +54,8 @@ namespace Hal.CookieGetterSharp
 					if (cookie != null) {
 						try {
 							container.Add(cookie);
-						} catch {
+						} catch(Exception ex) {
+							CookieGetter.Exceptions.Enqueue(ex);
 						}
 					}
 				}
@@ -97,6 +98,9 @@ namespace Hal.CookieGetterSharp
 					default:
 						cookie.Name = kvp.Key;
 						cookie.Value = kvp.Value;
+						if (cookie.Value != null) {
+							cookie.Value = Uri.EscapeDataString(cookie.Value);
+						}
 						break;
 				}
 			}

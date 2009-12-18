@@ -66,7 +66,8 @@ namespace Hal.CookieGetterSharp
 						System.Net.Cookie cookie = DataToCookie(items.ToArray());
 						try {
 							Utility.AddCookieToContainer(container, cookie);
-						} catch {
+						} catch (Exception ex){
+							CookieGetter.Exceptions.Enqueue(ex);
 							Console.WriteLine(string.Format("Invalid Format! domain:{0},key:{1},value:{2}", cookie.Domain, cookie.Name, cookie.Value));
 						}
 

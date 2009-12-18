@@ -87,7 +87,8 @@ namespace Hal.CookieGetterSharp
 									cookie.Path = '/' + string.Join("/", pathStack.ToArray());
 									try {
 										Utility.AddCookieToContainer(container, cookie);
-									} catch {
+									} catch (Exception ex){
+										CookieGetter.Exceptions.Enqueue(ex);
 										Console.WriteLine(string.Format("Invalid Format! domain:{0},key:{1},value:{2}", cookie.Domain, cookie.Name, cookie.Value));
 									}
 
@@ -160,6 +161,9 @@ namespace Hal.CookieGetterSharp
 						break;
 					case 0x11:  // Cookie Value
 						cookie.Value = Encoding.ASCII.GetString(recordData.bytepayload);
+						if (cookie.Value != null) {
+							cookie.Value = Uri.EscapeDataString(cookie.Value);
+						}
 						break;
 					case 0x12:
 						long time;

@@ -24,6 +24,10 @@ namespace Hal.CookieGetterSharp
 			cookie.Domain = data[2] as string;
 			cookie.Path = data[3] as string;
 
+			if (cookie.Value != null) {
+				cookie.Value = Uri.EscapeDataString(cookie.Value);
+			}
+
 			try {
 				long exp = (long)data[4];
 				cookie.Expires = Utility.UnixTimeToDateTime((int)exp);
