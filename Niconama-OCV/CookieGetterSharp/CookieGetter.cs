@@ -11,6 +11,7 @@ namespace Hal.CookieGetterSharp
 	abstract public class CookieGetter : ICookieGetter
 	{
 
+
 		#region [静的メンバー]
 
 		static IBrowserManager[] _browserManagers;
@@ -85,6 +86,8 @@ namespace Hal.CookieGetterSharp
 
 			return results.ToArray();
 		}
+
+		public static Queue<Exception> Exceptions = new Queue<Exception>();
 
 		#endregion [静的メンバー]
 

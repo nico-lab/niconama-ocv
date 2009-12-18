@@ -36,7 +36,8 @@ namespace Hal.CookieGetterSharp
 									System.Net.Cookie cookie = getCookie(xtr);
 									try {
 										Utility.AddCookieToContainer(container, cookie);
-									} catch {
+									} catch (Exception ex){
+										CookieGetter.Exceptions.Enqueue(ex);
 										Console.WriteLine(string.Format("Invalid Format! domain:{0},key:{1},value:{2}", cookie.Domain, cookie.Name, cookie.Value));
 									}
 								}
@@ -82,6 +83,9 @@ namespace Hal.CookieGetterSharp
 										break;
 									case "value":
 										cookie.Value = xtr.Value;
+										if (cookie.Value != null) {
+											cookie.Value = Uri.EscapeDataString(cookie.Value);
+										}
 										break;
 									case "expires":
 										cookie.Expires = DateTime.Parse(xtr.Value);
