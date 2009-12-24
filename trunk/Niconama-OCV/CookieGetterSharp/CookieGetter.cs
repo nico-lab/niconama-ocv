@@ -87,6 +87,9 @@ namespace Hal.CookieGetterSharp
 			return results.ToArray();
 		}
 
+		/// <summary>
+		/// クッキー取得中に発生した例外
+		/// </summary>
 		public static Queue<Exception> Exceptions = new Queue<Exception>();
 
 		#endregion [静的メンバー]

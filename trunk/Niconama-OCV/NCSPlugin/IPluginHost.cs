@@ -146,29 +146,6 @@ namespace Hal.NCSPlugin
 		void Disconnect();
 
 		/// <summary>
-		/// コメントサーバーに接続しない状態で放送にアクセスしたときのような動作を起こさせる
-		/// InsertPluginChatとあわせて使い、コメントサーバーとはまったく別ソースのコメントを
-		/// ビューに表示させるときに使う（Ustreamのコメントなど）
-		/// 実装は任意
-		/// インターフェースバージョン2
-		/// </summary>
-		/// <param name="liveId"></param>
-		/// <param name="liveName"></param>
-		/// <param name="liveStart"></param>
-		/// <returns>成功したかどうか(未実装の場合はfalseを返す)</returns>
-		bool StartMockLive(string liveId, string liveName, DateTime liveStart);
-
-		/// <summary>
-		/// プラグインからコメントサーバーとは別のコメントを挿入する
-		/// 実装は任意
-		/// インターフェースバージョン1
-		/// </summary>
-		/// <param name="chat"></param>
-		/// <returns>成功したかどうか(未実装の場合はfalseを返す)</returns>
-		bool InsertPluginChat(IChat chat);
-
-
-		/// <summary>
 		/// ビューで選択中のチャットを取得します。
 		/// </summary>
 		/// <returns>選択されているChat。何も選択されていない場合はnullを返す</returns>
@@ -186,11 +163,11 @@ namespace Hal.NCSPlugin
 		object Win32WindowOwner { get; }
 
 		/// <summary>
-		/// noで指定したコメントを選択状態にして画面上に表示します。
+		/// chatで指定したコメントを選択状態にして画面上に表示します。
 		/// </summary>
-		/// <param name="no">コメント番号</param>
+		/// <param name="chat">コメント</param>
 		/// <returns></returns>
-		bool SelectChat(int no);
+		bool SelectChat(IChat chat);
 
 		/// <summary>
 		/// ステータスメッセージを表示させます。
@@ -204,88 +181,19 @@ namespace Hal.NCSPlugin
 		/// <param name="message">表示内容</param>
 		void ShowFaitalMessage(string message);
 
-		/// <summary>
-		/// ビューフォーマット時の外部操作をサポートするか
-		/// インターフェースバージョン1
-		/// </summary>
-		bool SupportAddCellFormattingCallBack { get; }
+		#endregion
+
+		#region 拡張
 
 		/// <summary>
-		/// カラム拡張をサポートするかを取得します
-		/// インターフェースバージョン1
+		/// フォームを拡張するためのオブジェクトを取得する
 		/// </summary>
-		bool SupportAddColumn { get; }
+		IFormExtender FormExtender { get; }
 
 		/// <summary>
-		/// コンテクストメニュー拡張をサポートするかを取得します
-		/// インターフェースバージョン1
+		/// チャットビュー拡張するためのオブジェクトを取得する
 		/// </summary>
-		bool SupportAddContextMenuItem { get; }
-
-		/// <summary>
-		/// メニューストリップ拡張をサポートするか
-		/// インターフェースバージョン1
-		/// </summary>
-		bool SupportAddMenuStripItem { get; }
-
-		/// <summary>
-		/// ビューフォーマット時の外部操作を追加します
-		/// 実装は任意
-		/// インターフェースバージョン1
-		/// </summary>
-		/// <param name="callback"></param>
-		void AddCellFormattingCallBack(CellFormattingCallback callback);
-
-		/// <summary>
-		/// ビューのカラムを追加します
-		/// 実装は任意
-		/// インターフェースバージョン1
-		/// </summary>
-		/// <param name="columnExtention"></param>
-		void AddColumnExtention(IColumnExtention columnExtention);
-
-		/// <summary>
-		/// コンテクストメニューを拡張します
-		/// 実装は任意
-		/// インターフェースバージョン1
-		/// </summary>
-		/// <param name="menuItem"></param>
-		void AddContextMenuItem(System.Windows.Forms.ToolStripMenuItem menuItem);
-
-		/// <summary>
-		/// コンテクストメニューを拡張します
-		/// 実装は任意
-		/// インターフェースバージョン2
-		/// </summary>
-		/// <param name="menuItem"></param>
-		/// <param name="openingCallback">コンテクストメニューが開かれた際に実行されるコールバック関数</param>
-		void AddContextMenuItem(System.Windows.Forms.ToolStripMenuItem menuItem, EventHandler openingCallback);
-
-		/// <summary>
-		/// メニューストリップを拡張します
-		/// 実装は任意
-		/// インターフェースバージョン1
-		/// </summary>
-		/// <param name="category">ファイル、編集、表示などなるべく一般的なもの</param>
-		/// <param name="menuItem"></param>
-		void AddMenuStripItem(string category, System.Windows.Forms.ToolStripMenuItem menuItem);
-
-		/// <summary>
-		/// メニューストリップを拡張します
-		/// 実装は任意
-		/// インターフェースバージョン2
-		/// </summary>
-		/// <param name="category">ファイル、編集、表示などなるべく一般的なもの</param>
-		/// <param name="menuItem"></param>
-		/// <param name="openingCallback">コンテクストメニューが開かれた際に実行されるコールバック関数</param> 
-		void AddMenuStripItem(string category, System.Windows.Forms.ToolStripMenuItem menuItem, EventHandler openingCallback);
-
-		/// <summary>
-		/// カラムエクステンションやセルフォーマッターなどで値が変更され、ビュー全体を更新する必要があるときに呼び出します
-		/// 必要があれば実装
-		/// インターフェースバージョン3
-		/// </summary>
-		void UpdateCellValues();
+		IChatviewExtender ChatviewExtender { get; }
 
 		#endregion
 

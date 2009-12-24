@@ -27,11 +27,12 @@ namespace Hal.CookieGetterSharp
 	[Serializable]
 	public class CookieStatus
 	{
-		protected string _name;
-		protected BrowserType _browserType;
-		protected PathType _pathType;
-		protected string _path;
-		protected string _displayName;
+
+		private string _name;
+		private BrowserType _browserType;
+		private PathType _pathType;
+		private string _path;
+		private string _displayName;
 
 		protected CookieStatus() { 
 		}
@@ -51,6 +52,7 @@ namespace Hal.CookieGetterSharp
 		public BrowserType BrowserType
 		{
 			get { return _browserType; }
+			protected set { _browserType = value; }
 		}
 
 		/// <summary>
@@ -67,6 +69,7 @@ namespace Hal.CookieGetterSharp
 					return System.IO.Directory.Exists(this.CookiePath);
 				}
 			}
+
 		}
 
 		/// <summary>
@@ -75,7 +78,7 @@ namespace Hal.CookieGetterSharp
 		public string Name
 		{
 			get { return _name; }
-			internal set { _name = value; }
+			internal protected set { _name = value; }
 		}
 
 		/// <summary>
@@ -92,6 +95,7 @@ namespace Hal.CookieGetterSharp
 		/// </summary>
 		public PathType PathType {
 			get { return _pathType; }
+			protected set { _pathType = value; }
 		}
 
 		/// <summary>

@@ -1,34 +1,28 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
 namespace Hal.NCSPlugin
 {
-
 	/// <summary>
-	/// ビューの項目を追加するためのインターフェース
-	/// 実装は任意
-	/// PluginHost側もこれを扱えるかどうかは任意
+	/// �r���[�̍��ڂ�ǉ����邽�߂̃C���^�[�t�F�[�X
 	/// </summary>
 	public interface IColumnExtention : IComparer<IChat>
 	{
 
 		/// <summary>
-		/// 追加されるデータグリッドビューのカラム
+		/// �ǉ������f�[�^�O���b�h�r���[�̃J����
 		/// </summary>
 		DataGridViewColumn Column { get; }
-		
+
 		/// <summary>
-		/// セルの値が必要になったときに呼び出されます
-		/// 対応する文字列などを返してください
-		/// なおビューアは仮想モードで動くことを前提にしてあります
+		/// �Z���̒l���K�v�ɂȂ����Ƃ��ɌĂяo����܂�
+		/// �Ή����镶����Ȃǂ�Ԃ��Ă�������
+		/// �Ȃ��r���[�A�͉��z���[�h�œ������Ƃ�O��ɂ��Ă���܂�
 		/// </summary>
-		/// <param name="chat">該当するセルが含まれている行に割り当てられているチャット</param>
-		/// <returns>セルに代入される値</returns>
+		/// <param name="chat">�Y������Z�����܂܂�Ă���s�Ɋ��蓖�Ă��Ă���`���b�g</param>
+		/// <returns>�Z���ɑ�������l</returns>
 		object OnCellValueNeeded(IChat chat);
-
-		
-
 	}
 }

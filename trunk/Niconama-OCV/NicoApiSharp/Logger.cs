@@ -128,7 +128,7 @@ namespace Hal.NicoApiSharp
 		/// <param name="path"></param>
 		public void Save(string path)
 		{
-			string log = Utility.Serialize(this, typeof(Logger));
+			string log = Utility.XmlSerialize(this, typeof(Logger));
 			try {
 				using (System.IO.StreamWriter sw = new System.IO.StreamWriter(path, true)) {
 					sw.WriteLine(log);

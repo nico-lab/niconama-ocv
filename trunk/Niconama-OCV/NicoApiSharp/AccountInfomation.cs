@@ -60,6 +60,25 @@ namespace Hal.NicoApiSharp
 		}
 
 		/// <summary>
+		/// ログインした人のアカウント情報を取得します
+		/// </summary>
+		/// <param name="cookieGetter"></param>
+		/// <returns>ログインが完了していない場合はＮｕｌｌを返します</returns>
+		public static AccountInfomation GetMyAccountInfomation(CookieGetterSharp.ICookieGetter cookieGetter)
+		{
+			if (cookieGetter.Status.IsAvailable) {
+				try {
+					System.Net.CookieContainer container = new System.Net.CookieContainer();
+					container.Add(cookieGetter.GetCookieCollection(new Uri("http://live.nicovideo.jp/")));
+					return GetMyAccountInfomation(container);
+				} catch { 
+				}
+			}
+
+			return null;
+		}
+
+		/// <summary>
 		/// 指定したIDのユーザーアカウントを取得します
 		/// </summary>
 		/// <param name="userId"></param>
