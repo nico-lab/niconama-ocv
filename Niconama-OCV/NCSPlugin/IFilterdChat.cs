@@ -48,14 +48,5 @@ namespace Hal.NCSPlugin
 		/// </summary>
 		string NgSource { get; }
 
-		/// <summary>
-		/// コメントのどの位置からNGが始まっているか取得します
-		/// </summary>
-		int NgStart { get; }
-
-		/// <summary>
-		/// NGの長さ
-		/// </summary>
-		int NgLength { get; }
 	}
 }

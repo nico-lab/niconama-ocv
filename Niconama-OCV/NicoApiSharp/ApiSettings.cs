@@ -10,7 +10,7 @@ namespace Hal.NicoApiSharp
 	[Serializable]
 	public class ApiSettings
 	{
-		const int SETTING_VERSION = 2;
+		const int SETTING_VERSION = 3;
 
 		/// <summary>
 		/// 設定値のバージョン（値を大きくすると、古いデータは更新される）
@@ -259,56 +259,6 @@ namespace Hal.NicoApiSharp
 
 		#endregion
 
-		#region Cookie
-
-		/// <summary>
-		/// IEのクッキーが保存されているフォルダのパス
-		/// </summary>
-		public string IECookieFolderPath = "%COOKIES%";
-
-		/// <summary>
-		/// GoogleChrome3のクッキーが保存されているファイルのパス
-		/// </summary>
-		public string GoogleChrome3DatabasePath = "%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\cookies";
-		
-		/// <summary>
-		/// Firefox3のデータが格納されているフォルダー
-		/// </summary>
-		public string Firefox3DataFolder = "%APPDATA%Mozilla\\Firefox\\";
-
-		/// <summary>
-		/// Firefox3のプロファイルが保存されているディレクトリ
-		/// </summary>
-		public string Firefox3ProfieFolders = "%APPDATA%\\Mozilla\\Firefox\\Profiles";
-
-		/// <summary>
-		/// Firefox3のプロファイル設定ファイルの名前
-		/// </summary>
-		public string Firefox3ProfilesIniFileName = "profiles.ini";
-
-		/// <summary>
-		/// Firefox3のクッキーが保存されているファイルの名前
-		/// </summary>
-		public string Firefox3DatabaseName = "cookies.sqlite";
-
-		/// <summary>
-		/// Firefox3のデータベースロック回避のための退避用ファイル名
-		/// </summary>
-		public string Firefox3TempSqliteFileName = "temp_firefox_cookies.sqlite";
-
-		/// <summary>
-		/// Opera10のクッキーが保存されているファイルへのPath
-		/// </summary>
-		public string Opera10CookieFilePath = "%APPDATA%\\Opera\\Opera\\cookies4.dat";
-
-		/// <summary>
-		/// Safari4のクッキーが保存されているファイルへのPath
-		/// </summary>
-		public string Safari4CookieFilePath = "%APPDATA%\\Apple Computer\\Safari\\Cookies\\Cookies.plist";
-
-		#endregion
-
-
 		/// <summary>
 		/// 放送主の座席番号
 		/// </summary>
@@ -339,10 +289,10 @@ namespace Hal.NicoApiSharp
 			{
 
 				if (_default == null) {
-					_default = Utility.Deserialize(FILE_PATH, typeof(ApiSettings)) as ApiSettings;
+					_default = Utility.XmlDeserialize(FILE_PATH, typeof(ApiSettings)) as ApiSettings;
 					if (_default == null || _default.SettingVersion < SETTING_VERSION) {
 						_default = new ApiSettings();
-						Utility.Serialize(FILE_PATH, _default, typeof(ApiSettings));
+						Utility.XmlSerialize(FILE_PATH, _default, typeof(ApiSettings));
 					}
 				}
 

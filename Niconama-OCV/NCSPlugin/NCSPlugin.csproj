@@ -46,10 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ICellFormatter.cs" />
+    <Compile Include="Events.cs" />
     <Compile Include="IChat.cs" />
+    <Compile Include="IChatviewExtender.cs" />
     <Compile Include="IColumnExtention.cs" />
+    <Compile Include="ICommnetClient.cs" />
+    <Compile Include="IContentStatus.cs" />
     <Compile Include="IFilterdChat.cs" />
+    <Compile Include="IFormExtender.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="IPluginHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -12,6 +12,7 @@ namespace Hal.NicoApiSharp
 	/// </summary>
 	public static class Utility
 	{
+		#region シリアライズ
 
 		/// <summary>
 		/// Typeで指定されたクラスをXMLシリアライズする
@@ -20,7 +21,7 @@ namespace Hal.NicoApiSharp
 		/// <param name="graph">シリアライズ対象</param>
 		/// <param name="type">シリアライズするクラス情報</param>
 		/// <returns>成功・失敗</returns>
-		static public bool Serialize(string filePath, object graph, Type type)
+		static public bool XmlSerialize(string filePath, object graph, Type type)
 		{
 
 			try {
@@ -45,7 +46,7 @@ namespace Hal.NicoApiSharp
 		/// <param name="graph"></param>
 		/// <param name="type"></param>
 		/// <returns>シリアル化された文字列</returns>
-		static public string Serialize(object graph, Type type)
+		static public string XmlSerialize(object graph, Type type)
 		{
 
 			try {
@@ -63,13 +64,13 @@ namespace Hal.NicoApiSharp
 		}
 
 		/// <summary>
-		/// シリアライズされたオブジェクトを復元する
+		/// Xmlシリアライズされたオブジェクトを復元する
 		/// 失敗した場合はnullを返す
 		/// </summary>
 		/// <param name="filePath">対象のファイル</param>
 		/// <param name="type">対象のクラス情報</param>
 		/// <returns>復元されたオブジェクト・失敗した場合はnullを返す</returns>
-		static public object Deserialize(string filePath, Type type)
+		static public object XmlDeserialize(string filePath, Type type)
 		{
 
 			if (File.Exists(filePath)) {
@@ -80,7 +81,7 @@ namespace Hal.NicoApiSharp
 					using (System.IO.FileStream fs = new System.IO.FileStream(filePath, System.IO.FileMode.Open)) {
 						return serializer.Deserialize(fs);
 					}
-			
+
 
 				} catch (Exception ex) {
 					Logger.Default.LogException(ex);
@@ -90,6 +91,60 @@ namespace Hal.NicoApiSharp
 
 			return null;
 		}
+
+		/// <summary>
+		/// graphで指定されたオブジェクトをシリアライズする
+		/// </summary>
+		/// <param name="path">保存先</param>
+		/// <param name="graph">シリアライズ対象</param>
+		/// <returns>成否</returns>
+		public static bool Serialize(string path, object graph)
+		{
+			try {
+
+				IFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+				using (Stream stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None)) {
+					formatter.Serialize(stream, graph);
+					stream.Close();
+				}
+
+				return true;
+			} catch (Exception ex) {
+				Logger.Default.LogException(ex);
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// シリアライズされたオブジェクトを復元する
+		/// 失敗した場合はnullを返す
+		/// </summary>
+		/// <param name="filePath">対象のファイル</param>
+		/// <returns>復元されたオブジェクト・失敗した場合はnullを返す</returns>
+		public static object Deserialize(string filePath)
+		{
+
+			if (File.Exists(filePath)) {
+				try {
+					IFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+					using (Stream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read)) {
+						return formatter.Deserialize(stream);
+					}
+
+				} catch (Exception ex) {
+					Logger.Default.LogException(ex);
+				}
+			}
+
+			return null;
+		}
+
+		#endregion
+
+		#region 通信
+
+		
 
 		/// <summary>
 		/// url上のページを取得する
@@ -139,8 +194,9 @@ namespace Hal.NicoApiSharp
 		/// <param name="postData"></param>
 		/// <param name="cookies"></param>
 		/// <param name="defaultTimeout"></param>
+		/// <param name="referer"></param>
 		/// <returns></returns>
-		static public string PostData(string url, string postData, CookieContainer cookies, int defaultTimeout)
+		static public string PostData(string url, string postData, CookieContainer cookies, int defaultTimeout, string referer)
 		{
 
 			HttpWebResponse webRes = null;
@@ -152,7 +208,7 @@ namespace Hal.NicoApiSharp
 
 				HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(url);
 				webReq.Method = "POST";
-				webReq.Referer = ApiSettings.Default.PostOwnerCommentReferer;
+				webReq.Referer = referer;
 				webReq.ContentType = "application/x-www-form-urlencoded";
 				webReq.UserAgent = ApiSettings.Default.PostOwnerCommentUserAgent;
 
@@ -181,6 +237,8 @@ namespace Hal.NicoApiSharp
 
 			return null;
 		}
+
+		#endregion
 
 		/// <summary>
 		/// XMLやHTML上でエスケープされた文字を復元する
