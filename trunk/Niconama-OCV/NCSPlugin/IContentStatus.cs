@@ -11,23 +11,48 @@ namespace Hal.NCSPlugin
 	public interface IContentStatus
 	{
 		/// <summary>
-		/// IDを取得します
+		/// 放送に接続中かどうかを取得します。
 		/// </summary>
-		string Id { get; }
+		bool IsConnected { get; }
 
 		/// <summary>
-		/// タイトルを取得します
+		/// 放送主かどうかを取得します。
 		/// </summary>
-		string Title { get; }
+		bool IsOwner { get; }
 
 		/// <summary>
-		/// サムネイルのURLを取得します
+		/// プレミアム会員かどうかを取得します。
 		/// </summary>
-		string ThumbnailUrl { get; }
+		bool IsPremium { get; }
 
 		/// <summary>
-		/// 説明文を取得します
+		/// 放送IDを取得します
 		/// </summary>
-		string Description { get; }
+		string Id { get;}
+
+		/// <summary>
+		/// 放送名を取得します
+		/// </summary>
+		string Title { get;}
+
+		/// <summary>
+		/// コミュニティIDを取得します
+		/// </summary>
+		string CommunityId { get;}
+
+		/// <summary>
+		/// コミュニティ名を取得します
+		/// </summary>
+		string CommunityName { get;}
+
+		/// <summary>
+		/// ローカルPC上での放送開始時刻
+		/// </summary>
+		DateTime LocalStartTime { get; }
+
+		/// <summary>
+		/// サーバー上での放送開始時刻
+		/// </summary>
+		DateTime ServerStartTime { get; }
 	}
 }

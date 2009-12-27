@@ -50,12 +50,14 @@
     <Compile Include="IChat.cs" />
     <Compile Include="IChatviewExtender.cs" />
     <Compile Include="IColumnExtention.cs" />
-    <Compile Include="ICommnetClient.cs" />
+    <Compile Include="ICommnetAgent.cs" />
+    <Compile Include="ICommnetManager.cs" />
     <Compile Include="IContentStatus.cs" />
     <Compile Include="IFilterdChat.cs" />
     <Compile Include="IFormExtender.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="IPluginHost.cs" />
+    <Compile Include="ISimplePlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
