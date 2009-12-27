@@ -9,7 +9,7 @@ namespace Hal.NCSPlugin
 	/// プラグインホストのインターフェース
 	/// version 3
 	/// </summary>
-	public interface IPluginHost
+	public interface IPluginHost : ICommnetAgent, IContentStatus
 	{
 
 		#region アプリケーション情報
@@ -41,118 +41,6 @@ namespace Hal.NCSPlugin
 
 		#endregion
 
-		#region 放送情報
-
-		/// <summary>
-		/// 放送に接続中かどうかを取得します。
-		/// </summary>
-		bool IsConnected { get; }
-
-		/// <summary>
-		/// 放送主かどうかを取得します。
-		/// </summary>
-		bool IsOwner { get; }
-
-		/// <summary>
-		/// プレミアム会員かどうかを取得します。
-		/// </summary>
-		bool IsPremium { get; }
-
-		/// <summary>
-		/// 保存されているチャット一覧のコピーを取得します。
-		/// </summary>
-		IChat[] Chats { get;}
-
-		/// <summary>
-		/// 放送IDを取得します
-		/// </summary>
-		string Id { get;}
-
-		/// <summary>
-		/// 放送名を取得します
-		/// </summary>
-		string Title { get;}
-
-		/// <summary>
-		/// コミュニティIDを取得します
-		/// </summary>
-		string CommunityId { get;}
-
-		/// <summary>
-		/// コミュニティ名を取得します
-		/// </summary>
-		string CommunityName { get;}
-
-		/// <summary>
-		/// ローカルPC上での放送開始時刻
-		/// </summary>
-		DateTime LocalStartTime { get; }
-
-		/// <summary>
-		/// サーバー上での放送開始時刻
-		/// </summary>
-		DateTime ServerStartTime { get; }
-
-		#endregion
-
-		#region 操作
-
-		/// <summary>
-		/// 一般コメントが投稿可能かどうかを取得します。
-		/// コメント投稿機能が実装されていない場合は常にfalseが返される
-		/// </summary>
-		bool CanPostComment { get; }
-
-		/// <summary>
-		/// 運営コメントが投稿可能かどうかを取得します。
-		/// 運営コメント投稿機能が実装されていない場合は常にfalseが返される
-		/// </summary>
-		bool CanPostOwnerComment { get; }
-
-		/// <summary>
-		/// 一般コメントを投稿投稿します。
-		/// </summary>
-		/// <param name="message"></param>
-		/// <param name="command"></param>
-		void PostComment(string message, string command);
-
-		/// <summary>
-		/// 運営者コメントを投稿します。
-		/// </summary>
-		/// <param name="message"></param>
-		/// <param name="command"></param>
-		/// <returns>送信キューに追加できたか</returns>
-		bool PostOwnerComment(string message, string command);
-
-		/// <summary>
-		/// 運営者コメントを投稿します。
-		/// </summary>
-		/// <param name="message"></param>
-		/// <param name="command"></param>
-		/// <param name="name"></param>
-		/// <returns>送信キューに追加できたか</returns>
-		bool PostOwnerComment(string message, string command, string name);
-
-		/// <summary>
-		/// 放送に接続します。
-		/// </summary>
-		/// <param name="id">対象の放送URL、または放送ID</param>
-		/// <returns>接続できたか</returns>
-		bool Connect(string id);
-
-		/// <summary>
-		/// サーバー通信を中断します。
-		/// </summary>
-		void Disconnect();
-
-		/// <summary>
-		/// ビューで選択中のチャットを取得します。
-		/// </summary>
-		/// <returns>選択されているChat。何も選択されていない場合はnullを返す</returns>
-		IChat GetSelectedChat();
-
-		#endregion
-
 		#region フォーム操作
 
 		/// <summary>
@@ -180,6 +68,33 @@ namespace Hal.NCSPlugin
 		/// </summary>
 		/// <param name="message">表示内容</param>
 		void ShowFaitalMessage(string message);
+
+		#endregion
+
+		#region コメント
+
+		/// <summary>
+		/// 外部からチャットを追加します
+		/// </summary>
+		/// <param name="chat"></param>
+		void AddChat(IChat chat);
+
+		/// <summary>
+		/// 外部からチャットを追加します
+		/// </summary>
+		/// <param name="chats"></param>
+		void AddChats(IChat[] chats);
+
+		/// <summary>
+		/// 保存されているチャット一覧のコピーを取得します。
+		/// </summary>
+		IChat[] Chats { get;}
+
+		/// <summary>
+		/// ビューで選択中のチャットを取得します。
+		/// </summary>
+		/// <returns>選択されているChat。何も選択されていない場合はnullを返す</returns>
+		IChat GetSelectedChat();
 
 		#endregion
 

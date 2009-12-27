@@ -30,31 +30,6 @@ namespace Hal.NCSPlugin
 		}
 	}
 
-	/// <summary>
-	/// 複数のコメントを受け取ったときに発生するイベントの引数
-	/// </summary>
-	[Serializable]
-	public class ReceiveChatsEventArgs : EventArgs
-	{
-		readonly IChat[] _chats;
-
-		/// <summary>
-		/// 受信したチャット
-		/// </summary>
-		public IChat[] Chats
-		{
-			get { return _chats; }
-		}
-
-		/// <summary>
-		/// コンストラクタ
-		/// </summary>
-		/// <param name="chats"></param>
-		public ReceiveChatsEventArgs(IChat[] chats)
-		{
-			_chats = chats;
-		}
-	}
 
 	/// <summary>
 	/// コンテンツデータを受け取ったときに発生するイベント
