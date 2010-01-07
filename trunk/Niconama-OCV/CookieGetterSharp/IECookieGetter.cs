@@ -192,7 +192,7 @@ namespace Hal.CookieGetterSharp
 
 						// 有効期限を取得する
 						long uexp = 0, lexp = 0;
-						if (long.TryParse(lines[4], out lexp) && long.TryParse(lines[5], out uexp)) {
+						if (long.TryParse(lines[6], out lexp) && long.TryParse(lines[7], out uexp)) {
 							cookie.Expires = FileTimeToDateTime(lexp, uexp);
 						}
 
